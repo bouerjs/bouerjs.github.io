@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://afonsomatelias.github.io/assets/bouer/img/short.png" rel="shortcut icon" type="image/png">
+    <link href="./assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="./assets/css/styles.css" rel="stylesheet" type="text/css">
+    <link href="./assets/css/prism.css" rel="stylesheet" type="text/css">
+
+    <title>Tutorial</title>
+</head>
+
+<body>
+    <div id="app" silent>
+        <div e-class="{ 'loading': isLoading }"></div>
+
+        <app-header data="$data"></app-header>
+        <main route-view></main>
+
+        <div class="popup-container"></div>
+    </div>
+
+    <script src="./assets/js/prism.js"></script>
+    <script src="./assets/js/bouer.js"></script>
+    <script src="./assets/js/components.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>

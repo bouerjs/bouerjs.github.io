@@ -1,0 +1,43 @@
+<header>
+    <nav>
+        <a :href="/">
+            Bouer
+        </a>
+        <div class="menu-container">
+            <div class="top-menu-handler">
+                <div class="menu-btn-container">
+                    <div class="menu-btn" on:click="menuOpened = !menuOpened">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <ul e-class="{ 'top-menu-opened': menuOpened }">
+                <li> <a class="nav-doc" :href="/docs/introduction.html"> Docs </a> </li>
+                <li> <a class="nav-cli" :href="/cli.docs.html"> CLI </a> </li>
+                <li> <a class="nav-tutorial" :href="/tutorial.html"> Tutorial </a> </li>
+                <li> <a class="nav-play" :href="/play.html">PlayGround</a> </li>
+
+                <li>
+                    <span class="text" on:click="menuLangDropdown = !menuLangDropdown">
+                        Language • <span e-content="{{ selectedLang.toUpperCase() }}">#</span>
+                    </span>
+
+                    <div class="wrapper hide-it" e-class="{ 'hide-it': !menuLangDropdown }">
+                        <div class="item" e-for="item of translations" on:click="selectedLang = item.id">
+                            <span class="ident" e-content="{{ item.id.toUpperCase() }}"></span>
+                            <span class="name" e-content="{{ item.name }}"></span>
+                        </div>
+                    </div>
+                </li>
+
+                <li> <a target="_blank" href="https://github.com/bouerjs/bouer" title="Github" class="fa fa-github"></a>
+                </li>
+                <li> <a target="_blank" href="https://www.facebook.com/bouerjs" title="Facebook"
+                        class="fa fa-facebook"></a> </li>
+                <li on:click="darkMode = !darkMode"> <span title="Switch Dark/Light Mode"
+                        class="fa {{ themeIco }}"></span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

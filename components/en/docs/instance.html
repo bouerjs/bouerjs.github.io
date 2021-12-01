@@ -1,0 +1,176 @@
+<div class="page documentation">
+  <doc-menu data="$data"></doc-menu>
+  <aside class="view nice-scroll">
+
+    <section class="section">
+      <h1> <a id="instance"> Instance </a> </h1>
+
+      <p>
+        When we import <span class="note">Bouer</span> it will added a function to the global
+        object, so to begin using it we need to create a new instance of Bouer Class. This
+        constructor expects two parameters:
+      </p>
+
+      <pre><code lang="js">
+        var app = new Bouer(element, options);
+        </code></pre>
+
+      <h3> <a id="instance-el"> Element </a> </h3>
+      <p>
+        The element is the mandatory parameter that represents the section that the instance
+        will control in the application, it must be passed as a String in the format of a
+        CSS Selector. <span class="note">#my-id</span>, <span class="note">.my-class</span> or
+        <span class="note">body</span>.
+      </p>
+
+      <h3> <a id="instance-options"> Options </a> </h3>
+      <p>
+        Options is the optional parameter, which can be used to define initial data, instance
+        configuration, components (we'll talk about this later), etc. If passed, it must be
+        an object containing all the information we need when the instance is created.
+      </p>
+
+      <h3> <a id="properties"> Properties</a> </h3>
+      <p>
+        As previously stated, in the options parameter several properties can be defined which
+        are:
+      </p>
+
+      <pre><code lang="js">
+        var app = new Bouer('selector', {
+          /** The data of the application, havig the properties and methods */
+          data: Object,
+
+          /** The data that cross scopes (New Scope or Components Scope)   */
+          globalData: Object,
+
+          /** The configuration of the instance */
+          config: Object,
+
+          /** The components of the application */
+          components: Component[],
+
+          /** The custom directives for the application */
+          directives: { [key: string]: Directive },
+
+          /** The dependencies of the instance */
+          dependencies: { [key: string]: Object },
+
+          /** Appends delimiters to the instance */
+          delimiters: Delimiter[],
+
+          /** Middlewares that will be used in the application */
+          middleware: (
+            function configure (directive: string, configureCallback: MiddlewareConfig) { },
+            app: Bouer
+          ) { },
+
+          /** The hook that will be called before the component is loaded */
+          beforeLoad(event: CustomEvent) { },
+
+          /** The hook that will be called after the component is loaded (Compiled) */
+          loaded(event: CustomEvent) { },
+
+          /** The hook that will be called before the component is destroyed */
+          beforeDestroy(event: CustomEvent) { },
+
+          /** The hook that will be called after the component is destroyed */
+          destroyed(event: CustomEvent) { },
+        });
+        </code></pre>
+
+      <h3> <a id="prop-data">Data</a> </h3>
+      <p>
+        As already mentioned, the data property allows you to define the data that the application will have
+        when it starts, however there is a way to add data while it is already running with the
+        <span class="note">app.set({ ... })</span> method (We'll talk about that in the
+        <a :href="/docs/methods.html" class="mark">methods</a> section).
+        <br>
+        Data or properties defined on <span class="note mark">data</span> are not normal properties, they are
+        reactive, this means that they react to changes made to them.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip>
+
+          <pre><code lang="html">
+        <div id="app1">
+          <h4> {{ message }} </h4>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app1 = new Bouer('#app1', {
+          data: {
+            message: 'Hello World!'
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <p>
+        This property can be accessed from the instance object: <span class="note">app.data</span>,
+        You can open the browser console and type <span class="note">app1.data</span>.
+      </p>
+
+      <p>
+        Is in data property where the <i class="note mark">functions</i> need to be defined too, and
+        they do not respect <i class="note mark">scopes</i> (we'll talk about this later), they can be
+        accessed even if a scope is created.
+      </p>
+
+      <h3> <a id="prop-dependencies">Dependencies </a> </h3>
+      <p>
+        This property allow to add dependencies in the current instance... All the dependencies can be accessed at
+        <span class="note">app.dependencies</span> object, which are defined providing a [key: string] and The
+        dependency object.
+      <div class="note mark">{ 'my-dependency': {...} }</div>
+      </p>
+
+      <pre><code lang="js">
+      var app = new Bouer('#app', {
+        dependencies: {
+          'html-parser': HTMLParser
+        }
+      });
+
+      var parser = app.dependencies['html-parser'];
+      </code></pre>
+
+      <div class="block-note info">
+        <p>
+          We can create an instance without a variable, meaning that the instance cannot be accessed by the browser
+          console.
+        </p>
+      </div>
+
+    </section>
+
+    <section class="navigator">
+      <div class="left">
+        <a class="next" :href="/docs/installation.html">
+          <i class="fa fa-angle-left"></i>
+          <span>Installation</span>
+        </a>
+      </div>
+      <div class="middle">
+
+        <small>
+          Help us improve this documentation on github!
+          <a href="" title="Take me to Github">Edit this on Github</a>
+        </small>
+
+      </div>
+      <div class="right">
+        <a class="next" :href="/docs/delimiters.html">
+          <span>Delimiters</span>
+          <i class="fa fa-angle-right"></i>
+        </a>
+      </div>
+    </section>
+
+  </aside>
+</div>

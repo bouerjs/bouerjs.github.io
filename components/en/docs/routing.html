@@ -1,0 +1,284 @@
+<div class="page documentation">
+  <doc-menu data="$data"></doc-menu>
+  <aside class="view nice-scroll">
+
+    <section class="section">
+      <h1> <a id="routing"> Routing </a> </h1>
+      <p>
+        The routing funcionality that enable the <b>Single Page Application</b> mode, and creating a SPA with
+        <i class="note">Bouer</i> is very simple, because it uses the same <a class="note mark">Component</a>
+        concept.
+      </p>
+
+      <h3> <a id="routing-init"> Initialization </a> </h3>
+      <p>
+        In the routing, the element where the components will be rendered must be specified, for this,
+        the <i class="note mark">route-view</i> directive is used, and in the definition of the components,
+        some additional specific properties for the routing are defined, which are:
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
+          // Registering directly in the instance
+          components: [{
+            /** ... previous properties ... */
+
+            /** The name of the component (Optional) */
+            name?: string,
+
+            /** The title that will be replaced when the page is loaded */
+            title?: string,
+
+            /** The navigation url */
+            route?: string,
+
+            /** The children of the component that will inherit the `route` of the father */
+            children?: Component[],
+
+            /** Allow to set this component as the `default page` when the application loads */
+            isDefault?: boolean,
+
+            /** Allow to set this component as the `not found page` when no route was found */
+            isNotFound?: boolean,
+
+            /** ... previous hooks ... */
+          }]
+        });
+        </code></pre>
+      </div>
+
+      <label>Example</label>
+      <div e-skip>
+        <pre><code lang="html">
+        <div id="app">
+          <nav>
+            <a :href="/home"> Home </a>
+            <a :href="/about"> About </a>
+          </nav>
+          <main route-view></main>
+        </div>
+        </code></pre>
+
+        <pre><code lang="js">
+        new Bouer('#app', {
+          components: [
+            {
+              title: 'Home',
+              route: '/home',
+              isDefault: true,
+              url: '/pages/home.html',
+            },
+            {
+              url: '/pages/about.html',
+              title: 'About',
+              route: '/about'
+            }
+          ]
+        });
+        </code></pre>
+      </div>
+
+      <div class="block-note dont">
+        <p>
+          Two or more components cannot be defined with <i class="mark">isDefault</i> or
+          <i class="note">mark</i>, if you do, an error will be thrown in saying
+          `<i class="color-red">It is not allowed to define more than one 'default'/'notFound' page...</i>`.
+        </p>
+      </div>
+
+      <h3> <a id="routing-navegation"> Navegation </a> </h3>
+      <p>
+        Navigation between pages is done using the tag element <i class="note mark">a</i> but with
+        the attribute <i class="note mark">:href</i>, it can also be done with <i class="note">href</i>
+        but we do not recommend using it, we will describe the behavior of each one.
+      </p>
+
+      <p>
+        When <i class="note mark">:href</i> is defined it rewrites the href attribute according to the
+        app base path, and whenever it is clicked, the default anchor action is prevented.
+      </p>
+
+      <h3> <a id="routing-nesting"> Nesting Routes </a> </h3>
+      <p>
+        Children can be added to each component, this in the <i class="note mark">children</i> property,
+        like this we can nest routes too. The property expects a component as well.
+      </p>
+
+      <div class="block-note info">
+        <p>
+          Note that in the children route we only put <i class="note mark">/childRouteName</i>, because
+          after it registered it will became <i class="note mark">/parentRouteName/childRouteName</i>. <br>
+          The nesting the has not limit, meaning that we can also nest in a child.
+        </p>
+      </div>
+
+      <h3> <a id="routing-params"> Route Params </a> </h3>
+      <p>
+        To define a parameter on the route, we use <i class="note">{<i class="mark">paramName</i>}</i> and to
+        extract the data of the route's parameters, we use <i class="note mark">this.getParams()</i> in the
+        component instance, returning an object containing all the <i class="mark">route parameters</i>
+        and <i class="mark">query parameters</i>.
+      </p>
+
+      <h3> <a id="routing-handler"> Routing Handler </a> </h3>
+      <p>
+        Whenever we need to navigate to a route programatically, we use the <i class="note mark">app.$routing</i>
+        object to achieve that, it has the following structure:
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        Routing {
+          /** Store Bouer application instance */
+          bouer: Bouer,
+
+          /** Store the route elements */
+          routeView: Element,
+
+          /** Store the Component defined has NotFound Page */
+          defaultPage?: Component,
+
+          /** Store the Component defined has NotFound Page */
+          notFoundPage?: Component,
+
+          /** Store `href` value of the <base /> tag */
+          base: string,
+
+          /** Navigates to a certain page without reloading all the page */
+          navigate(route: string, changeUrl?: boolean),
+
+          /** Navigates to previous page according to a number of go back */
+          popState(times?: number),
+
+          /** Changes the current url to a new one provided */
+          pushState(url: string, title?: string),
+
+          /** Mark all anchors having the route provided as active */
+          markActiveAnchors(route: string)
+        }
+        </code></pre>
+      </div>
+
+      <p>
+        Programatically Navigation Example
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
+          components: [
+            {
+              path: '/home.html',
+              route: '/home'
+            },
+            {
+              path: '/about.html',
+              route: '/about'
+            },
+          ]
+        });
+
+        setTimeout(function () {
+          app.$routing.navigate('/about');
+        }, 5000);
+        </code></pre>
+      </div>
+
+      <h3> <a id="routing-pretty-url"> HTML5 Mode / Pretty URL </a> </h3>
+      <p>
+        The default navegation mode is hash mode, which uses a URL hash to navigate between pages without reloading it.
+      </p>
+
+      <p>
+        To navegate without using the URL hash, there are a few steps that must be followed, which are:
+      </p>
+
+      <ol>
+        <li> Disable the <i class="note mark">config.usehash</i> &ndash; setting to <i class="mark">false</i> it
+          make that no hash will be added the navegation anchors. </li>
+
+        <li> Add the <i class="note mark">base</i> tag in the page head &ndash; that specify the base URL to use for
+          all relative URLs in a document.
+          <a class="mark" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base" target="_blank"
+            rel="noopener noreferrer">Click me for more base tag info</a>.
+        </li>
+
+        <li> Configure the server to return <i class="note mark">index.html</i> if the URL doesn't match any static
+          assets &ndash; as the application only runs in one page `the index` we need only to tell the server to
+          return this file allowing the <i class="note mark">bouer.js</i> handling the navegation in the front-end.
+        </li>
+      </ol>
+
+      <div e-skip>
+        <pre><code lang="html">
+        <!-- index.html -->
+
+        <!-- head -->
+          <base href="/" >
+        <!-- /head -->
+
+        <div id="app">
+          <!-- app -->
+        </div>
+        </code></pre>
+
+        <pre><code lang="js">
+        // app.js
+
+        var app = new Bouer('#app', {
+          config: {
+            usehash: false
+          },
+          components: [
+            // ...
+          ]
+        });
+        </code></pre>
+      </div>
+
+      <h3> Apache Configuration Example (.htcaccess) </h3>
+      <div e-skip>
+        <pre><code lang="bash">
+        RewriteEngine On
+
+        # Setting the base path of the project
+        RewriteBase /
+
+        # Return the index.html file if the request is this
+        RewriteRule ^index\.html$ - [L]
+
+        # If the request file name is not a directory
+        RewriteCond %{REQUEST_FILENAME} !-d
+        # If the request file name is not a file
+        RewriteCond %{REQUEST_FILENAME} !-f
+        # Return the index.html file
+        RewriteRule . index.html [L]
+            </code></pre>
+      </div>
+    </section>
+
+    <section class="navigator">
+      <div class="left">
+        <a class="next" :href="/docs/components.html">
+          <i class="fa fa-angle-left"></i>
+          <span>Components</span>
+        </a>
+      </div>
+      <div class="middle">
+
+        <small>
+          Help us improve this documentation on github!
+          <a href="" title="Take me to Github">Edit this on Github</a>
+        </small>
+
+      </div>
+      <div class="right">
+        <a class="next" :href="/cli.docs.html">
+          <span>Use Bouer with CLI!</span>
+        </a>
+      </div>
+    </section>
+
+  </aside>
+</div>
