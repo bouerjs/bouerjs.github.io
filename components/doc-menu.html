@@ -160,7 +160,7 @@
       for (var i = 0; i < $h3s.length; i++) {
         var anchor = $h3s[i].parentNode;
         var ulContainer = anchor.nextElementSibling;
-        if (!ulContainer) return;
+        if (!ulContainer) continue;
 
         var ulAnchors = ulContainer.querySelectorAll('a[href]');
 
