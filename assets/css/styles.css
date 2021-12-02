@@ -678,6 +678,14 @@ a.active-doc-menu * {
   margin: 0;
 }
 
+.documentation .view .section .result p {
+  margin: 4px 0;
+}
+
+.documentation .view .result::after {
+  content: "Code Result";
+}
+
 .documentation .view .navigator {
   border-top: none;
   display: flex;
@@ -721,28 +729,7 @@ a.active-doc-menu * {
 }
 
 .result>* {
-  margin: 0 8px;
-}
-
-.result::after,
-.block-note::after {
-  content: "Code";
-  font-family: Consolas, 'Courier New', monospace;
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: var(--color-soft-border);
-  text-align: right;
-  font-size: 0.9em;
-  padding: 3px 10px;
-  line-height: 15px;
-  height: 15px;
-  font-weight: 400;
-}
-
-.result::after,
-.block-note::after {
-  content: "Result";
+  margin: 0 28px;
 }
 
 .keep-reading {
@@ -833,17 +820,27 @@ pre code * {
   font-family: "Fira Mono", 'Courier New', Courier, monospace;
 }
 
-pre code::after {
+pre code::after,
+.result::after,
+.block-note::after {
   content: attr(lang);
   position: absolute;
-  top: 2px;
-  right: 8px;
   color: var(--color-text);
   text-align: right;
   font-size: 0.9em;
-  height: 15px;
-  font-weight: 600;
   font-weight: 400;
+  height: 15px;
+  right: 8px;
+  top: 2px;
+}
+
+.result::after,
+.block-note::after {
+  padding: 3px 10px;
+  line-height: 15px;
+  font-size: 0.8em;
+  right: 0;
+  top: 0;
 }
 
 .light-mode pre code .tag>.attr-value {
@@ -874,12 +871,14 @@ pre code::after {
 }
 
 .block-note::after {
-  content: "Note";
-  font-size: 0.9em;
+  content: "( i )";
+  font-weight: 500;
+  color: var(--color-blue);
 }
 
 .block-note {
   margin: 30px 0;
+  padding: 3px 0;
   max-width: 546px;
   border-radius: 6px;
   background-color: var(--color-soft-transparency);
@@ -895,30 +894,15 @@ pre code::after {
 }
 
 .block-note.info {
-  content: "info";
   border-color: var(--note-green);
 }
 
 .block-note.warn {
-  content: "warn";
   border-color: var(--note-yellow);
 }
 
 .block-note.dont {
-  content: "danger";
   border-color: var(--note-red);
-}
-
-.block-note.info::after {
-  content: "info";
-}
-
-.block-note.warn::after {
-  content: "warn";
-}
-
-.block-note.dont::after {
-  content: "danger";
 }
 
 .att-border.note {

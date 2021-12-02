@@ -72,11 +72,22 @@
         var codes = [].slice.call(el.querySelectorAll('code'));
         for (let i = 0; i < codes.length; i++) {
           var code = codes[i];
-          var lang = code.getAttribute('lang')
+          var lang = code.getAttribute('lang');
           var highlightedCode = Prism.highlight(code.innerHTML, Prism.languages[lang], lang);
           code.innerHTML = highlightedCode;
         }
 
+        var executables = [].slice.call(el.querySelectorAll('[execute]'));
+        for (let i = 0; i < executables.length; i++) {
+          var executable = executables[i];
+          var _codes = executable.querySelectorAll('code');
+          var result = executable.querySelector('.result');
+          var _html = _codes[0].innerText;
+          var _js = _codes[1].innerText;
+
+          result.innerHTML = _html;
+          eval(_js);
+        }
 
         if (location.href.includes('/docs/')){
           var navDoc = document.querySelector('a.nav-doc');

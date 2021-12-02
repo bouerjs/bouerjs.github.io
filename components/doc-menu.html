@@ -155,6 +155,10 @@
       for (var i = 0; i < $$anchors.length; i++) {
         var anchor = $$anchors[i];
         menu[anchor.hash] = anchor;
+
+        anchor.onclick = function (evt) {
+          if (this.hash) location.href = this.href;
+        }
       }
 
       for (var i = 0; i < $h3s.length; i++) {
@@ -166,7 +170,7 @@
 
         for (var k = 0; k < ulAnchors.length; k++) {
           var ulAnchor = ulAnchors[k];
-          ulAnchor.href = anchor.href.replace(anchor.hash, '') + ulAnchor.hash;
+          ulAnchor.href = anchor.href.split('#')[0] + ulAnchor.hash;
         }
       }
 
@@ -186,7 +190,7 @@
 
           // Checking if it is in the range
           // (Used this way because with only one value like 60, some of them will not have this verification)
-          if (position <= 88 && position >= 38) {
+          if (position <= 90 && position >= 38) {
             current = element;
             break;
           }
@@ -215,7 +219,7 @@
           // Setting the last Passed one void if necessary
           lastPassed = current;
         }
-      })()
+      })();
     }).then(function (executable) {
       executable(_this.bouer.el);
     });

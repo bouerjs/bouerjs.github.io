@@ -113,14 +113,14 @@
       <div e-skip>
         <pre><code lang="html">
         <div id="app">
-          <p on:change_p_text="change_p_text"></p>
+          <p on:change_p_text="changeParagraphText"></p>
         </div>
             </code></pre>
 
         <pre><code lang="js">
         var app = new Bouer('#app', {
           data: {
-            change_p_text: function(evt) {
+            changeParagraphText: function(evt) {
               evt.target.innerText = 'Hello!';
             }
           }

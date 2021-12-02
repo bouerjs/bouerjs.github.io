@@ -19,15 +19,16 @@
       <p>
         The element is the mandatory parameter that represents the section that the instance
         will control in the application, it must be passed as a String in the format of a
-        CSS Selector. <span class="note">#my-id</span>, <span class="note">.my-class</span> or
+        CSS Selector. Example: <span class="note">#app</span>, <span class="note">.main-app</span> or
         <span class="note">body</span>.
       </p>
 
       <h3> <a id="instance-options"> Options </a> </h3>
       <p>
-        Options is the optional parameter, which can be used to define initial data, instance
-        configuration, components (we'll talk about this later), etc. If passed, it must be
-        an object containing all the information we need when the instance is created.
+        Options is the optional parameter, which can be used to define initial <i class="note mark">data</i>,
+        <i class="note mark">app configurations</i>, <i class="note mark">components</i> (we'll talk about
+        this later), etc. If passed, it must be an object containing all the information we need when the
+        instance is created.
       </p>
 
       <h3> <a id="properties"> Properties</a> </h3>
@@ -83,17 +84,16 @@
       <p>
         As already mentioned, the data property allows you to define the data that the application will have
         when it starts, however there is a way to add data while it is already running with the
-        <span class="note">app.set({ ... })</span> method (We'll talk about that in the
+        <span class="note">app.set(<i class="mark">{ ... }</i>)</span> method (We'll talk about that in the
         <a :href="/docs/methods.html" class="mark">methods</a> section).
         <br>
         Data or properties defined on <span class="note mark">data</span> are not normal properties, they are
         reactive, this means that they react to changes made to them.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+      <div e-skip>
 
-          <pre><code lang="html">
+        <pre><code lang="html">
         <div id="app1">
           <h4> {{ message }} </h4>
         </div>
@@ -105,16 +105,10 @@
             message: 'Hello World!'
           }
         });
-          </code></pre>
 
-          <div class="result"></div>
-        </div>
+        app1.set({ version: '3.0.0' });
+        </code></pre>
       </div>
-
-      <p>
-        This property can be accessed from the instance object: <span class="note">app.data</span>,
-        You can open the browser console and type <span class="note">app1.data</span>.
-      </p>
 
       <p>
         Is in data property where the <i class="note mark">functions</i> need to be defined too, and
@@ -125,9 +119,9 @@
       <h3> <a id="prop-dependencies">Dependencies </a> </h3>
       <p>
         This property allow to add dependencies in the current instance... All the dependencies can be accessed at
-        <span class="note">app.dependencies</span> object, which are defined providing a [key: string] and The
-        dependency object.
-      <div class="note mark">{ 'my-dependency': {...} }</div>
+        <span class="note">app.dependencies</span> object, which are defined providing a
+        <i class="note">[key: <i class="mark">string</i>]</i> and The dependency object.
+        <i class="note mark">{ 'my-dependency': {...} }</i>
       </p>
 
       <pre><code lang="js">

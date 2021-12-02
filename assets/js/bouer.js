@@ -350,7 +350,6 @@
       compile: 'compile',
       request: 'request',
       response: 'response',
-      update: 'update',
       fail: 'fail',
       done: 'done',
     },
@@ -3344,6 +3343,8 @@
     Routing.prototype.navigate = function (route, changeUrl) {
       var _this = this;
       var _a;
+      if (!this.routeView)
+        return;
       if (isNull(route))
         return Logger.log("Invalid url provided to the navigation method.");
       route = trim(route);
@@ -3465,6 +3466,8 @@
       var dir = Constants.skeleton;
       if (!DOM.getElementById(this.identifier))
         DOM.head.appendChild(this.style);
+      if (!this.style.sheet)
+        return;
       for (var i = 0; i < this.style.sheet.cssRules.length; i++)
         (_a = this.style.sheet) === null || _a === void 0 ? void 0 : _a.deleteRule(i);
       if (color) {
@@ -3823,7 +3826,7 @@
       var el = this.el;
       if (el.tagName == 'body')
         el.innerHTML = '';
-      else
+      else if (el.isConnected)
         DOM.body.removeChild(el);
       forEach(toArray(DOM.head.querySelectorAll('#bouer,[component-style]')), function (item) {
         if (item.isConnected)

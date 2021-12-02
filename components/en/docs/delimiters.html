@@ -28,7 +28,7 @@
           <span class="mark">{{</span> [Content] <span class="mark">}}</span> </span>
       </p>
 
-      <h3> <a id="delimiter-html"> HTML Delimiter </h3>
+      <h3> <a id="delimiter-html"> HTML Delimiter</a> </h3>
 
       <p e-skip>
         To use this delimiter just do the following: <span class="note">
@@ -37,13 +37,15 @@
       </p>
 
       <p>
-        We can check all the available delimiters in property <i class="note mark">app.$delimiters.get()</i>.
-        These values is unalterable by this property.
+        We can check all the available delimiters in property
+        <i class="note">app.$delimiters.<i class="mark">get()</i></i>. These values is unalterable
+        by this property.
       </p>
 
       <p>
-        To be able to define our own delimiter, we use the method <i class="note mark">
-          app.$delimiters.add({ ... })</i>, it expects an object having the following structure:
+        To be able to define our own delimiter, we use the method <i class="note">
+          app.$delimiters.<i class="mark">add({ ... })</i></i>, it expects an object having the
+          following structure:
       </p>
 
       <div e-skip>
@@ -51,20 +53,19 @@
         var app = new Bouer('#app');
         app.$delimiters.add({
           /** The name of the delimiter */
-          name: "php-like",
-
+          name: string,
           /** The delimiter structure */
           delimiter: {
             /** The open syntax */
-            open: "<?",
+            open: string,
             /** The close syntax */
-            close: "?>"
+            close: string
           },
 
           /** The action that will the performed */
           action?: (valueToSet: string, node: Node, data: object): string { }
         });
-            </code></pre>
+        </code></pre>
       </div>
 
     </section>

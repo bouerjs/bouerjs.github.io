@@ -12,23 +12,23 @@
       </p>
 
       <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+        <div e-skip execute>
 
           <pre><code lang="html">
-        <div id="app3">
+        <div id="app">
           <input type="text" value="{{ value }}" />
           <h4> {{ value }} </h4>
         </div>
           </code></pre>
 
           <pre><code lang="js">
-        var app3 = new Bouer('#app3', {
+        var app = new Bouer('#app3', {
           data: {
             value: 'Type something!'
           },
-          loaded: function(el) {
+          loaded: function(evt) {
             var self = this;
-            el.node('input').onkeyup = function(evt) {
+            evt.target.querySelector('input').onkeyup = function(evt) {
               self.data.value = evt.target.value;
             }
           }
@@ -66,7 +66,7 @@
       </p>
 
       <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+        <div e-skip execute>
 
           <pre><code lang="html">
         <div id="app4">
@@ -74,7 +74,7 @@
           <input type="text" e-bind="value" />
           <h4> {{ value }} </h4>
         </div>
-            </code></pre>
+          </code></pre>
 
           <pre><code lang="js">
         var app4 = new Bouer('#app4', {

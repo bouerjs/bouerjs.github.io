@@ -17,33 +17,27 @@
         content the element will have the data of the main scope, app.data.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-          <pre><code lang="html">
-        <div id="app5">
-            <div>
-                <h4> {{ value }} </h4>
-            </div>
+      <div e-skip>
+        <pre><code lang="html">
+        <div id="app">
+          <h4> {{ value }} </h4>
 
-            <div data="scope1">
-                <h4> 1st {{ value }} </h4>
-            </div>
+          <div data="scope1">
+              <h4> {{ value }} </h4>
+          </div>
         </div>
-          </code></pre>
+        </code></pre>
 
-          <pre><code lang="js">
-        var app5 = new Bouer('#app5', {
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
           data: {
-            value: 'This is a value from main scope 🙂',
+            value: 'Value from main scope',
             scope1: {
-              value: 'This is a value from 1st scope'
+              value: 'Value from Scope 1'
             }
           }
         });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
+        </code></pre>
       </div>
 
       <p>
@@ -54,36 +48,30 @@
         <span class="note">app.$data.get(<i class="mark">'scope-key'</i>)</span>.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+      <div e-skip>
 
-          <pre><code lang="html">
-        <div id="app6">
-          <div>
-            <h4> {{ value }} </h4>
-          </div>
+        <pre><code lang="html">
+        <div id="app">
+          <h4> {{ value }} </h4>
 
           <div data:[scope-1]="scope1">
-            <h4> 1st {{ value }} </h4>
+            <h4> {{ value }} </h4>
           </div>
         </div>
-          </code></pre>
+        </code></pre>
 
-          <pre><code lang="js">
-        var app5 = new Bouer('#app5', {
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
           data: {
-            value: 'This is a value from main scope 🙂',
+            value: 'Value from main scope',
             scope1: {
-              value: 'This is a value from another scope'
+              value: 'Value from Scope 1'
             }
           }
         });
 
-        var scope1 = app5.$data.get('scope-1');
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
+        var scope1 = app.$data.get('scope-1');
+        </code></pre>
       </div>
 
       <p>
@@ -100,35 +88,14 @@
         we use the <span class="note">app.$wait.set(<i class="mark">'data-key', {...}</i>)</span> method.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-          <pre><code lang="html">
-        <div id="app7">
-          <button on:click="load" > Load Remain </button>
+      <div e-skip>
+        <pre><code lang="html">
+        <h4 wait-data="waiting"> {{ message }} </h4>
+        </code></pre>
 
-          <h4>
-            {{ message }}!
-            <span wait-data="waiting"> {{ message }} </span>
-          </h4>
-        </div>
-          </code></pre>
-
-          <pre><code lang="js">
-        var app7 = new Bouer('#app7', {
-          data: {
-            /* Properties */
-            message: 'Hello',
-
-            /* Methods */
-            load: function(){
-              this.$wait.set('waiting', { message: 'How are you? 😀' });
-            }
-          }
-        });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
+        <pre><code lang="js">
+        app.$wait.set('waiting', { message: 'Hello 😀' });
+        </code></pre>
       </div>
 
       <div class="block-note info">
@@ -156,39 +123,14 @@
         compiled.
       </p>
 
-      <p e-show="typeof noApp === 'undefined'">
-        Let's redo the example.
-      </p>
+      <div e-skip>
+        <pre><code lang="html">
+        <h4 wait-data="waiting" e-content="{{ message }}">...</h4>
+        </code></pre>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
-        <div id="app8">
-          <button on:click="load" > Load Remain </button>
-
-          <h4>
-            {{ message }}!
-            <span wait-data="waiting" e-content="{{ message }}">...</span>
-          </h4>
-        </div>
-          </code></pre>
-
-          <pre><code lang="js">
-        var app8 = new Bouer('#app8', {
-          data: {
-            /* Properties */
-            message: 'Hello',
-
-            /* Methods */
-            load: function(){
-                this.$wait.set('waiting', { message: 'How are you? 😀' });
-            }
-          }
-        });
-          </code></pre>
-          <div class="result"></div>
-        </div>
+        <pre><code lang="js">
+        app.$wait.set('waiting', { message: 'Hello 😀' });
+        </code></pre>
       </div>
 
       <p>
@@ -202,47 +144,14 @@
         a lot in today's applications.
       </p>
 
-      <div class="block-note info">
-        <p>
-          Please don't judge us by this example, it may not even make much sense, but it's
-          just to show you how it works 😀.
-        </p>
-      </div>
+      <div e-skip>
+        <pre><code lang="html">
+        <h4 wait-data="waiting" e-skeleton>{{ message }}</h4>
+        </code></pre>
 
-      <p e-if="typeof noApp === 'undefined'">
-        Let's redo the example above, again.
-      </p>
-
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
-        <div id="app9">
-          <button on:click="load" > Load Remain </button>
-
-          <h4>
-            {{ message }}!
-            <span wait-data="waiting" e-skeleton>{{ message }}</span>
-          </h4>
-        </div>
-          </code></pre>
-
-          <pre><code lang="js">
-        var app9 = new Bouer('#app9', {
-          data: {
-            /* Properties */
-            message: 'Hello',
-
-            /* Methods */
-            load: function(){
-              this.expose('waiting', { message: 'How are you? 😀' });
-            }
-          }
-        });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
+        <pre><code lang="js">
+        app.$wait.set('waiting', { message: 'Hello 😀' });
+        </code></pre>
       </div>
 
       <p>
@@ -259,19 +168,18 @@
         `e-skeleton` attribute from the elements.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+      <div e-skip>
 
-          <pre><code lang="html">
-        <div id="app10">
-            <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
+        <pre><code lang="html">
+        <div id="app">
+          <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
 
-            <button on:click="removeSkeleton" > Remove Skeleton</button>
+          <button on:click="removeSkeleton" > Remove Skeleton</button>
         </div>
-          </code></pre>
+        </code></pre>
 
-          <pre><code lang="js">
-        var app10 = new Bouer('#app10', {
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
           data: {
             /* Properties */
             message: 'Hello',
@@ -282,10 +190,7 @@
             }
           }
         });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
+        </code></pre>
       </div>
 
       <p>
@@ -299,9 +204,8 @@
         app.skeleton.set({
           background: '#444546',
           wave: '#747576'
-        })
+        });
         </code></pre>
-
       </div>
 
       <h3> <a id="directive-e-def"> e-def </a> </h3>
@@ -313,15 +217,12 @@
           Literal</a>.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
+      <div e-skip>
+        <pre><code lang="html">
         <div e-def="{ dynamicProperty: 'I was created dynamically' }">
           {{ dynamicProperty }}!
         </div>
-          </code></pre>
-        </div>
+        </code></pre>
       </div>
 
       <div class="block-note warn">
@@ -333,34 +234,32 @@
 
       <h3> <a id="directive-e-if"> e-if </a> </h3>
       <p>
-        The <span class="note">e-if</span> directive is very similar to the <span class="mark">Vue.js</span> <span
-          class="note">v-if</span> directive...
-        It is used to conditionally render a block (element). The block will only be shown if
-        the directive expression returns a truthy value. It is accompanied with the `e-else-if` and
-        `e-else` directives.
+        The <span class="note mark">e-if</span> directive is very similar to the <span class="mark">Vue.js</span>
+        <span class="note">v-if</span> directive... It is used to conditionally render a block (element).
+        The block will only be shown if the directive expression returns a truthy value. It is accompanied with
+        the <i class="note mark">e-else-if</i> and <i class="note mark">e-else</i> directives.
       </p>
 
       <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
+        <div e-skip execute>
           <pre><code lang="html">
-        <div id="app12">
+        <div id="app1">
           <input type="number" e-bind="binary" /> <br>
 
           <p e-if="binary == 1">
-            {{ binary }} is on 🙂
+              {{ binary }} is on 🙂
           </p>
           <p e-else-if="binary == 0">
-            {{ binary }} is off 🙁
+              {{ binary }} is off 🙁
           </p>
           <p e-else>
-            {{ binary }} is not binary 🤨
+              {{ binary }} is not binary 🤨
           </p>
         </div>
           </code></pre>
 
           <pre><code lang="js">
-        var app12 = new Bouer('#app12', {
+        var app1 = new Bouer('#app1', {
           data: {
             binary: 1
           }
@@ -380,17 +279,14 @@
         The block will be visible if the directive expression returns a truthy value.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
+      <div e-skip>
+        <pre><code lang="html">
         <div class="input-field">
           <label for="name-in">Name</label>
           <input type="text" id="name-in" name="Name">
           <span e-show="!isValid">Name is required*</span>
         </div>
-          </code></pre>
-        </div>
+        </code></pre>
       </div>
 
       <h3> <a id="directive-e-for"> e-for </a> </h3>
@@ -407,24 +303,24 @@
       </p>
 
       <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+        <div e-skip execute>
 
           <pre><code lang="html">
-        <div id="app14">
+        <div id="app2">
           <h4> Array</h4>
           <ul>
-            <li e-for="fruit of fruits"> {{ fruit }} </li>
+              <li e-for="fruit of fruits"> {{ fruit }} </li>
           </ul>
 
           <h4> Object</h4>
           <ul>
-            <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
+              <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
           </ul>
         </div>
           </code></pre>
 
           <pre><code lang="js">
-        var app14 = new Bouer('#app14', {
+        var app2 = new Bouer('#app2', {
           data: {
             fruits: [ 'Bananas', 'Mango' ],
             person: {
@@ -465,10 +361,8 @@
         or <i class="note">where:[<i class="mark">filterFunction</i>]</i>.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
+      <div e-skip>
+        <pre><code lang="html">
         <input type="text" e-def="{ search: '' }" e-bind="search" />
 
         <ul>
@@ -476,8 +370,7 @@
             {{ food.name }}
           </li>
         </ul>
-          </code></pre>
-        </div>
+        </code></pre>
       </div>
 
       <h4> <a id="directive-e-for-w-order"> e-for with `order` filter </a> </h4>
@@ -487,16 +380,14 @@
         <i class="note">order:[<i class="mark">type</i>]:[<i class="mark">property?</i>]</i>.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-          <pre><code lang="html">
+      <div e-skip>
+        <pre><code lang="html">
         <ul>
           <li e-for="food of foods | order:asc:name">
             {{ food.name }}
           </li>
         </ul>
-          </code></pre>
-        </div>
+        </code></pre>
       </div>
 
       <div class="block-note info">
@@ -543,8 +434,8 @@
 
       <div e-skip>
         <pre><code lang="html">
-            <img e-src="{{ url }}" />
-            </code></pre>
+          <img e-src="{{ url }}" />
+        </code></pre>
       </div>
 
       <p>
@@ -559,15 +450,13 @@
         To achieve this result with this syntax: <span class="note mark">e-<i>attribute</i>="{ '': boolean }"</span>
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-          <pre><code lang="html">
+      <div e-skip>
+        <pre><code lang="html">
         <button e-class="{ 'active' : isActive }"
                 on:click="isActive = !isActive">
           Click Me
         </button>
-          </code></pre>
-        </div>
+        </code></pre>
       </div>
 
       <h3> <a id="directive-e-skip"> e-skip </a> </h3>
@@ -596,7 +485,7 @@
         </p>
       </div>
 
-      <h3> <a id="directive-ref"> ref (reference) </a> </h3>
+      <h3><a id="directive-ref"> ref (reference) </a></h3>
       <p>
         It's a way mark an element an access it in the instance, to achieve that, we need to use the
         <i class="note mark">ref</i> directive. To get the refs, we use <i class="note">app.refs</i>.
@@ -657,8 +546,7 @@
       <b>Request Path</b>
 
       <ul>
-        <li> <span class="note">request path &ndash; represents the path where the value will be retrieved.
-        </li>
+        <li> <span class="note">request path &ndash; represents the path where the value will be retrieved. </li>
       </ul>
 
       <h3> <a id="directive-e-req-init"> Initialization </a> </h3>
@@ -670,31 +558,39 @@
       <div e-skip>
         <pre><code lang="js">
         var app = new Bouer('#app', {
-          middleware: function (configure, app) {
-            configure('req', function (bind, update) {
-              bind(function (context) {
-                var path = context.detail.requestPath;
-                var baseURL = "https://jsonplaceholder.typicode.com/";
+            middleware: function (configure, app) {
 
-                var fetchPromise = fetch(baseURL + path, {
-                  headers: { 'Content-Type': "application/json" }
-                }).then(function (response) {
-                  if (!response.ok)
-                    throw new Error("Bad Request");
-                  return response.json();
-                }).then(function (json) {
+              configure('req', function (bind, update) {
 
-                  // the response must be always into a object with `data` property
-                  return { data: json };
+                bind(function (context) {
+                  var path = context.detail.requestPath;
+                  var baseURL = "https://jsonplaceholder.typicode.com/";
 
-                }).catch(function (error) {
-                  return error
+                  var fetchPromise = fetch(baseURL + path, {
+                    headers: {
+                      'Content-Type': "application/json"
+                    }
+                  }).then(function (response) {
+
+                    if (!response.ok)
+                      throw new Error(response.statusText);
+
+                    return response.json();
+                  }).then(function (json) {
+
+                    // the response must be always into a object with `data` property
+                    return { data: json };
+
+                  }).catch(function (error) {
+                    return error
+                  });
+
+                  return fetchPromise;
                 });
 
-                return fetchPromise;
               });
-            });
-          }
+
+            }
         });
         </code></pre>
       </div>
