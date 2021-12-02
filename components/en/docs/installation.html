@@ -4,14 +4,25 @@
 
     <section class="section">
       <h1> <a id="installation"> Installation </a> </h1>
+
+      <h3> <a id="compatibility"> Browsers Compatibility </a> </h3>
+      <p>
+        It was tested in almost every popular browsers and IE 11, below that is not suported,
+        because it uses some concepts of <a href="https://caniuse.com/#feat=es6" class="mark">
+          ECMAScript 2015 (ES6) </a>.
+      </p>
+
       <p>
         It is easily added to a web project, just like the other libraries and framework, and
-        for that there are two ways.
+        for that we can use:
       </p>
+
+      <h2> <a> Using <i class="note">&lt;<i class="mark">script</i>&gt; </i> tag </a> </h2>
 
       <h3> <a id="install-local"> Locally </a> </h3>
       <p>
-        To use it locally, we need to download the file and import it
+        To use it locally, we need to download the file and include script, after that Bouer class will be available to
+        the global object.
       </p>
 
       <p>
@@ -26,23 +37,57 @@
 
       <p> Or, we can use... </p>
 
-      <h3> <a id="install-cdn"> CDN </a> </h3>
+      <h2> <a id="install-cdn">Using <i class="note mark">CDN</i> </a> </h2>
       <p>
         Using <a href="https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" target="_blank" class="mark"
-          rel="noopener noreferrer">CDN</a>
-        is a little bit simpler because the only thing that must be done is to import it
+          rel="noopener noreferrer">CDN</a> is a little bit simpler because the only thing that must be done is to
+        import it.
       </p>
 
       <pre><code lang="html">
-        <script src="url/bouer.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/bouerjs@2.6.14/dist/bouer.js"></script>
       </code></pre>
 
       <p> Or, we can use the minified one... </p>
       <pre><code lang="html">
-        <script src="url/bouer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/bouerjs@2.6.14/dist/bouer.min.js"></script>
       </code></pre>
 
-      <h3> <a id="install-npm"> NPM </a> </h3>
+      <p>
+        If you are using native ES Modules, there is also an ES Modules compatible build:
+      </p>
+
+      <pre><code lang="html">
+        <script type="module">
+      import Bouer from 'https://cdn.jsdelivr.net/gh/bouerjs@2.6.14/dist/bouer.esm.js'
+    </script>
+      </code></pre>
+
+      <p>
+        We recommend to use the production version in your published application ot site, switching from bouer.js to
+        bouer.min.js. This is a smaller build optimized for speed instead of development experience.
+      </p>
+
+      <a href="https://www.jsdelivr.com/package/gh/bouerjs/bouer"></a>
+
+      <h2> <a id="install-npm"> Using <i class="note mark">NPM</i> </a> </h2>
+
+      <p>
+        We recommended <i class="note">NPM</i> installation method when building large scale applications with Bouer,
+        working nicely with module bundlers like <a href="https://webpack.js.org/" class="mark">Webpack</a>.
+      </p>
+
+      <pre><code lang="shell">
+      # latest stable version
+      $ npm install bouerjs
+      </code></pre>
+
+      <p>
+        Bouer also provides <a :href="/cli.docs.html" class="mark">CLI</a> project or components scaffolding,
+        serve the application, builds and deploy.
+      </p>
+
+
 
     </section>
 

@@ -1,14 +1,8 @@
 <aside class="menu">
   <ul class="items nice-scroll">
-    <li> <a :href="/docs/introduction.html#intro">
+    <li><a :href="/docs/introduction.html#intro">
         <h3> Introduction </h3>
-      </a>
-      <ul>
-        <li> <a :href="#what"> What is? </a></li>
-        <li> <a :href="#compactibility"> Compactibility </a> </li>
-        <li> <a :href="#scale"> Scale </a> </li>
-      </ul>
-    </li>
+      </a></li>
     <li> <a :href="/docs/installation.html#installation">
         <h3> Installation </h3>
       </a>
@@ -166,6 +160,8 @@
       for (var i = 0; i < $h3s.length; i++) {
         var anchor = $h3s[i].parentNode;
         var ulContainer = anchor.nextElementSibling;
+        if (!ulContainer) return;
+
         var ulAnchors = ulContainer.querySelectorAll('a[href]');
 
         for (var k = 0; k < ulAnchors.length; k++) {
@@ -176,7 +172,7 @@
 
       // Listening to the scroll event
       var view = root.querySelector('.documentation .view');
-      (view.onscroll = function onscroll () {
+      (view.onscroll = function onscroll() {
         var current, $anchors = view.querySelectorAll('a[id]');
         // Looping all the subscribed anchors
         for (var i = 0; i < $anchors.length; i++) {
