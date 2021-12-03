@@ -371,12 +371,12 @@ a.active-doc-menu * {
 
 .banner .top .logo {
   position: relative;
-  font-size: 82pt;
+  font-size: 80pt;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--bouer-black);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .banner .top .logo .wrapper {
@@ -384,8 +384,8 @@ a.active-doc-menu * {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72pt;
-  height: 72pt;
+  width: 65pt;
+  height: 65pt;
   border-radius: 50%;
   top: 14pt;
   position: relative;
@@ -399,7 +399,7 @@ a.active-doc-menu * {
   position: absolute;
   font-weight: 600;
   left: 50%;
-  top: 30%;
+  top: 28%;
 }
 
 .banner .bottom {

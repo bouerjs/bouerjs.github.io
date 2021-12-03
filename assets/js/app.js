@@ -14,6 +14,7 @@
 
   // If some language isn't selected
   // if (!localStorage.$lang) {
+
   //   // Get the navigator language
   //   var id = ((window.navigator || {}).language || 'en').split('-')[0];
 

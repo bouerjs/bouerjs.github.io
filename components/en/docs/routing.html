@@ -5,16 +5,16 @@
     <section class="section">
       <h1> <a id="routing"> Routing </a> </h1>
       <p>
-        The routing funcionality that enable the <b>Single Page Application</b> mode, and creating a SPA with
+        the routing functionality enables <b>Single Page Application</b> (SPA) mode, and creating a SPA with
         <i class="note">Bouer</i> is very simple, because it uses the same <a class="note mark">Component</a>
         concept.
       </p>
 
       <h3> <a id="routing-init"> Initialization </a> </h3>
       <p>
-        In the routing, the element where the components will be rendered must be specified, for this,
-        the <i class="note mark">route-view</i> directive is used, and in the definition of the components,
-        some additional specific properties for the routing are defined, which are:
+        To initialize the routing we need set <i class="note mark">route-view</i> to an element, this specify
+        where all the pages will be rendered and we also need to add some additional and specific properties
+        for the routing in the component, which are:
       </p>
 
       <div e-skip>
@@ -82,40 +82,58 @@
       <div class="block-note dont">
         <p>
           Two or more components cannot be defined with <i class="mark">isDefault</i> or
-          <i class="note">mark</i>, if you do, an error will be thrown in saying
-          `<i class="color-red">It is not allowed to define more than one 'default'/'notFound' page...</i>`.
+          <i class="note">mark</i>, if you do, an error will be thrown.
         </p>
       </div>
 
-      <h3> <a id="routing-navegation"> Navegation </a> </h3>
+      <h3> <a id="routing-navigation"> Navigation </a> </h3>
       <p>
-        Navigating between pages is done using the anchor <i class="note code-style"> &lt;<i class="mark">a</i>&gt;</i>
-        tag but with the attribute <i class="note mark">:href</i>, it can also be done with <i class="note">href</i>
-        but we do not recommend using it, we will describe the behavior of each one.
+        Navigating between pages is done using the anchor tag
+        <i class="note code-style">&lt;<i class="mark">a</i>&gt;</i> but with the
+        <i class="note mark">:href</i> attribute, it can also be done with <i class="note">href</i> attribute
+        but we do not recommend using it, we will describe the attribute behavior for better understanding.
       </p>
 
       <p>
         When <i class="note mark">:href</i> is defined it rewrites the href attribute according to the
-        app base path, and whenever it is clicked, the default anchor action is prevented.
+        application <i class="note code-style">&lt;<i class="mark">base</i>&gt;</i> value, and whenever it's
+        clicked, the default anchor action is prevented.
       </p>
 
-      <h3> <a id="routing-nesting"> Nesting Routes </a> </h3>
+      <h3> <a id="routing-nesting"> Nesting Children and Routes </a> </h3>
       <p>
-        Children can be added to each component, this in the <i class="note mark">children</i> property,
+        Children can be added to a component, this in the <i class="note mark">children</i> property,
         like this we can nest routes too. The property expects a component as well.
       </p>
 
+      <div e-skip>
+        <pre><code lang="js">
+        components: [{
+          title: 'About',
+          route: '/about',
+          url: '/about.html',
+          children: [
+            {
+              url: '/about-author.html',
+              title: 'About the author',
+              route: '/author'
+            }
+          ]
+        }]
+        </code></pre>
+      </div>
+
       <div class="block-note info">
         <p>
-          Note that in the children route we only put <i class="note mark">/childRouteName</i>, because
-          after it registered it will became <i class="note mark">/parentRouteName/childRouteName</i>. <br>
-          The nesting the has not limit, meaning that we can also nest in a child.
+          Note that in the children route we only put <i class="note mark">/author</i>, because
+          after it registered it will became <i class="note mark">/about/author</i>. <br>
+          The nesting the has no limit, meaning that we can also nest into the child.
         </p>
       </div>
 
       <h3> <a id="routing-params"> Route Params </a> </h3>
       <p>
-        To define a parameter on the route, we use <i class="note">{<i class="mark">paramName</i>}</i> and to
+        To define a parameter in the route, we use <i class="note">{<i class="mark">paramName</i>}</i> and to
         extract the data of the route's parameters, we use <i class="note mark">this.getParams()</i> in the
         component instance, returning an object containing all the <i class="mark">route parameters</i>
         and <i class="mark">query parameters</i>.
@@ -187,7 +205,7 @@
 
       <h3> <a id="routing-pretty-url"> HTML5 Mode / Pretty URL </a> </h3>
       <p>
-        The default navegation mode is hash mode, which uses a URL hash to navigate between pages without reloading it.
+        The default navigation mode is hash mode, which uses a URL hash to navigate between pages without reloading it.
       </p>
 
       <p>
@@ -196,7 +214,7 @@
 
       <ol>
         <li> Disable the <i class="note mark">config.usehash</i> &ndash; setting to <i class="mark">false</i> it
-          make that no hash will be added the navegation anchors. </li>
+          make that no hash will be added the navigation anchors. </li>
 
         <li> Add the <i class="note code-style">&lt;<i class="mark">base</i>&gt;</i> tag in the page head &ndash; that
           specify the base URL to use for all relative URLs in a document.
@@ -206,7 +224,7 @@
 
         <li> Configure the server to return <i class="note mark">index.html</i> if the URL doesn't match any static
           assets &ndash; as the application only runs in one page `the index` we need only to tell the server to
-          return this file allowing the <i class="note mark">bouer.js</i> handling the navegation in the front-end.
+          return this file allowing the <i class="note mark">bouer.js</i> handling the navigation in the front-end.
         </li>
       </ol>
 

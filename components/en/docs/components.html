@@ -130,11 +130,10 @@
 
       <h3> <a id="component-style"> Styles </a> </h3>
       <p>
-        The style tag here works as expected, by default the styles is global to define it has a
-        scope one just add the <i class="note mark">scoped</i> attribute. This adds a class
+        The style tag here works as expected, by default the styles is global to set it has a
+        scoped one just add the <i class="note mark">scoped</i> attribute. This adds a class
         like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
       </p>
-
 
       <div e-skip>
         <pre><code lang="xml">
@@ -280,7 +279,7 @@
       <h3> <a id="component-keep-alive"> Keep Alive </a> </h3>
       <p>
         By default, the components are re-created when they are requested to be injected do the DOM, to
-        keep the element with it information just define keep-alive.
+        keep the element with it information just set <i class="note mark">keep-alive</i> attribute.
         <i class="note warn-border">All the scripts will be reloaded</i>.
       </p>
 
@@ -318,7 +317,7 @@
 
       <p>
 
-        But, if want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
+        But, if we want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
         <i class="note mark">name</i> attribute with a value and mark with <i class="note mark">slot</i>
         attribute with the same value in the element we want to include.
       </p>
@@ -449,17 +448,25 @@
         The component <i class="note mark">addAssets(<i>[ { ... } ]</i>)</i> method is used for adding assets like
         .js and/or .css files to the component. It expects a list of
         <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>,
-        scoped: <i class="mark">boolean</i> }</i>, where:
+          scoped: <i class="mark">boolean</i> }</i>, where:
       </p>
 
       <ul>
-
+        <li> <span class="note mark">type</span> &ndash; the type of the asset, which can be <i class="mark">style</i>,
+          <i class="mark">css</i>, <i class="mark">link</i>, <i class="mark">script</i>, <i class="mark">js</i>.
+        </li>
+        <li> <span class="note mark">src</span> &ndash; the source of the file, if the path ends with the file extension
+          like <i class="note mark">.js</i> or <i class="note mark">.css</i> the <i class="note mark">type</i> property
+          can be optional.
+        </li>
+        <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="note mark">scoped</i>.
+          By default the value is <i class="note mark">true</i>.
+        </li>
       </ul>
 
       <p>
-        As we extend the Component class, we can define the already existing hooks an add custom methods
-        to this class, to be able to access this method we use <i class="mark">this</i> keyword in
-        the element.
+        As we extend the Component class, we can set the existing hooks or even add custom methods
+        to this class, to be able to access this method we use <i class="mark">this</i> keyword.
       </p>
 
       <div e-skip>
