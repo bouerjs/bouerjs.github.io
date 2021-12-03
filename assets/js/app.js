@@ -1,6 +1,6 @@
 (function () {
   // The language that needs to loaded
-  var lang,
+  var lang = 'en',
     // Website available languages
     languages = [{
         id: 'en',
