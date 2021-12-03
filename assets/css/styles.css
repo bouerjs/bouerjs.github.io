@@ -384,8 +384,8 @@ a.active-doc-menu * {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 61pt;
-  height: 61pt;
+  width: 63pt;
+  height: 63pt;
   border-radius: 50%;
   top: 13pt;
   position: relative;
@@ -396,7 +396,7 @@ a.active-doc-menu * {
   color: var(--bouer-yellow);
   position: relative;
   font-weight: 600;
-  top: -13pt;
+  top: -14pt;
 }
 
 .banner .bottom {
