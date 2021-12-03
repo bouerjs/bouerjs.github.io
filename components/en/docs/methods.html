@@ -11,12 +11,13 @@
       <h3><a id="method-set">set</a></h3>
       <p>
         It is used to define properties in the data scope. It sintax is
-        <span class="note">app.set( <i class="mark">object, targetObject</i>)</span>.
+        <span class="note">app.set(object: <i class="mark">object</i>, targetObject?: <i
+            class="mark">object</i>)</span>.
       </p>
       <ul>
-        <li> <span class="note mark">{ Object } object</span> &ndash; represents object a
+        <li> <span class="note mark">object</span> &ndash; represents object a
           containing the properties that must be added to the scope. </li>
-        <li> <span class="note mark">{ Object } targetObject</span> &ndash; represents the
+        <li> <span class="note mark">targetObject</span> &ndash; represents the
           target scope to be added to the properties. It is optional, if not defined the
           properties will be in the <span class="note mark">main scope</span>. </li>
       </ul>
@@ -40,15 +41,14 @@
       <p>
         It allows adding an event to the instance so that it can be used anywhere in the
         application. The method expects two parameters: <span class="note">
-          app.on(<i class="mark">eventName, callback, options</i>)</span>.
+          app.on(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>, options?: <i
+            class="mark">object</i>)</span>.
       </p>
 
       <ul>
-        <li> <span class="note mark">{ String } eventName</span> &ndash; the name of the
-          event to be added. </li>
-        <li> <span class="note mark">{ Function } callback</span> &ndash; the callback having
-          your code. </li>
-        <li> <span class="note mark">{ Object } options</span> &ndash; an object having the
+        <li> <span class="note mark">eventName</span> &ndash; the name of the event to be added. </li>
+        <li> <span class="note mark">callback</span> &ndash; the callback having your code. </li>
+        <li> <span class="note mark">options</span> &ndash; an object having the
           <i class="mark">Event AttachedNode</i> and the <i class="mark">Event Modifiers</i>.
         </li>
         <li> <span class="note mark">{ EventSubscription } returns</span> &ndash; an object
@@ -69,16 +69,17 @@
       <h3><a id="method-off">off</a></h3>
       <p>
         Allows you to remove an event added to the instance. The method expects two parameters:
-        <span class="note">app.off( <i class="mark">eventName, callback, attachedNode?</i>)</span>.
+        <span class="note">app.off(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
+          attachedNode?:
+          <i class="mark">Element</i>)</span>.
       </p>
 
       <ul>
-        <li> <span class="note mark">{ String } eventName</span> &ndash; The name of the
-          event to be removed. </li>
-        <li> <span class="note mark">{ Function } callback</span> &ndash; The callback
-          returned from <span class="note mark">on</span> method. </li>
-        <li> <span class="note mark">{ Element } attachedNode</span> &ndash; The element having
-          the event to be removed. </li>
+        <li> <span class="note mark">eventName</span> &ndash; The name of the event to be removed. </li>
+        <li> <span class="note mark">callback</span> &ndash; The callback returned from
+          <span class="note mark">on</span> method.
+        </li>
+        <li> <span class="note mark">attachedNode</span> &ndash; The element having the event to be removed. </li>
       </ul>
 
       <div e-skip>
@@ -97,13 +98,13 @@
       <p>
         Allows to dispatch a specific event, whether customized (events added in elements) or
         added in the instance. The method expects three parameters:
-        <span class="note">app.emit( <i class="mark">eventName, options?</i>)</span>.
+        <span class="note">app.emit(eventName: <i class="mark">string</i>, options?: <i class="mark">object</i>)</span>.
       </p>
 
       <ul>
-        <li> <span class="note mark">{ String } eventName</span> &ndash; the name of the
+        <li> <span class="note mark">eventName</span> &ndash; the name of the
           event to be emitted. </li>
-        <li> <span class="note mark">{ Object } Options </span> &ndash; an object that can be set
+        <li> <span class="note mark">Options</span> &ndash; an object that can be set
           the <i class="note">element: <i class="mark">Node</i></i>,
           <i class="note">init?: <i class="mark">CustomEventInit</i></i>, <i class="note">once?:
             <i class="mark">boolean</i></i>.
@@ -134,6 +135,18 @@
         </code></pre>
       </div>
 
+      <b>CustomEventInit structure: </b>
+      <div e-skip>
+        <pre><code lang="js">
+        CustomEventInit {
+          bubbles?: boolean;
+          cancelable?: boolean;
+          composed?: boolean;
+          detail?: object;
+        }
+        </code></pre>
+      </div>
+
       <h3><a id="method-tojsObj">toJsObj</a></h3>
       <p>
         It allows creating a structured javascript object, based on the structure of the HTML
@@ -161,19 +174,20 @@
 
       <p>
         The method expects three parameters: <span class="note">
-          app.toJsObj(<i class="mark">selector, options?, onset?</i>)</span>.
+          app.toJsObj(selector: <i class="mark">string | Element</i>, options?:
+          <i class="mark">object</i>, onset?: <i class="mark">Function</i>)</span>.
       </p>
 
       <ul>
-        <li> <span class="note mark">{ String | Element } selector</span> &ndash; the selector
+        <li> <span class="note mark">selector</span> &ndash; the selector
           of the element to be generated or the element it self. </li>
-        <li> <span class="note mark">{ Object } options</span> &ndash; options that indicates
+        <li> <span class="note mark">options</span> &ndash; options that indicates
           attributes it needs to look and from this ones which attributes it needs to get the
           value. It sintax is <i class="note">{ names: <i class="mark">'[attribute1],[attribute2]'</i>,
             values: <i class="mark">'[attribute1],[attribute2]'</i> }</i>. The order really matters, it takes
           what it finds first. The default value is <span class="note">{ names: <i class="mark">'[name]'</i>,
             values: <i class="mark">'[value]'</i> }</span>. </li>
-        <li> <span class="note mark">{ Function} onset</span> &ndash; a function that will be
+        <li> <span class="note mark">onset</span> &ndash; a function that will be
           called whenever a property is setted. </li>
       </ul>
 
@@ -222,24 +236,25 @@
       <h3><a id="method-watch">watch</a></h3>
       <p>
         It is used to watch changes in specific property in the data scope. It sintax is
-        <span class="note">app.watch(<i class="mark">propertyName, callback, targetObject</i>)</span>.
+        <span class="note">app.watch(propertyName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
+          targetObject?: <i class="mark">object</i>)</span>.
       </p>
       <ul>
-        <li> <span class="note mark">{ String } propertyName</span> &ndash; represents the
+        <li> <span class="note mark">propertyName</span> &ndash; represents the
           name of the property in the data scope. </li>
-        <li> <span class="note mark">{ Object } callback</span> &ndash; represents the
+        <li> <span class="note mark">callback</span> &ndash; represents the
           callback where all the logic will be fired when the property changes. The first
           argument is the new value and the second is the old value of the property. </li>
-        <li> <span class="note mark">{ Object } targetObject</span> &ndash; represents the
+        <li> <span class="note mark">targetObject</span> &ndash; represents the
           target scope having the property to watch. It is optional, if not defined the
           properties will be in the <span class="note mark">main scope</span>. </li>
-        <li> <span class="note mark">{ Object } returns</span> &ndash; the watch object, that
+        <li> <span class="note mark">returns</span> &ndash; the watch object, that
           can be used to destroy the watch listener. </li>
       </ul>
 
       <div e-skip>
         <pre><code lang="js">
-        var app = new Bouer('#my-app', {
+        var app = new Bouer('#app', {
           data: {
             firstName: 'Neves',
             lastName: 'Manuel'
@@ -256,20 +271,42 @@
 
       <h3><a id="method-react">react</a></h3>
       <p>
-        Watch all reactive properties in the provided scope.
+        It is used to watch all reactive properties in the provided scope. It sintax is
+        <span class="note">app.react(watchableScope: <i class="mark">Function</i>)</span>.
       </p>
 
       <ul>
-        <li> <span class="note mark">{ Function } watchableScope</span> &ndash; the function that will
+        <li> <span class="note mark">watchableScope</span> &ndash; the function that will
           be called when the any reactive property change. </li>
         <li> <span class="note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
           and the method to destroy watches at once.
         </li>
       </ul>
 
+      <div e-skip>
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
+          data: {
+            result: 0,
+            value1: 1,
+            value2: 1
+          }
+        });
+
+        // If any of the reactive property changes the callback will be called
+        var watches = app.react(function() {
+          var src = this.data;
+          src.result = src.value1 + src.value2;
+        });
+
+        watches.destroy();
+        </code></pre>
+      </div>
+
       <h3><a id="method-compile">compile</a></h3>
       <p>
-        It's used to compile a html element. It expects one parameter: <span class="note mark">app.compile(options)</span>.
+        It's used to compile a html element. It expects one parameter: <span class="note">
+          app.compile(options: <i class="mark">object</i>)</span>.
       </p>
 
       <ul>
@@ -290,9 +327,15 @@
         </code></pre>
       </div>
 
+      <div class="block-note warn">
+        <p>
+          The element to be compiled need to be added already to the DOM.
+        </p>
+      </div>
+
       <h3><a id="method-destroy">destroy</a></h3>
       <p>
-        The method used to destroy the application.
+        The method used to destroy the application. It expects no parameters.
       </p>
     </section>
 

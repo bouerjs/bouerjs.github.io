@@ -5,58 +5,45 @@
     <section class="section">
       <h1><a id="components"> Components </a></h1>
       <p>
-        It is a concept that allows the reuse of HTML code. Bouer creates and handles components
-        in a different way, we will see in the chapters below...
-      </p>
-
-      <p>
-        There are two types of components, <span class="note mark">Cloned</span> and <span
-          class="note mark">Registered</span>, and these two forms can be used of the component
-        as the tag name.
+        It is a concept that allows the reuse of HTML Snippet. Bouer creates and handles components
+        in a different way, we will see in the chapters below. There are two types of components,
+        <span class="note mark">Cloned</span> and <span class="note mark">Registered</span>,
+        and these two ways are used the same way.
       </p>
 
       <h3> <a id="component-cloned"> Cloned </a> </h3>
       <p>
-        These are components that are based on a copy of an element during compilation process, it is
-        like a copy and paste. It can be achived by defining <span class="note mark">
-          e-entry="<i>component-name</i>"</span> to the element that needs to be
-        copied or registered and include it where it needs to pasted.
+        These are components that are based on a copy of an element during compilation process, it's
+        like copy and paste. It can be achived by defining
+        <span class="note mark">e-entry<i>="component-name"</i></span> in the element that needs to be
+        copied (registered) and include it where it needs to pasted.
+        <i class="note warn-border">The order matters.</i>.
       </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-
-          <pre><code lang="html">
-        <div id="app">
-          <!-- Copying -->
-          <div e-entry="logo">
-            <label> Logo </label>
-          </div>
-
-          <!-- Pasting -->
-          <logo></logo>
-
-          <!-- Pasting -->
-          <logo></logo>
+      <div e-skip>
+        <pre><code lang="html">
+        <!-- Copying -->
+        <div e-entry="logo">
+          <label> Logo </label>
         </div>
-          </code></pre>
 
-        </div>
+        <!-- Pasting -->
+        <logo></logo>
+
+        <!-- Pasting -->
+        <logo></logo>
+        </code></pre>
       </div>
 
       <h3> <a id="component-registered"> Registered</a> </h3>
       <p>
-        These are the components that are registered directly in the instance, it can be done
-        in <span class="note mark">Bouer Class</span> or using the component manager
-        object in <span class="note mark">app.$components</span>.
+        These are the components that are registered directly in the instance, it can be done in
+        <span class="note mark">Bouer</span> instance options at
+        <i class="note">{ <i class="mark">components</i>: [ ... ] }</i> or using the component handler
+        object in <i class="note">app.<i class="mark">$components.add(<i>...</i>)</i></i>.
       </p>
 
       <h3> <a id="component-registering"> Registering </a> </h3>
-      <p>
-        This way we register the component directly in the instance, in the instance options or in
-        app component handler.
-      </p>
-
       <div e-skip>
         <pre><code lang="js">
         var app = new Bouer('#app', {
@@ -114,30 +101,31 @@
           }]
         });
 
-        // Adding or Registering new component
+        // Adding or Registering new component with the handler
         app.$components.add(Component);
         </code></pre>
       </div>
 
       <h3> <a id="component-handing"></a> Handling Components </h3>
       <p>
-        The object <span class="note mark">app.$components</span> allow us to manage
+        The object <i class="note">app.<i class="mark">$components</i></i> allow us to manage
         components. It is structured as following:
       </p>
 
       <ul>
         <li> <span class="note mark">add</span> &ndash; it is a method that allow to add
-          components to the instance. It expects an object having the component element: <span
-            class="note mark">Component</span>. </li>
+          components to the instance. It expects an object having the component element: <i
+            class="note mark">add(<i>Component</i>)</i>. </li>
         <li> <span class="note mark">get</span> &ndash; it is a method that allow to get a
-          component options object. It expects the <span class="note mark">nameId</span> of
-          the component: <span class="note mark">get(component-name)</span>. </li>
+          component. It expects the <span class="note mark">component-name</span> of
+          the component: <span class="note mark">get(<i>string</i>)</span>. </li>
       </ul>
 
       <h3> <a id="component-format"> Component Format </a> </h3>
       <p>
-        They are written into .html files, containing <i class="mark">styles</i> (optional),
-        <i class="mark">scripts</i> (optional) and a <i class="mark">root</i> element (required).
+        They are written into .html files, containing <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i>
+        (optional), <i class="note code-style">&lt;<i class="mark">script</i>&gt;</i> (optional) and the
+        <i class="note">root element</i> like <i class="note code-style">&lt;<i class="mark">div</i>&gt;</i> (required).
       </p>
 
       <h3> <a id="component-style"> Styles </a> </h3>
@@ -149,14 +137,14 @@
 
 
       <div e-skip>
-        <pre><code lang="html">
+        <pre><code lang="xml">
         <style>
           /* Global Style */
-      </style>
+        </style>
 
         <style scoped>
           /* Scoped Style */
-      </style>
+        </style>
         </code></pre>
       </div>
 
@@ -194,16 +182,16 @@
 
       <div e-skip>
 
-        <pre><code lang="html">
+        <pre><code lang="xml">
         <div>
           <!-- Component Element -->
         </div>
         <script>
-          /* Component Script */
+          /*   Component Script   */
         </script>
         <style scoped>
-          /* Component Scope Style */
-      </style>
+          /*   Component Scope Style   */
+        </style>
         </code></pre>
 
       </div>
@@ -229,7 +217,7 @@
           /** Method used to export data to the element */
           export (options: object): void;
 
-          /** Method used to destroy the compoment */
+          /** Method used to destroy the component */
           destroy(): void;
 
           /** Method used to build the `url attributes` or `query parameters` */
@@ -257,16 +245,16 @@
         </p>
       </div>
 
-      <h3> <a id="component-data"> Component with `data` </a> </h3>
+      <h3> <a id="component-data"> Component with <i class="note-mark">data</i> </a> </h3>
       <p>
-        A component can be combined with <i class="note mark">data direactive</i> to inject data
-        in the component. This data can be accessed in the property
-        <i class="note mark">this.data</i> inside of the component's script.
+        A component can be combined with <i class="note mark">data</i> directive to inject data
+        in the component. This data can be accessed in the property <i class="note mark">this.data</i>
+        inside of the component's script.
       </p>
 
       <div class="block-note info">
         <p>
-          The attributes defined in component element are transfered to the template element
+          The attributes defined in component element are transfered to the component root element
           (for example: <i class="note mark">div</i>) of the component.
         </p>
       </div>
@@ -304,15 +292,10 @@
 
       <h3> <a id="component-slots"> Component with `slots` </a> </h3>
       <p>
-        Components can be easily nested using slots, just define a <i class="note mark">slot</i>
-        tag with <i class="note mark">name</i> attribute into the component body and define a
-        <i class="note mark">slot</i> tag into the component template (where the content needs to placed)
-        with the same name.
-      </p>
-
-      <p>
-        But, if we define a <i class="note mark">slot</i> tag with <i class="note mark">default</i> in the
-        component template, all the component body content will be injected (no need to define a slot).
+        Elements can be easily nested using slots, just define a
+        <i class="note code-style">&lt;<i class="mark">slot</i>&gt;</i> tag with <i class="note mark">default</i>
+        attribute into the component body where we want the element to be included and fill the component body
+        with the elements to include.
       </p>
 
       <div e-skip>
@@ -333,35 +316,36 @@
         </code></pre>
       </div>
 
-      <b> With multiple slots should be: </b>
+      <p>
+
+        But, if want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
+        <i class="note mark">name</i> attribute with a value and mark with <i class="note mark">slot</i>
+        attribute with the same value in the element we want to include.
+      </p>
 
       <div e-skip>
         <label>DOM</label>
         <pre><code lang="html">
         <app-table>
-          <slot name="head">
+          <div slot="head" class="head">
             <label> Name </label>
             <label> Age </label>
-          </slot>
+          </div>
 
-          <slot name="body">
+          <div slot="body" class="body">
             <div e-for="users">
               <label> {{ name }} </label>
               <label> {{ age }} </label>
             </div>
-          </slot>
+          </div>
         </app-table>
         </code></pre>
 
         <label>Component</label>
         <pre><code lang="html">
         <div class="table">
-          <div class="head">
-            <slot name="head"></slot>
-          </div>
-          <div class="body">
-            <slot name="body"></slot>
-          </div>
+          <slot name="head"></slot>
+          <slot name="body"></slot>
         </div>
         </code></pre>
       </div>
@@ -431,7 +415,7 @@
 
           init(){
             this.addAssets([
-              { src: './home.css' }
+              { src: './about.css' }
             ]);
           }
         }
@@ -458,13 +442,19 @@
 
       <p>
         The <i class="note mark">init</i> method is called after the component is instantiated, and
-        commonly used for code initialization, like <i class="mark">addAssets</i>.
+        commonly used for code initialization, like <i class="mark">addAssets(<i>[ { ... } ]</i>)</i>.
       </p>
 
       <p>
-        The compoment <i class="note mark">addAssets</i> method is used for adding assets like .js and/or
-        .css files to the component.
+        The component <i class="note mark">addAssets(<i>[ { ... } ]</i>)</i> method is used for adding assets like
+        .js and/or .css files to the component. It expects a list of
+        <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>,
+        scoped: <i class="mark">boolean</i> }</i>, where:
       </p>
+
+      <ul>
+
+      </ul>
 
       <p>
         As we extend the Component class, we can define the already existing hooks an add custom methods

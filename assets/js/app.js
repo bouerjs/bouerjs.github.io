@@ -13,20 +13,20 @@
     ];
 
   // If some language isn't selected
-  if (!localStorage.$lang) {
-    // Get the navigator language
-    var id = ((window.navigator || {}).language || 'en').split('-')[0];
+  // if (!localStorage.$lang) {
+  //   // Get the navigator language
+  //   var id = ((window.navigator || {}).language || 'en').split('-')[0];
 
-    // Loop and check if it's in available languages
-    for (let i = 0; i < languages.length; i++)
-      if (languages[i].id == id) lang = id;
+  //   // Loop and check if it's in available languages
+  //   for (let i = 0; i < languages.length; i++)
+  //     if (languages[i].id == id) lang = id;
 
-    // If it was found set it
-    lang = localStorage.$lang = lang || 'en';
-  } else {
-    // Otherwise get the defined language
-    lang = localStorage.$lang;
-  }
+  //   // If it was found set it
+  //   lang = localStorage.$lang = lang || 'en';
+  // } else {
+  //   // Otherwise get the defined language
+  //   lang = localStorage.$lang;
+  // }
 
   new Bouer('#app', {
     config: {
@@ -89,10 +89,17 @@
           eval(_js);
         }
 
-        if (location.href.includes('/docs/')){
+        if (location.href.includes('/docs/')) {
+          // marking the active link
           var navDoc = document.querySelector('a.nav-doc');
           if (navDoc && !navDoc.classList.contains('active-link'))
             navDoc.classList.add('active-link');
+
+          if (location.hash) {
+            var view = this.el.querySelector('.documentation .view');
+            var anchor = view.querySelector(location.hash);
+            view.scrollTop = anchor.getBoundingClientRect().top - 60;
+          }
         }
       }
     })
