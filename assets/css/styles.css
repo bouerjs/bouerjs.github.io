@@ -384,22 +384,19 @@ a.active-doc-menu * {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 65pt;
-  height: 65pt;
+  width: 61pt;
+  height: 61pt;
   border-radius: 50%;
-  top: 14pt;
+  top: 13pt;
   position: relative;
   border: 4px solid #3178c6;
 }
 
 .banner .top .logo .wrapper .yellow {
   color: var(--bouer-yellow);
-  transform: translate(-50%, -50%);
-  display: inline-block;
-  position: absolute;
+  position: relative;
   font-weight: 600;
-  left: 50%;
-  top: 28%;
+  top: -13pt;
 }
 
 .banner .bottom {
