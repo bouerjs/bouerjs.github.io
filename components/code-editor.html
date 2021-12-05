@@ -1,0 +1,758 @@
+<div class="editor-wrapper">
+  <div class="editor" e-class="{ 'show-result' : showResult }">
+    <div class="main">
+      <div class="editor-aside editor-html">
+        <!-- Top Editor Bar -->
+        <div class="top">
+          <div class="tab-container nice-scroll">
+            <div class="tab active" tab-id="main" on:click="selectTab(event)">
+              <span class="fa fa-globe" title="The Main Code"></span>
+              <label e-title="{{ options.name }}"> Editor </label>
+            </div>
+
+            <!-- List of tabs -->
+            <div class="tab" title="Use editor.tab('{{ tab.name }}') to get the tab content"
+              e-for="(tab, tab_index) of tabList" tab-id="{{ tab.id }}" on:click="selectTab(event, tab)">
+              <label contenteditable tabindex="1" spellcheck="false" on:input="tab.name = event.target.textContent">
+                {{ tab.name || 'new-tab' }}
+              </label>
+              <i class="center-icon fa fa-close" on:click="remTab(tab_index)"></i>
+            </div>
+          </div>
+
+          <span class="add-tab">
+            <i class="center-icon fa fa-plus" on:click="addTab"></i>
+          </span>
+        </div>
+
+        <!-- Screens -->
+        <div class="screens">
+          <div class="screen editor-screen" e-skip screen-tab-id="main">
+            <div class="screen-view"></div>
+          </div>
+
+          <!-- List of screens -->
+          <div class="screen editor-screen hide-it" screen-tab-id="{{ tab.id }}" find-me="{{ tab.name }}"
+            e-for="tab of tabList" on:add="configNewTab(event.target, tab)">
+            <div e-skip class="screen-view" tabindex="-1"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="extra-area">
+          <span class="info">
+            <span>
+              <span class="fa fa-info-circle"></span>
+              <span class="text"> 'Ctrl/CMD + Enter' to compile your code </span>
+            </span>
+          </span>
+        </div>
+      </div>
+      <span class="resizable"></span>
+      <div class="editor-aside editor-result" e-skip>
+
+        <!-- Top Editor Bar -->
+        <div class="top result-container">
+          <label> Output </label>
+        </div>
+
+        <!-- Editor Result Screen -->
+        <div class="screen">
+        </div>
+
+        <!-- Editor Console Screen -->
+        <div class="extra-area nice-scroll">
+          <span class="info console">
+            <span>
+              <i class="fa fa-check-circle"></i>
+              <span class="text"> Console </span>
+            </span>
+          </span>
+          <span class="message"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editor Extra -->
+    <div class="extra">
+      <div class="alternator">
+        <button on:click="this.bouer.data.sMenuClosed = false">Tutorial</button>
+        <button on:click="showResult = false" e-class="{ 'active-side' : !showResult }">Code</button>
+        <button on:click="runCodeShowResult" e-class="{ 'active-side' : showResult }">Result</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var mEditor = null;
+  var component = this;
+  var bouer = this.bouer;
+  var MOBILE_SIZE = 645;
+  var tabConfig = {};
+  var editorBaseConfig = function (value) {
+    return {
+      value: value || '',
+      mode: "htmlmixed",
+      scrollbarStyle: 'simple',
+      autoCloseBrackets: true,
+      autoCloseTags: true,
+      matchtags: true,
+      tabSize: 2,
+      indentUnit: 2,
+      smartIndent: true,
+    }
+  };
+
+  this.on('mounted', function (evt) {
+    var element = evt.target;
+    var editor = element.children[0];
+    var $classes = editor.classList;
+    var resultScreen = element.querySelector('.editor-result .screen');
+
+
+    var exec = bouer.lazy(function (width) {
+      var has = $classes.contains('mobile');
+      if (MOBILE_SIZE >= width) {
+        if (!has) $classes.add('mobile');
+      } else {
+        if (has) $classes.remove('mobile');
+      }
+    }, 200);
+
+    evtResize = resultScreen.addEventListener('resize', function (evt) {
+      exec(element.clientWidth);
+    });
+
+    exec(element.clientWidth);
+  });
+
+  this.on('loaded', function (evt) {
+    var element = evt.target;
+
+    // Editor config
+    function Editor(selector, options) {
+      var codeEditor = (selector instanceof Element) ? selector :
+        element.querySelector(selector);
+
+      if (!codeEditor) {
+        return console.error('[Editor]: Editor element not found!');
+      }
+
+      var self = this;
+      tabConfig.activeTab = codeEditor.querySelector('div[tab-id="main"]');
+      var codeScreen = tabConfig.activeScreen = codeEditor.querySelector('div[screen-tab-id="main"]');
+      var resultScreen = codeEditor.querySelector('.editor-result .screen');
+
+      // Configuring the instance var
+      this.el = codeEditor;
+      this.result = resultScreen;
+      this.content = '';
+      options = options || {};
+
+      for (var key in options)
+        this[key] = options[key];
+
+      // vars
+      var $console = this.el.querySelector('.console');
+      var consoleIcon = $console.querySelector('.fa');
+      var consoleSection = $console.parentNode;
+      var messageContainer = consoleSection.querySelector('.message');
+      var icons = {
+        warn: 'fa-warning',
+        fine: 'fa-check-circle',
+        error: 'fa-times-circle'
+      }
+
+      this.tab = (function (name) {
+        var screen = codeEditor.querySelector('div[find-me="' + name + '"]');
+
+        if (!screen) {
+          this.console.add({
+            type: 'warn',
+            message: 'The tab `' + name + '` was not found.'
+          });
+          return '';
+        }
+
+        return screen.editor.getValue();
+      }).bind(this)
+
+      // Confifuring the instance functions
+      this.console = {
+        add: function (obj) {
+          messageContainer.innerHTML += '<p class="line fa ' + obj.type + '">' +
+            obj.message +
+            '</p>';
+          setConsoleIcon(icons[obj.type]);
+        },
+        clear: function () {
+          messageContainer.innerHTML = '';
+          setConsoleIcon(icons.fine);
+        }
+      };
+
+      if (this.type) {
+        codeEditor.children[0].classList.add(this.type);
+      }
+
+      if (self.resizable) {
+        var resizable = self.el.querySelector('.resizable');
+        resizable.style.cursor = 'n-resize';
+
+        function dragElement(element, first, second, dir) {
+          var md; // remember mouse down info
+          element.onmousedown = onMouseDown;
+
+          function onMouseDown(e) {
+            md = {
+              e: e,
+              offsetLeft: element.offsetLeft,
+              offsetTop: element.offsetTop,
+              firstWidth: first.offsetWidth,
+              secondWidth: second.offsetWidth,
+              firstHeight: first.offsetHeight - 2,
+              secondHeight: second.offsetHeight - 2
+            };
+            document.onmousemove = onMouseMove;
+            document.onmouseup = function () {
+              document.onmouseup = document.onmousemove = null;
+            }
+          }
+
+          function onMouseMove(e) {
+            var delta = {
+              x: e.clientX - md.e.x,
+              y: e.clientY - md.e.y
+            };
+
+            // prevent negative-sized elements
+            delta.y = Math.min(Math.max(delta.y, -md.firstHeight), md.secondHeight);
+
+            if (dir === 'y') {
+              element.style.height = '2px';
+              element.style.top = md.offsetTop + delta.y + "px";
+              first.style.height = (md.firstHeight + delta.y) + "px";
+              second.style.height = (md.secondHeight - delta.y) + "px";
+              element.style.flex = first.style.flex = second.style.flex = 'unset';
+            }
+          }
+        }
+
+        dragElement(resizable,
+          self.el.querySelector('.editor-aside.editor-html'),
+          self.el.querySelector('.editor-aside.editor-result'), self.resizable);
+      }
+
+      $console.onclick = function (evt) {
+        var $class = 'open-extra',
+          fun = 'add';
+        fun = consoleSection.classList.contains($class) ? 'remove' : 'add';
+        consoleSection.classList[fun]($class);
+      }
+
+      this.editor = CodeMirror(codeScreen.children[0], editorBaseConfig(self.content));
+
+      this.editor.setOption("extraKeys", {
+        'Ctrl-Enter': function (cm) {
+          self.runCode()
+        },
+        'Cmd-Enter': function (cm) {
+          self.runCode()
+        }
+      });
+
+      // functions
+      function runCode() {
+        // Clear the console
+        setConsoleIcon(icons.fine);
+        self.console.clear();
+        // Execute your code...
+
+        var div = document.createElement('div');
+        div.innerHTML = self.editor.getValue();
+        var scriptContent = [];
+        for (let i = 0; i < div.children.length; i++) {
+          var child = div.children.item(i);
+          if (child.tagName === 'SCRIPT') {
+            scriptContent.push(child.innerText)
+            div.removeChild(child);
+          }
+        }
+
+        try {
+          resultScreen.innerHTML = div.innerHTML;
+          eval(scriptContent.join('\n\n'));
+        } catch (error) {
+          self.console.add({
+            type: 'error',
+            message: error.toString()
+          });
+        }
+      }
+
+      function setConsoleIcon(name) {
+        var keys = Object.keys(icons);
+        for (let i = 0; i < keys.length; i++)
+          consoleIcon.classList.remove(icons[keys[i]]);
+        consoleIcon.classList.add(name);
+      }
+
+      self.runCode = runCode;
+      return self;
+    }
+
+    // Editor initialization
+    mEditor = element.$editor = new Editor(element, this.data.options || {});
+
+    // Add the tabs if exists
+    if (Array.isArray(mEditor.tabs))
+      this.data.tabList = mEditor.tabs;
+
+    mEditor.runCode();
+  })
+
+  this.export({
+    tab_id: 1,
+    name: this.name,
+    showResult: false,
+    tabList: [],
+    addTab: function () {
+      this.data.tabList.push({ id: this.data.tab_id++, name: 'new-tab' });
+    },
+    remTab: function (index) {
+      this.data.tabList.splice(index, 1);
+    },
+    runCodeShowResult: function () {
+      if (mEditor) {
+        component.data.showResult = true;
+        mEditor.runCode();
+      }
+    },
+    selectTab: function (evt) {
+      // Getting the scope data and the clicked element
+      var tabElement = evt.target;
+      // If the is the same ignore
+      if (tabConfig.activeTab === tabElement) return;
+      // Finding the screen
+      var id = tabElement.valueIn('tab-id');
+
+      var screen = tabElement.parentNode.parentNode.parentNode;
+      // If the screen was not found means that the it was removed
+      if (!screen) return;
+      screen = screen.querySelector('div[screen-tab-id="' + id + '"]');
+      // Hiding the current screen
+      tabConfig.activeScreen.classList.add('hide-it');
+      // Unmarking the current tab
+      tabConfig.activeTab.classList.remove('active');
+      // Showing the other screen
+      screen.classList.remove('hide-it');
+      // Marking the clicked one
+      tabElement.classList.add('active');
+
+      // Storing the last position
+      tabConfig.activeScreen = screen;
+      tabConfig.activeTab = tabElement;
+
+      if (screen.editor) screen.editor.refresh();
+    },
+    configNewTab: function (tab, data) {
+      tab.editor = CodeMirror(tab.children[0], editorBaseConfig(data.content));
+      tab.editor.setOption("extraKeys", {
+        'Ctrl-Enter': function (cm) {
+          if (mEditor) mEditor.runCode()
+        },
+        'Cmd-Enter': function (cm) {
+          if (mEditor) mEditor.runCode()
+        }
+      });
+    }
+  });
+</script>
+
+<style scoped>
+  /* Editor style */
+  .editor-wrapper {
+    flex: 1;
+    display: flex;
+  }
+
+  .editor {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    height: 420px;
+    border-radius: 6px;
+    background-color: var(--color-bg-lighter);
+    border: 1px solid var(--color-editor-border);
+    position: relative;
+  }
+
+  .editor-aside .extra-area .text,
+  .editor-aside .extra-area .message *,
+  .editor .screen-view * {
+    font-family: "Fira Mono", Consolas, 'Courier New', Courier, monospace;
+  }
+
+  .editor .main {
+    display: flex;
+    flex-flow: row;
+    flex: 1;
+  }
+
+  .editor .editor-html {
+    flex: 2;
+    border: 1px solid var(--color-editor-border);
+    min-height: 75px;
+  }
+
+  .editor .editor-html .screen-view {
+    flex: 1;
+    border-left: 15px solid var(--color-smooth-transparency);
+    padding: 4px;
+    position: relative;
+  }
+
+  .editor .editor-html .screen-view * {
+    font-size: 10pt;
+  }
+
+  .editor .editor-html .screen-view .CodeMirror {
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
+
+  .editor .editor-result {
+    border: 1px solid var(--color-editor-border);
+    flex: 1.5;
+    font-size: 11pt;
+    min-height: 75px;
+  }
+
+  .editor .editor-result .screen {
+    background-color: var(--color-editor-result-screen);
+    padding: 4px;
+  }
+
+  .editor .editor-result .screen input,
+  .editor .editor-result .screen select,
+  .editor .editor-result .screen button {
+    border: 1px solid var(--color-border);
+    padding: 2px;
+    border-radius: 4px;
+    margin: 4px 0;
+  }
+
+  .editor .editor-result .screen p {
+    margin: 4px 0;
+  }
+
+  .editor-aside {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .editor-aside .screens {
+    display: flex;
+    flex: 1;
+  }
+
+  .editor-aside .screen {
+    flex: 1;
+    overflow-y: auto;
+    outline: none;
+  }
+
+  .editor-aside .editor-screen {
+    display: flex;
+    position: relative;
+  }
+
+  .editor-aside .editor-screen>div:nth-child(1) {
+    background-color: var(--color-editor-screen);
+  }
+
+  .editor-aside .top {
+    height: 45px;
+    font-size: 10pt;
+    color: var(--color-text);
+    position: relative;
+  }
+
+  .editor-aside .top .fa {
+    padding: 0 8px;
+  }
+
+  .editor-aside .top label {
+    font-size: 9pt;
+  }
+
+  .editor-aside .tab-container,
+  .editor-aside .add-tab {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    padding: 0 4px;
+  }
+
+  .editor-aside .add-tab {
+    left: auto;
+    right: 0px;
+    width: 30px;
+  }
+
+  .editor-aside .add-tab .fa {
+    background-color: var(--color-editor-border);
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 3px;
+    transition: background-color .2s;
+  }
+
+  .editor-aside .add-tab .fa:active {
+    background-color: var(--color-smooth-transparency);
+  }
+
+  .editor-aside .tab-container .tab {
+    background-color: var(--color-smooth-transparency);
+    height: 32px;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    border-radius: 3px;
+    margin-right: 2px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .editor-aside .tab-container .tab.active:before {
+    content: '';
+    height: 26px;
+    position: absolute;
+    left: 4px;
+    width: 4px;
+    background-color: var(--color-blue);
+    border-radius: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .editor-aside .tab-container .tab label[contenteditable] {
+    margin: 0 3px;
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+
+  .editor-aside .tab-container .tab label[contenteditable]:focus {
+    background-color: var(--color-bg-lighter);
+  }
+
+  .editor-aside .tab-container .tab .fa-close {
+    position: absolute;
+    right: 4px;
+    font-size: 9pt;
+    background-color: var(--color-border);
+    border-radius: 15px;
+    color: var(--color-text);
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    transition: color .2s;
+  }
+
+  .editor-aside .tab-container .tab .fa-close:hover {
+    color: var(--color-red);
+  }
+
+  .editor-aside .top.result-container {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    background-color: var(--color-bg);
+  }
+
+  .editor-result .screen {
+    position: relative;
+  }
+
+  .editor-aside .extra-area {
+    height: 40px;
+    background-color: var(--color-editor-border);
+    font-size: 10pt;
+    color: var(--color-text);
+    transition: height .2s;
+    overflow: hidden;
+  }
+
+  .editor .open-extra {
+    height: 120px;
+    overflow-y: auto;
+  }
+
+  .editor .extra-area .info {
+    padding: 0 10px;
+    display: block;
+    height: 40px;
+  }
+
+  .editor .extra-area .info {
+    position: relative;
+  }
+
+  .editor .extra-area .info>span {
+    top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
+  }
+
+  .editor .extra-area .info>span .fa {
+    margin: 0 10px;
+  }
+
+  .editor .extra-area .console {
+    cursor: pointer;
+  }
+
+  .editor .console .fa-check-circle {
+    color: var(--color-green) !important;
+  }
+
+  .editor .console .fa-times-circle {
+    color: var(--color-red) !important;
+  }
+
+  .editor .console .fa-warning {
+    color: var(--color-yellow) !important;
+  }
+
+  .editor .extra-area .message {
+    display: block;
+    padding: 5px;
+    word-wrap: anywhere;
+  }
+
+  .editor .extra-area .message .line {
+    margin: 4px 0;
+    display: block;
+  }
+
+  .editor .extra-area .message .error {
+    color: var(--color-red);
+  }
+
+  .editor .extra-area .message .warn {
+    color: var(--color-yellow);
+  }
+
+  .resizable {
+    flex: 0.01;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: var(--color-border);
+  }
+
+  /* Editor */
+  /* Mobile type */
+  .editor.mobile>.main>span,
+  .editor.mobile .editor-result {
+    display: none;
+  }
+
+  .editor.mobile .editor-aside {
+    flex: 1 !important;
+  }
+
+  .editor.mobile .editor-html .extra-area {
+    display: none;
+  }
+
+  .alternator {
+    display: none;
+  }
+
+  .editor.mobile .alternator {
+    text-align: center;
+    display: block;
+  }
+
+  .editor.mobile .alternator>button {
+    height: 28px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    margin: 5px 8px;
+    border-radius: 5px;
+    color: var(--color-text);
+    max-width: 115px;
+    padding: 0 5%;
+  }
+
+  .editor.mobile .alternator>button:first-child {
+    display: none;
+  }
+
+  .editor.mobile.show-result .editor-result {
+    display: flex;
+  }
+
+  .editor.mobile.show-result .editor-html {
+    display: none;
+  }
+
+  .editor.expanded {
+    height: auto;
+  }
+
+  .editor.expanded .main {
+    flex-flow: column;
+  }
+
+  .active-side {
+    border-color: var(--note-green) !important;
+  }
+
+  /* CodeMirror */
+  .CodeMirror {
+    background-color: transparent !important;
+    height: auto;
+    margin: 0;
+  }
+
+  /* .CodeMirror.cm-s-default .CodeMirror-simplescroll-vertical,
+  .CodeMirror.cm-s-default .CodeMirror-simplescroll-horizontal {
+    background-color: var(--color-scroll-track)!important;
+  } */
+
+  .CodeMirror .CodeMirror-code .cm-tag {
+    color: #905 !important;
+  }
+
+  .CodeMirror .CodeMirror-code .cm-tag.cm-bracket {
+    color: #999 !important;
+  }
+
+  .CodeMirror .CodeMirror-code .cm-string {
+    color: #690;
+  }
+
+  .CodeMirror .CodeMirror-code .cm-comment {
+    color: #008000 !important;
+  }
+
+  .CodeMirror .CodeMirror-code .cm-attribute {
+    color: #856e3d !important;
+  }
+
+  /* End CodeMirror */
+</style>
