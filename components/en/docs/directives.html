@@ -80,6 +80,30 @@
         <i class="note">app.$data.unset(<i class="mark">'data-key'</i>)</i>.
       </p>
 
+      <b> Getting the Current Scope </b>
+      <p>
+        To be able to get the current scope we use <i class="note mark">$data</i>, it's a `variable`
+        that keeps the current scope in the expression of <i class="note mark">data</i> directive.
+      </p>
+
+      <div e-skip>
+
+        <pre><code lang="html">
+        <h4> {{ value }} </h4>
+
+        <div data="$data">
+          <h4> {{ value }} </h4>
+        </div>
+        </code></pre>
+      </div>
+
+      <div class="block-note warn">
+        <p>
+          The <i class="node mark">$data</i> variable is only available in the <i class="note mark">data</i>
+          directive.
+        </p>
+      </div>
+
       <h3> <a id="directive-wait-data"> wait-data </a> </h3>
       <p>
         Allows the element where it is defined to be skipped in the compilation, waiting for it's

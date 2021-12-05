@@ -29,7 +29,7 @@
   //   lang = localStorage.$lang;
   // }
 
-  new Bouer('#app', {
+  new Bouer('#bouer-app', {
     config: {
       usehash: false
     },

@@ -39,8 +39,8 @@
       <p>
         These are the components that are registered directly in the instance, it can be done in
         <span class="note mark">Bouer</span> instance options at
-        <i class="note">{ <i class="mark">components</i>: [ ... ] }</i> or using the component handler
-        object in <i class="note">app.<i class="mark">$components.add(<i>...</i>)</i></i>.
+        <i class="note">{ <i class="mark">components</i>: [ {...} ] }</i> or using the component handler
+        object in <i class="note">app.<i class="mark">$components.add(<i>{...}</i>)</i></i>.
       </p>
 
       <h3> <a id="component-registering"> Registering </a> </h3>
@@ -130,8 +130,8 @@
 
       <h3> <a id="component-style"> Styles </a> </h3>
       <p>
-        The style tag here works as expected, by default the styles is global to set it has a
-        scoped one just add the <i class="note mark">scoped</i> attribute. This adds a class
+        The <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i> tag here works as expected, by default the
+        styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This adds a class
         like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
       </p>
 
@@ -154,14 +154,14 @@
 
       <h3> <a id="component-script"> Scripts </a> </h3>
       <p>
-        A block containing the JavaScript code that runs after the component is created.
-        The context (<i class="mark">this</i>) is the component instance.
+        A block containing the JavaScript code that runs after the component is created. The context
+        (<i class="note mark">this</i>) is the component instance.
       </p>
 
       <div class="block-note info">
         <p>
           The <i class="note">Bouer</i> instance of this component can be accessed in <i
-            class="note mark">this.bouer</i>.
+            class="note"><i class="mark">this</i>.bouer</i>.
         </p>
       </div>
 
@@ -176,7 +176,7 @@
       <h3> <a id="component-exporting"> Exporting </a> </h3>
       <p>
         The method that is used to export data from the script to the template is <span class="mark">export</span>.
-        To be able to export the data, it needs to be defined as following: <i class="note mark">this.export({...})</i>.
+        To be able to export the data, it needs to be defined as following: <i class="note mark">this.export(<i>{...}</i>)</i>.
       </p>
 
       <div e-skip>

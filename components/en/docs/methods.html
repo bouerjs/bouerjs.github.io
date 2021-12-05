@@ -19,7 +19,7 @@
           containing the properties that must be added to the scope. </li>
         <li> <span class="note mark">targetObject</span> &ndash; represents the
           target scope to be added to the properties. It is optional, if not defined the
-          properties will be in the <span class="note mark">main scope</span>. </li>
+          properties will be set to the <span class="note mark">main scope</span>. </li>
       </ul>
 
       <div e-skip>
@@ -40,7 +40,7 @@
       <h3><a id="method-on">on</a></h3>
       <p>
         It allows adding an event to the instance so that it can be used anywhere in the
-        application. The method expects two parameters: <span class="note">
+        application. The method expects three parameters: <span class="note">
           app.on(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>, options?: <i
             class="mark">object</i>)</span>.
       </p>
@@ -68,7 +68,7 @@
 
       <h3><a id="method-off">off</a></h3>
       <p>
-        Allows you to remove an event added to the instance. The method expects two parameters:
+        Allows you to remove an event added to the instance. The method expects three parameters:
         <span class="note">app.off(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
           attachedNode?:
           <i class="mark">Element</i>)</span>.
@@ -96,8 +96,8 @@
 
       <h3><a id="method-emit">emit</a></h3>
       <p>
-        Allows to dispatch a specific event, whether customized (events added in elements) or
-        added in the instance. The method expects three parameters:
+        Allows to dispatch a specific event, whether customized (events added in elements) or added in the instance.
+        The method expects two parameters:
         <span class="note">app.emit(eventName: <i class="mark">string</i>, options?: <i class="mark">object</i>)</span>.
       </p>
 
@@ -128,7 +128,7 @@
         });
 
         var event = app.on('change_p_text', function(data) {
-          alert('P value was changed');
+          alert('paragraph value was changed');
         });
 
         app.emit('change_p_text');
@@ -147,6 +147,13 @@
         </code></pre>
       </div>
 
+      <div class="block-note info">
+        <p>
+          You can read more about CustomEvent <a target="_blank"
+            href="https://javascript.info/dispatch-events#event-constructor" class="mark">Here</a>.
+        </p>
+      </div>
+
       <h3><a id="method-tojsObj">toJsObj</a></h3>
       <p>
         It allows creating a structured javascript object, based on the structure of the HTML
@@ -154,7 +161,7 @@
       </p>
 
       <p>
-        To be able to generate the structure, this method depends of some commands, whitch are:
+        To be able to generate the structure, this method depends of some directives, whitch are:
       </p>
 
       <ul>

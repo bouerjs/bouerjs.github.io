@@ -15,7 +15,7 @@
         <div e-skip execute>
 
           <pre><code lang="html">
-        <div id="app">
+        <div id="app3">
           <input type="text" value="{{ value }}" />
           <h4> {{ value }} </h4>
         </div>
@@ -41,8 +41,8 @@
 
       <p e-skip>
         If we don't want to do it this way, exposing the delimiter in the actual element attribute, we can still use
-        the command <span class="note mark">e-<i>attribute</i>="{{ expression }}"</span>,
-        it creates the attribute after being compiled. This commands is very versatile,
+        the directive <span class="note mark">e-<i>attribute</i>="{{ expression }}"</span>,
+        it creates the attribute after being compiled. This divertives is very versatile,
         we will go into details about it in the <a :href="/docs/directives.html" class="note mark">directives</a>
         section.
       </p>
@@ -58,11 +58,10 @@
 
       <h3> <a id="binding-two-way"> Two Way </a> </h3>
       <p>
-        We can achieve Two Way Data Binding using the command <span class="note"><i class="mark">e-bind:</i>attribute="<i
-            class="mark">property</i>",</span>
-        by default it binds <span class="note">value</span> attribute, it means that if we want
-        to bind the `value` attribute of an input we can define like this
-        <span class="note mark">e-bind="property"</span>.
+        We can achieve Two Way Data Binding using the directive <span class="note"><i class="mark">
+            e-bind:</i>attribute="<i class="mark">property</i>",</span> by default it binds
+        <span class="note">value</span> attribute, it means that if we want to bind the `value` attribute of an
+        input we can define like this <span class="note mark">e-bind="property"</span>.
       </p>
 
       <div e-if="typeof noApp === 'undefined'">

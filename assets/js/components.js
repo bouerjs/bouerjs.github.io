@@ -16,6 +16,10 @@ function BouerComponents(sharedOptions) {
       name: 'doc-menu',
       path: '/components/doc-menu.html'
     },
+    {
+      name: 'code-editor',
+      path: '/components/code-editor.html'
+    },
 
     // Routes
     {

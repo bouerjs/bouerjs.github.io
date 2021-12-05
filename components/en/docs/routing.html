@@ -108,18 +108,20 @@
 
       <div e-skip>
         <pre><code lang="js">
-        components: [{
-          title: 'About',
-          route: '/about',
-          url: '/about.html',
-          children: [
-            {
-              url: '/about-author.html',
-              title: 'About the author',
-              route: '/author'
-            }
-          ]
-        }]
+        {
+          components: [{
+            title: 'About',
+            route: '/about',
+            url: '/about.html',
+            children: [
+              {
+                url: '/about-author.html',
+                title: 'About the author',
+                route: '/author'
+              }
+            ]
+          }]
+        }
         </code></pre>
       </div>
 
@@ -139,6 +141,18 @@
         and <i class="mark">query parameters</i>.
       </p>
 
+      <div e-skip>
+        <pre><code lang="js">
+        {
+          components: [{
+            title: 'User Profile',
+            route: '/user/{userId}',
+            url: '/user-profile.html'
+          }]
+        }
+        </code></pre>
+      </div>
+
       <h3> <a id="routing-handler"> Routing Handler </a> </h3>
       <p>
         Whenever we need to navigate to a route programatically, we use the <i class="note mark">app.$routing</i>
@@ -149,31 +163,31 @@
         <pre><code lang="js">
         Routing {
           /** Store Bouer application instance */
-          bouer: Bouer,
+          bouer: Bouer;
 
           /** Store the route elements */
-          routeView: Element,
+          routeView: Element;
 
           /** Store the Component defined has NotFound Page */
-          defaultPage?: Component,
+          defaultPage?: Component;
 
           /** Store the Component defined has NotFound Page */
-          notFoundPage?: Component,
+          notFoundPage?: Component;
 
           /** Store `href` value of the <base /> tag */
-          base: string,
+          base: string;
 
           /** Navigates to a certain page without reloading all the page */
-          navigate(route: string, changeUrl?: boolean),
+          navigate(route: string, changeUrl?: boolean);
 
           /** Navigates to previous page according to a number of go back */
-          popState(times?: number),
+          popState(times?: number);
 
           /** Changes the current url to a new one provided */
-          pushState(url: string, title?: string),
+          pushState(url: string, title?: string);
 
           /** Mark all anchors having the route provided as active */
-          markActiveAnchors(route: string)
+          markActiveAnchors(route: string);
         }
         </code></pre>
       </div>

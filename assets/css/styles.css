@@ -75,7 +75,7 @@ i {
   --color-shadow: #e5e5e5;
   --color-menu: #343842;
   --color-disable: #efefef;
-  --color-soft-transparency: #f0f0f08a;
+  --color-smooth-transparency: #f0f0f5f5;
   --color-popup: #fafafa;
   --color-row: #ececec;
 
@@ -83,7 +83,7 @@ i {
 
   --color-editor-screen: #f6f6f6;
   --color-editor-caret: #343842;
-  --color-editor-border: #efefef;
+  --color-editor-border: #e2e2e2;
   --color-editor-result-screen: #fcfcfc;
 
   --color-scroll-thumb: #888;
@@ -108,7 +108,7 @@ i {
   --color-shadow: #2c2c2c;
   --color-menu: #242526;
   --color-disable: #3a3b3c;
-  --color-soft-transparency: #3a3b3c80;
+  --color-smooth-transparency: #3a3b3c80;
   --color-popup: #3c3c3c;
   --color-row: #3a3b3c;
 
@@ -134,7 +134,7 @@ body {
   background-color: var(--color-bg);
 }
 
-#app {
+#bouer-app {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -342,7 +342,7 @@ a.active-doc-menu * {
   color: var(--color-white-text);
 }
 
-#app>main {
+#bouer-app>main {
   flex: 1;
   display: flex;
   overflow-y: auto;
@@ -519,6 +519,39 @@ a.active-doc-menu * {
   align-items: center;
 }
 
+.main-page-editor-container {
+  padding: 65px 12%;
+  display: flex;
+}
+
+.main-page-editor-container .description {
+  display: flex;
+  margin: 10px;
+  width: 360px;
+  color: var(--color-text);
+}
+
+.main-page-editor-container .description>div {
+  margin: auto;
+}
+
+.main-page-editor-container .description>div>h2 {
+  margin: 8px 0;
+}
+
+.main-page-editor-container .description>div>p {
+  font-size: 11.5pt;
+}
+
+.main-page-description {
+  margin: 0 20%;
+  line-height: 30px;
+}
+
+.editor-divider {
+  background-color: var(--color-smooth-transparency);
+}
+
 /* Main page footer style */
 .bottom-content {
   padding: 25px;
@@ -669,8 +702,12 @@ a.active-doc-menu * {
   list-style: disc;
 }
 
-.documentation .view .section .result h4 {
-  font-weight: 500;
+.documentation .view .section .result h1,
+.documentation .view .section .result h2,
+.documentation .view .section .result h3,
+.documentation .view .section .result h4,
+.documentation .view .section .result h5 {
+    margin: 4px 0;
 }
 
 .documentation .view .section .result ul li {
@@ -800,9 +837,7 @@ a.active-doc-menu * {
   margin: 20px 0;
 }
 
-
-pre,
-.result {
+pre, .result {
   overflow-y: hidden;
   overflow-x: auto;
   max-width: 740px;
@@ -815,9 +850,7 @@ pre,
   margin: 10px 0;
 }
 
-.code-style,
-.code-style *,
-pre code * {
+.code-style, .code-style *, pre code * {
   font-family: "Fira Mono", 'Courier New', Courier, monospace;
 }
 
@@ -882,7 +915,7 @@ pre code::after,
   padding: 3px 0;
   max-width: 546px;
   border-radius: 6px;
-  background-color: var(--color-soft-transparency);
+  background-color: var(--color-smooth-transparency);
   border: 2px solid transparent;
   position: relative;
   border-left-width: 5px;
@@ -1047,7 +1080,7 @@ pre code::after,
 /* For Mozilla */
 .popup-container,
 .nice-scroll,
-#app>main {
+#bouer-app>main {
   scrollbar-color: var(--color-scroll-thumb) var(--color-scroll-track);
   scrollbar-width: thin;
   overflow-y: auto;
