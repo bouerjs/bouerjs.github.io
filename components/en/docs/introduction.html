@@ -269,9 +269,16 @@
             configure('req', function (bind, update) {
 
               bind(function (context) {
+
+                // the type of the request: `of` or `as`
+                var type = context.detail.requestType;
+
+                // the path of the request: `users`
                 var path = context.detail.requestPath;
+
                 var baseURL = "https://jsonplaceholder.typicode.com/";
 
+                // Request data from the server
                 return fetch(baseURL + path, {
                   headers: { 'Content-Type': "application/json" }
                 }).then(function (response) {
@@ -284,7 +291,6 @@
 
                   // the response must be always into a object with `data` property
                   return { data: json };
-
                 }).catch(function (error) {
                   return error
                 });
