@@ -615,13 +615,13 @@ a.active-doc-menu * {
   border-top: 2px solid var(--color-border);
   color: var(--color-text);
   position: relative;
-  max-width: 950px;
+  max-width: 810px;
   margin: 0px 80px;
   font-size: 11pt;
 }
 
 .documentation .view .section p {
-  margin: 18px 0;
+  margin: 20px 0;
 }
 
 .documentation .view .section h1 {
@@ -707,7 +707,7 @@ a.active-doc-menu * {
 .documentation .view .section .result h3,
 .documentation .view .section .result h4,
 .documentation .view .section .result h5 {
-    margin: 4px 0;
+  margin: 4px 0;
 }
 
 .documentation .view .section .result ul li {
@@ -768,8 +768,13 @@ a.active-doc-menu * {
   margin: 0 28px;
 }
 
+.documentation .view .section .result li {
+  margin: 0;
+  line-height: 20px;
+}
+
 .keep-reading {
-  max-width: 950px;
+  max-width: 810px;
   display: flex;
   padding: 40px 0;
 }
@@ -837,7 +842,8 @@ a.active-doc-menu * {
   margin: 20px 0;
 }
 
-pre, .result {
+pre,
+.result {
   overflow-y: hidden;
   overflow-x: auto;
   max-width: 740px;
@@ -850,7 +856,9 @@ pre, .result {
   margin: 10px 0;
 }
 
-.code-style, .code-style *, pre code * {
+.code-style,
+.code-style *,
+pre code * {
   font-family: "Fira Mono", 'Courier New', Courier, monospace;
 }
 

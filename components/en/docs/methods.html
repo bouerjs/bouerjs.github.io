@@ -18,8 +18,8 @@
         <li> <span class="note mark">object</span> &ndash; represents object a
           containing the properties that must be added to the scope. </li>
         <li> <span class="note mark">targetObject</span> &ndash; represents the
-          target scope to be added to the properties. It is optional, if not defined the
-          properties will be set to the <span class="note mark">main scope</span>. </li>
+          target scope to add the properties. It is optional, if not defined the
+          properties should be set to the <span class="note mark">main scope</span>. </li>
       </ul>
 
       <div e-skip>
@@ -194,7 +194,7 @@
             values: <i class="mark">'[attribute1],[attribute2]'</i> }</i>. The order really matters, it takes
           what it finds first. The default value is <span class="note">{ names: <i class="mark">'[name]'</i>,
             values: <i class="mark">'[value]'</i> }</span>. </li>
-        <li> <span class="note mark">onset</span> &ndash; a function that will be
+        <li> <span class="note mark">onset</span> &ndash; a function that should be
           called whenever a property is setted. </li>
       </ul>
 
@@ -250,11 +250,12 @@
         <li> <span class="note mark">propertyName</span> &ndash; represents the
           name of the property in the data scope. </li>
         <li> <span class="note mark">callback</span> &ndash; represents the
-          callback where all the logic will be fired when the property changes. The first
+          callback where all the logic should be fired when the property changes. The first
           argument is the new value and the second is the old value of the property. </li>
         <li> <span class="note mark">targetObject</span> &ndash; represents the
           target scope having the property to watch. It is optional, if not defined the
-          properties will be in the <span class="note mark">main scope</span>. </li>
+          <span class="note mark">main scope</span> should be used.
+        </li>
         <li> <span class="note mark">returns</span> &ndash; the watch object, that
           can be used to destroy the watch listener. </li>
       </ul>
@@ -283,8 +284,8 @@
       </p>
 
       <ul>
-        <li> <span class="note mark">watchableScope</span> &ndash; the function that will
-          be called when the any reactive property change. </li>
+        <li> <span class="note mark">watchableScope</span> &ndash; the function that should be called when the any
+          reactive property change. </li>
         <li> <span class="note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
           and the method to destroy watches at once.
         </li>
@@ -300,7 +301,7 @@
           }
         });
 
-        // If any of the reactive property changes the callback will be called
+        // If any of the reactive property changes the callback should be called
         var watches = app.react(function() {
           var src = this.data;
           src.result = src.value1 + src.value2;
@@ -318,7 +319,7 @@
 
       <ul>
         <li> <span class="note mark">{ Element } options.el</span> &ndash; the element to be compiled. </li>
-        <li> <span class="note mark">{ Object } config.data?</span> &ndash; the data that will be injected
+        <li> <span class="note mark">{ Object } config.data?</span> &ndash; the data that should be injected
           in the element compilation.</li>
         <li> <span class="note mark">{ Object } config.context?</span> &ndash; the context object of the
           this compilation process, what can be <i class="mark">Bouer</i> or <i class="mark">Component</i>.

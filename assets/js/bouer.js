@@ -332,7 +332,9 @@
     return path;
   }
 
-  function buildError(error, options) {
+  function buildError(error) {
+    if (!error)
+      return 'Unknown Error';
     error.stack = '';
     return error;
   }
@@ -423,7 +425,10 @@
      * @returns the instance of the class
      */
     IoC.Resolve = function (app, $class) {
-      var mContainer = this.container[app.__id__][$class.name];
+      var appContainer = this.container[app.__id__];
+      if (!appContainer)
+        throw new Error("Application already disposed.");
+      var mContainer = appContainer[$class.name];
       return mContainer.ClassInstance;
     };
     /**
@@ -691,21 +696,23 @@
       // <button on:submit.once.stopPropagation="times++"></button>
       var nodeValue = trim((_a = node.nodeValue) !== null && _a !== void 0 ? _a : '');
       var eventNameWithModifiers = nodeName.substr(Constants.on.length);
-      var modifiersList = eventNameWithModifiers.split('.');
-      var eventName = modifiersList[0];
-      modifiersList.shift();
+      var allModifiers = eventNameWithModifiers.split('.');
+      var eventName = allModifiers[0];
+      allModifiers.shift();
       if (nodeValue === '')
         return Logger.error("Expected an expression in the “" + nodeName + "” and got an <empty string>.");
       connectNode(node, ownerElement);
       ownerElement.removeAttribute(nodeName);
       var callback = function (evt) {
         // Calling the modifiers
-        forEach(modifiersList, function (modifier) {
-          forEach(Object.keys(evt), function (key) {
-            var fnModifier;
-            if (fnModifier = evt[key] && isFunction(fnModifier) && toLower(key) === toLower(modifier))
-              fnModifier();
-          });
+        var availableModifiersFunction = {
+          'prevent': 'preventDefault',
+          'stop': 'stopPropagation'
+        };
+        forEach(allModifiers, function (modifier) {
+          var modifierFunctionName = availableModifiersFunction[modifier];
+          if (evt[modifierFunctionName])
+            evt[modifierFunctionName]();
         });
         var mArguments = [evt];
         var isResultFunction = _this.evaluator.exec({
@@ -725,23 +732,24 @@
           }
         }
       };
-      var modifiers = {};
+      var modifiersObject = {};
       var addEventListenerOptions = ['capture', 'once', 'passive'];
-      forEach(modifiersList, function (md) {
+      forEach(allModifiers, function (md) {
         md = md.toLocaleLowerCase();
-        if (addEventListenerOptions.indexOf(md) !== -1)
-          modifiers[md] = true;
+        if (addEventListenerOptions.indexOf(md) !== -1) {
+          modifiersObject[md] = true;
+        }
       });
       if (!('on' + eventName in this.input))
         this.on({
           eventName: eventName,
           callback: callback,
-          modifiers: modifiers,
+          modifiers: modifiersObject,
           context: context,
           attachedNode: ownerElement
         });
       else
-        ownerElement.addEventListener(eventName, callback, modifiers);
+        ownerElement.addEventListener(eventName, callback, modifiersObject);
     };
     EventHandler.prototype.on = function (options) {
       var _this = this;
@@ -1908,20 +1916,17 @@
           if (middlewareAction) {
             runnable.action(function (config, cbs) {
               Promise.resolve(middlewareAction(config, function () {
-                isNext = true;
-              })).then(function (value) {
-                if (isNext)
-                  return;
-                cbs.success(value);
-              }).catch(function (error) {
-                if (isNext)
-                  return;
-                cbs.fail(error);
-              }).finally(function () {
-                if (isNext)
-                  return;
-                cbs.done();
-              });
+                  isNext = true;
+                }))
+                .then(function (value) {
+                  return isNext ? null : cbs.success(value);
+                })
+                .catch(function (error) {
+                  return isNext ? null : cbs.fail(error);
+                })
+                .finally(function () {
+                  return isNext ? null : cbs.done();
+                });
             });
           } else {
             (runnable.default || (function () {}))();
@@ -1936,11 +1941,11 @@
             break;
         }
       };
-      this.register = function (directive, configureCallback) {
+      this.register = function (directive, actions) {
         if (!_this.middlewareConfigContainer[directive])
           _this.middlewareConfigContainer[directive] = [];
         var middleware = {};
-        configureCallback(function (bind) {
+        actions(function (bind) {
           return middleware.bind = bind;
         }, function (update) {
           return middleware.update = update;
@@ -3788,7 +3793,7 @@
     }
     /**
      * Sets data into a target object, by default is the `app.data`
-     * @param inputData the data the will be setted
+     * @param inputData the data the should be setted
      * @param targetObject the target were the inputData
      * @returns the object with the data setted
      */
@@ -3817,7 +3822,7 @@
      * Compiles a `HTML snippet` to a `Object Literal`
      * @param input the input element
      * @param options the options of the compilation
-     * @param onSet a function that will be fired when a value is setted
+     * @param onSet a function that should be fired when a value is setted
      * @returns the Object Compiled from the HTML
      */
     Bouer.prototype.toJsObj = function (input, options, onSet) {
@@ -3826,7 +3831,7 @@
     /**
      * Provides the possibility to watch a property change
      * @param propertyName the property to watch
-     * @param callback the function that will be called when the property change
+     * @param callback the function that should be called when the property change
      * @param targetObject the target object having the property to watch
      * @returns the watch object having the method to destroy the watch
      */
@@ -3835,7 +3840,7 @@
     };
     /**
      * Watch all reactive properties in the provided scope.
-     * @param watchableScope the function that will be called when the any reactive property change
+     * @param watchableScope the function that should be called when the any reactive property change
      * @returns an object having all the watches and the method to destroy watches at once
      */
     Bouer.prototype.react = function (watchableScope) {
@@ -3844,7 +3849,7 @@
     /**
      * Add an Event Listener to the instance or to an object
      * @param eventName the event name to be listening
-     * @param callback the callback that will be fired
+     * @param callback the callback that should be fired
      * @param attachedNode A node to attach the event
      * @param modifiers An object having all the event modifier
      * @returns The event added
@@ -3862,7 +3867,7 @@
     /**
      * Removes an Event Listener from the instance or from object
      * @param eventName the event name to be listening
-     * @param callback the callback that will be fired
+     * @param callback the callback that should be fired
      * @param attachedNode A node to attach the event
      */
     Bouer.prototype.off = function (eventName, callback, attachedNode) {
@@ -3889,7 +3894,7 @@
     };
     /**
      * Limits sequential execution to a single one acording to the milliseconds provided
-     * @param callback the callback that will be performed the execution
+     * @param callback the callback that should be performed the execution
      * @param wait milliseconds to the be waited before the single execution
      * @returns executable function
      */

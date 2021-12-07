@@ -6,7 +6,7 @@
       <h1> <a id="instance"> Instance </a> </h1>
 
       <p>
-        When we import <span class="note">Bouer</span> it will added a function to the global
+        When we import <span class="note">Bouer</span> it should added a function to the global
         object, so to begin using it we need to create a new instance of Bouer Class. This
         constructor expects two parameters:
       </p>
@@ -17,8 +17,8 @@
 
       <h3> <a id="instance-el"> Element </a> </h3>
       <p>
-        The element is the mandatory parameter that represents the section that the instance
-        will control in the application, it must be passed as a String in the format of a
+        The element is the mandatory parameter that represents the section that the Bouer instance
+        should control in the application, it must be passed as a String in the format of a
         CSS Selector. Example: <span class="note">#app</span>, <span class="note">.main-app</span> or
         <span class="note">body</span>.
       </p>
@@ -60,35 +60,45 @@
           /** Appends delimiters to the instance */
           delimiters: Delimiter[],
 
-          /** Middlewares that will be used in the application */
-          middleware: (
-            function configure (directive: string, configureCallback: MiddlewareConfig) { },
+          /** Middlewares that should be used in the application */
+          middleware: function (
+            function configure (
+              /** Directive to intercept */
+              directive: string,
+              /** Actions to intercept */
+              actions: function (bind, update) {}
+            ) { },
             app: Bouer
           ) { },
 
-          /** The hook that will be called before the component is loaded */
+          /** The hook that should be called before the component is loaded */
           beforeLoad(event: CustomEvent) { },
 
-          /** The hook that will be called after the component is loaded (Compiled) */
+          /** The hook that should be called after the component is loaded (Compiled) */
           loaded(event: CustomEvent) { },
 
-          /** The hook that will be called before the component is destroyed */
+          /** The hook that should be called before the component is destroyed */
           beforeDestroy(event: CustomEvent) { },
 
-          /** The hook that will be called after the component is destroyed */
+          /** The hook that should be called after the component is destroyed */
           destroyed(event: CustomEvent) { },
         });
         </code></pre>
 
-      <h3> <a id="prop-data">Data</a> </h3>
+      <h3> <a id="prop-data">Data & GlobalData</a> </h3>
       <p>
-        As already mentioned, the data property allows you to set the data that the application will have
+        As already mentioned, the data property allows you to set the data that the application should have
         when it starts, however there is a way to add data while it is already running with the
         <span class="note">app.set(<i class="mark">{ ... }</i>)</span> method (We'll talk about that in the
         <a :href="/docs/methods.html" class="mark">methods</a> section).
         <br>
-        Data or properties defined on <span class="note mark">data</span> are not normal properties, they are
-        reactive, this means that they react to changes made to them.
+        The properties set on <span class="note mark">data</span> are reactive, this means that they react to
+        changes made to them.
+      </p>
+
+      <p>
+        The same concept is applied for <i class="note mark">globalData</i> property, the main difference is
+        that globalData properties always appear regardless of scope.
       </p>
 
       <div e-skip>
@@ -99,7 +109,7 @@
         </div>
           </code></pre>
 
-          <pre><code lang="js">
+        <pre><code lang="js">
         var app1 = new Bouer('#app1', {
           data: {
             message: 'Hello World!'
@@ -141,6 +151,73 @@
         </p>
       </div>
 
+      <h3> <a id="prop-middleware">Middleware</a> </h3>
+      <p>
+        Middlewares in Bouer are used to intercept directive actions like <i class="note mark">Bind</i> or
+        <i class="note mark">Update</i>, it used also to configure
+        <a href="/docs/directives.html#directive-e-req" class="note mark">e-req</a> request.
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
+            middleware: function (configure, app) {
+
+              // Configure function is used to configure the interceptions
+              configure('e-title', function (bind, update) {
+
+                // Interceptors:
+                // Argument -> bind: a function configure a behavior after bound
+                // Argument -> update: a function configure a behavior after update
+
+                bind(function (context, next) {
+                  // TODO: Your after bind logic code here...
+                });
+
+                bind(function (context, next) {
+                  // TODO: Your update logic code here...
+                });
+
+              });
+            }
+        });
+        </code></pre>
+      </div>
+
+      <p>
+        Note that the <i class="note">Interceptors</i> callback function has two arguments, which are the
+        <i class="note mark"><i>context:</i> object</i> and <i class="note mark"><i>next():</i> Function</i>
+      </p>
+
+      <b> <i class="note mark"><i>context:</i> object</i> </b>
+
+      <p>
+        The object containing the <i class="note">BinderConfig</i> object and the <i class="note">details</i>
+        (Optional) of the Interceptor, it's structured as follows:
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        {
+          binder: {
+            node: Node,
+            data: object,
+            nodeName: string,
+            nodeValue: string,
+            fields: Delimiters[],
+            parent: Element,
+            value: string
+          },
+          detail: object
+        }
+        </code></pre>
+      </div>
+
+      <b> <i class="note mark"><i>next():</i> Function</i> </b>
+      <p>
+        This function is used to get the <i class="note">next</i> Interceptor of that directive when using
+        multiple configuration. we strongly advise using the <i class="note mark">return</i>.
+      </p>
     </section>
 
     <section class="navigator">

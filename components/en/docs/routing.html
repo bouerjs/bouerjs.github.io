@@ -13,7 +13,7 @@
       <h3> <a id="routing-init"> Initialization </a> </h3>
       <p>
         To initialize the routing we need set <i class="note mark">route-view</i> to an element, this specify
-        where all the pages will be rendered and we also need to add some additional and specific properties
+        where all the pages should be rendered and we also need to add some additional and specific properties
         for the routing in the component, which are:
       </p>
 
@@ -27,13 +27,13 @@
             /** The name of the component (Optional) */
             name?: string,
 
-            /** The title that will be replaced when the page is loaded */
+            /** The title that should be replaced when the page is loaded */
             title?: string,
 
             /** The navigation url */
             route?: string,
 
-            /** The children of the component that will inherit the `route` of the father */
+            /** The children of the component should inherit the `route` of the father */
             children?: Component[],
 
             /** Allow to set this component as the `default page` when the application loads */
@@ -82,7 +82,7 @@
       <div class="block-note dont">
         <p>
           Two or more components cannot be defined with <i class="mark">isDefault</i> or
-          <i class="note">mark</i>, if you do, an error will be thrown.
+          <i class="note">mark</i>, if you do, an error should be thrown.
         </p>
       </div>
 
@@ -128,7 +128,7 @@
       <div class="block-note info">
         <p>
           Note that in the children route we only put <i class="note mark">/author</i>, because
-          after it registered it will became <i class="note mark">/about/author</i>. <br>
+          after it registered it should became <i class="note mark">/about/author</i>. <br>
           The nesting the has no limit, meaning that we can also nest into the child.
         </p>
       </div>
@@ -227,8 +227,8 @@
       </p>
 
       <ol>
-        <li> Disable the <i class="note mark">config.usehash</i> &ndash; setting to <i class="mark">false</i> it
-          make that no hash will be added the navigation anchors. </li>
+        <li> Disable the <i class="note mark">config.usehash</i> &ndash; setting to <i class="mark">false</i> no hash should
+          be added to the navigation anchors. </li>
 
         <li> Add the <i class="note code-style">&lt;<i class="mark">base</i>&gt;</i> tag in the page head &ndash; that
           specify the base URL to use for all relative URLs in a document.

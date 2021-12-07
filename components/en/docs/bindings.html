@@ -15,14 +15,14 @@
         <div e-skip execute>
 
           <pre><code lang="html">
-        <div id="app3">
+        <div id="app1">
           <input type="text" value="{{ value }}" />
           <h4> {{ value }} </h4>
         </div>
           </code></pre>
 
           <pre><code lang="js">
-        var app = new Bouer('#app3', {
+        var app1 = new Bouer('#app1', {
           data: {
             value: 'Type something!'
           },
@@ -68,7 +68,7 @@
         <div e-skip execute>
 
           <pre><code lang="html">
-        <div id="app4">
+        <div id="app2">
           <input type="text" e-bind:value="value" /> <br>
           <input type="text" e-bind="value" />
           <h4> {{ value }} </h4>
@@ -76,7 +76,7 @@
           </code></pre>
 
           <pre><code lang="js">
-        var app4 = new Bouer('#app4', {
+        var app2 = new Bouer('#app2', {
           data: {
             value: 'Type something!'
           }

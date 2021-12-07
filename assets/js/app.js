@@ -64,8 +64,19 @@
       loadedEvent: function (evt) {
         var el = evt.target;
 
+        var anchorsWithId = [].slice.call(el.querySelectorAll('a[id]'));
+        for (let i = 0; i < anchorsWithId.length; i++) {
+          var anchor = anchorsWithId[i];
+          anchor.href = location.href.split('#')[0].split('?')[0] + '#' + anchor.id;
+
+          anchor.onclick = function (evt) {
+            evt.preventDefault();
+            history.replaceState({}, '', this.href);
+          }
+        }
+
         // Anchors modifier
-        var anchors = [].slice.call(el.querySelectorAll('h1>a'))
+        var anchors = [].slice.call(el.querySelectorAll('h1>a'));
         for (let i = 0; i < anchors.length; i++)
           anchors[i].innerHTML += '<i class="fa fa-link"></i>';
 
@@ -83,11 +94,11 @@
           var executable = executables[i];
           var _codes = executable.querySelectorAll('code');
           var result = executable.querySelector('.result');
-          var _html = _codes[0].innerText;
-          var _js = _codes[1].innerText;
+          var _html = _codes[0];
+          var _js = _codes[1];
 
-          result.innerHTML = _html;
-          eval(_js);
+          result.innerHTML = _html.innerText;
+          eval(_js.innerText);
         }
 
         if (location.href.includes('/docs/')) {

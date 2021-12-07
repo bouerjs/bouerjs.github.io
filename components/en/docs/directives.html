@@ -14,7 +14,7 @@
       <p>
         It allows defining a data scope for a certain element, the syntax is
         <span class="note"><i class="mark">data</i>="{...}"</span>. If it's defined without
-        value, the element will have the data of the <i class="note mark">main scope</i>, app.data.
+        value, the element should have the data of the <i class="note mark">main scope</i>, app.data.
       </p>
 
       <div e-skip>
@@ -143,7 +143,7 @@
 
       <h3> <a id="directive-e-content"> e-content </a> </h3>
       <p>
-        It is a way to define a value that will be put in the container after the element is
+        It is a way to define a value that should be put in the container after the element is
         compiled.
       </p>
 
@@ -252,7 +252,7 @@
       <div class="block-note warn">
         <p>
           The order of definition matters a lot, e-def must always be above the elements where
-          it will be used.
+          it should be used.
         </p>
       </div>
 
@@ -260,7 +260,7 @@
       <p>
         The <span class="note mark">e-if</span> directive is very similar to the <span class="mark">Vue.js</span>
         <span class="note">v-if</span> directive... It is used to conditionally render a block (element).
-        The block will only be shown if the directive expression returns a truthy value. It is accompanied with
+        The block should be shown if the directive expression returns a truthy value. It is accompanied with
         the <i class="note mark">e-else-if</i> and <i class="note mark">e-else</i> directives.
       </p>
 
@@ -300,7 +300,7 @@
         <span class="mark">Vue.js</span> <span class="note">v-show</span> directive... It is
         used to conditionally show an block (element), it toggles CSS
         <span class="note mark">display:none</span> property.
-        The block will be visible if the directive expression returns a truthy value.
+        The block should be visible if the directive expression returns a truthy value.
       </p>
 
       <div e-skip>
@@ -370,7 +370,7 @@
 
       <h4> <a id="directive-e-for-filters"> e-for with filters </a> </h4>
       <p>
-        We can add filters in <i class="note">e-for</i> what will change behavior of the array while it's being
+        We can add filters in <i class="note">e-for</i> what should change behavior of the array while it's being
         rendered. The available filters are: <i class="mark">where</i> and <i class="mark">order</i>. To add the
         filter we use <span class="note mark">|</span> after <a class="note mark">e-for</a> expression and then
         the filter name: <i class="note"><i class="mark">| where</i>:search</i> or
@@ -431,16 +431,16 @@
 
       <div class="block-note info">
         <p>
-          If we use some method that changes the array even if it is not in the list above
-          the user interface will be updated too.
+          If we use some method that changes the array even if it's not in the list above
+          the user interface should be updated too.
         </p>
       </div>
 
       <div class="block-note dont">
         <p>
           Bouer cannot detect changes when we modify the length of the array. For example:
-          <span class="note attr-border"> array.length = newLength </span>.
-          It will not have effects in to the user interface.
+          <span class="note attr-border"> array.length = newLength </span>
+          It will not have effects to the user interface.
         </p>
       </div>
 
@@ -453,7 +453,7 @@
 
       <p>
         The sintax for simply attribute creation is <span class="note mark">e-<i>attribute</i>="expression"</span>.
-        In this case the expression must contain delimiter, otherwise it will not be compiled.
+        In this case the expression must contain delimiter, otherwise it should not be compiled.
       </p>
 
       <div e-skip>
@@ -470,8 +470,8 @@
       </p>
 
       <p>
-        We can also toggle an attribute, if the result is empty the attribute will be removed otherwise it will be set.
-        To achieve this result with this syntax: <span class="note mark">e-<i>attribute</i>="{ '': boolean }"</span>
+        We can also toggle an attribute, if the result is empty the attribute should be removed otherwise it should be
+        set. To achieve this result with this syntax: <span class="note mark">e-<i>attribute</i>="{ '': boolean }"</span>
       </p>
 
       <div e-skip>
@@ -539,7 +539,7 @@
         <pre><code lang="html">
         <div class="users" e-req="user of users">
           <label>Name: {{ user.name }}</label>
-          <label>Age: {{ user.age }}</label>
+          <label>Username: {{ user.username }}</label>
         </div>
         </code></pre>
       </div>
@@ -554,7 +554,7 @@
 
       <ul>
         <li> <span class="note mark">variables</span> &ndash; the variable where the value of the
-          response will placed. like <i class="mark">e-for</i> it can be `item` and `index` in case of
+          response should placed. like <i class="mark">e-for</i> it can be `item` and `index` in case of
           response type: <i class="note mark">of</i>.</li>
       </ul>
 
@@ -570,7 +570,7 @@
       <b>Request Path</b>
 
       <ul>
-        <li> <span class="note">request path &ndash; represents the path where the value will be retrieved. </li>
+        <li> <span class="note">request path &ndash; represents the path where the value should be retrieved. </li>
       </ul>
 
       <h3> <a id="directive-e-req-init"> Initialization </a> </h3>
@@ -584,6 +584,7 @@
         var app = new Bouer('#app', {
             middleware: function (configure, app) {
 
+              // 'req' Interceptor is used for request interception
               configure('req', function (bind, update) {
 
                 bind(function (context) {
@@ -628,9 +629,9 @@
       <h3> <a id="directive-e-req-w-where"> e-for with `where` </a> </h3>
       <div e-skip>
         <pre><code lang="html">
-        <div class="users" e-req="user of [users] | where:search:name ">
+        <div class="users" e-req="user of users | where:search:name ">
           <label>Name: {{ user.name }}</label>
-          <label>Age: {{ user.age }}</label>
+          <label>Username: {{ user.username }}</label>
         </div>
         </code></pre>
       </div>
@@ -638,9 +639,9 @@
       <h3> <a id="directive-e-req-w-order"> e-for with `order` </a> </h3>
       <div e-skip>
         <pre><code lang="html">
-        <div class="users" e-req="user of [users] | order:asc:name ">
+        <div class="users" e-req="user of users | order:asc:name ">
           <label>Name: {{ user.name }}</label>
-          <label>Age: {{ user.age }}</label>
+          <label>Username: {{ user.username }}</label>
         </div>
         </code></pre>
       </div>
