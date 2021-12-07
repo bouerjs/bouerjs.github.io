@@ -73,9 +73,8 @@
         <div>
           <h2>Hello World Example</h2>
           <p>
-            Begin showing some data in your app by just setting a
-            property with the value that you want to display in
-            `data` property.
+            Begin showing some data in your app by just setting a property with the value that you want to
+            display in `data` property.
           </p>
         </div>
       </div>
@@ -88,13 +87,28 @@
         <div>
           <h2>TODO List Example</h2>
           <p>
-            Loop an array in HTML like you're doing it on javascript,
-            add or remove elements without worrying about the UI.
+            Loop an array in HTML like you're doing it on javascript, add or remove elements without worrying
+            about the UI.
           </p>
         </div>
       </div>
 
       <code-editor wait-data="todo-app" data="{ options: $data }"></code-editor>
+    </div>
+
+    <div class="main-page-editor-container">
+      <div class="description">
+        <div>
+          <h2>Component Example</h2>
+          <p>
+            Bouer components are written in pure html code, we can register them to
+            the Bouer instance using by a <i class="mark">.html</i> file path or using a template string.
+            Each component can have its own script and style.
+          </p>
+        </div>
+      </div>
+
+      <code-editor wait-data="component-app" data="{ options: $data }"></code-editor>
     </div>
 
   </div>
@@ -122,14 +136,14 @@
       name: 'Hello Word App',
       content:
         '<div id="hello-word-app">\n' +
-        ' <h3> {{ greeting }} <\/h3>\n' +
+        '  <h3> {{ greeting }} <\/h3>\n' +
         '<\/div>\n\n' +
         '<script>\n' +
-        '	new Bouer("#hello-word-app", {\n' +
-        '   data: {\n' +
-        '     greeting: "Hello World!"\n' +
-        '   }\n' +
-        ' });\n' +
+        '  new Bouer("#hello-word-app", {\n' +
+        '    data: {\n' +
+        '      greeting: "Hello World!"\n' +
+        '    }\n' +
+        '  });\n' +
         '<\/script>'
     });
 
@@ -137,31 +151,86 @@
       name: 'TODO',
       content:
         '<div id="todo-app">\n' +
-        ' <input type="text" e-bind="task"><br>\n' +
-        ' <p>TODO: <span> {{ task }} <\/span></p>\n' +
-        ' <button on:click="todos = []"> Clear </button>\n' +
-        ' <button on:click="addTodo"> Add </button><br>\n' +
-        ' <ul>\n' +
-        '   <li e-for="todo of todos"> {{ todo }} </li>\n' +
-        ' </ul>\n' +
+        '  <input type="text" e-bind="task"><br>\n' +
+        '  <p>TODO: <span> {{ task }} <\/span></p>\n\n' +
+        '  <button on:click="todos = []"> Clear </button>\n' +
+        '  <button on:click="addTodo"> Add </button><br>\n\n' +
+        '  <ul>\n' +
+        '    <li e-for="todo of todos"> {{ todo }} </li>\n' +
+        '  </ul>\n' +
         '<\/div>\n\n' +
         '<script>\n' +
-        ' new Bouer("#todo-app", {\n' +
-        '   data: {\n' +
-        '     // Properties\n' +
-        '     task: "",\n' +
-        '     todos: [ "💻 Work", "🛌 Rest" ],\n' +
-        '     // Methods\n' +
-        '     addTodo: function() {\n' +
-        '       if (!this.data.task) return;\n' +
-        '       this.data.todos.push(this.data.task);\n' +
-        '       this.data.task = "";\n' +
-        '     }\n' +
-        '   }\n' +
-        ' });\n' +
+        '  new Bouer("#todo-app", {\n' +
+        '    data: {\n' +
+        '      // Properties\n' +
+        '      task: "",\n' +
+        '      todos: [ "💻 Work", "🛌 Rest" ],\n' +
+        '      // Methods\n' +
+        '      addTodo: function() {\n' +
+        '        if (!this.data.task) return;\n' +
+        '          this.data.todos.push(this.data.task);\n' +
+        '          this.data.task = "";\n' +
+        '      }\n' +
+        '    }\n' +
+        '  });\n' +
         '<\/script>'
     });
 
+    bouer.$wait.set('component-app', {
+      name: 'Component Based App',
+      content:
+      '<div id="component-app">\n'+
+      '  <app-header><\/app-header>\n\n'+
+      '  <div class="content">\n'+
+      '    <p>Application Content<\/p>\n'+
+      '  <\/div>\n\n'+
+      '  <app-footer><\/app-footer>\n'+
+      '<\/div>\n\n'+
+      '<script>\n'+
+      '  var app = new Bouer("#component-app", {\n'+
+      '    components: [\n'+
+      '      {\n'+
+      '        name: "app-header",\n'+
+      '        template: this.tab("header")\n'+
+      '      },\n'+
+      '      {\n'+
+      '        name: "app-footer",\n'+
+      '        template: this.tab("footer")\n'+
+      '      },\n'+
+      '    ]\n'+
+      '  });\n'+
+      '<\/script>',
+
+      tabs: [
+        {
+          name: 'header',
+          content:
+          '<header>\n'+
+          '  <span class="logo"><\/span> \n'+
+          '<\/header>\n\n'+
+          '<style scoped>\n'+
+          '  header {\n'+
+          '    display: flex;\n'+
+          '  }\n'+
+          '  .logo {\n'+
+          '    margin: auto;\n'+
+          '    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");\n'+
+          '    height: 60px;\n'+
+          '    background-repeat: no-repeat;\n'+
+          '    flex: 1;\n'+
+          '    background-size: contain;\n'+
+          '  }\n'+
+          '<\/style>'
+        },
+        {
+          name: 'footer',
+          content:
+          '<footer>\n'+
+          '  <small>Copyright © Bouer<\/small>\n'+
+          '<\/footer>'
+        }
+      ]
+    });
 
   });
 
