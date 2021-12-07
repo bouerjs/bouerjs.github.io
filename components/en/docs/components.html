@@ -106,6 +106,23 @@
         </code></pre>
       </div>
 
+      <p>
+        We can listen to hooks of all the components at once using the <i class="note mark"><i>app.</i>on</i>,
+        we just need to append <i class="note mark">component:</i> before the hook we want to listen.
+      </p>
+
+      <div e-skip>
+        <pre><code lang="js">
+        var app = new Bouer('#app'. {
+          components: [ ... ]
+        });
+
+        app.on('component:loaded', function (evt) {
+          // TODO: Your logic here...
+        });
+        </code></pre>
+      </div>
+
       <h3> <a id="component-handing"></a> Handling Components </h3>
       <p>
         The object <i class="note">app.<i class="mark">$components</i></i> allow us to manage
@@ -131,7 +148,8 @@
       <h3> <a id="component-style"> Styles </a> </h3>
       <p>
         The <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i> tag here works as expected, by default the
-        styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This adds a class
+        styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This adds a
+        class
         like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
       </p>
 
@@ -160,8 +178,8 @@
 
       <div class="block-note info">
         <p>
-          The <i class="note">Bouer</i> instance of this component can be accessed in <i
-            class="note"><i class="mark">this</i>.bouer</i>.
+          The <i class="note">Bouer</i> instance of this component can be accessed in <i class="note"><i
+              class="mark">this</i>.bouer</i>.
         </p>
       </div>
 
@@ -176,7 +194,8 @@
       <h3> <a id="component-exporting"> Exporting </a> </h3>
       <p>
         The method that is used to export data from the script to the template is <span class="mark">export</span>.
-        To be able to export the data, it needs to be defined as following: <i class="note mark">this.export(<i>{...}</i>)</i>.
+        To be able to export the data, it needs to be defined as following: <i
+          class="note mark">this.export(<i>{...}</i>)</i>.
       </p>
 
       <div e-skip>
@@ -205,19 +224,27 @@
         Component {
           /** The component name */
           name: string;
+
           /** The component element */
           el: Element;
+
           /** The app instance */
           bouer: Bouer;
 
           /** The data of the component */
           data: object;
 
+          /**
+           * Allow to prefetch the component content when the application is ready.
+           * Note: it overrides the global prefetch value
+           */
+          prefetch?: boolean;
+
           /** Method used to export data to the element */
-          export (options: object): void;
+          export(options: object);
 
           /** Method used to destroy the component */
-          destroy(): void;
+          destroy();
 
           /** Method used to build the `url attributes` or `query parameters` */
           params(): Object;

@@ -83,7 +83,7 @@ i {
 
   --color-editor-screen: #f6f6f6;
   --color-editor-caret: #343842;
-  --color-editor-border: #e2e2e2;
+  --color-editor-border: #e9e9e9;
   --color-editor-result-screen: #fcfcfc;
 
   --color-scroll-thumb: #888;
@@ -190,7 +190,7 @@ body {
   color: var(--color-black-text);
 }
 
-header {
+.header {
   position: fixed;
   width: 100%;
   z-index: 2;
@@ -520,7 +520,7 @@ a.active-doc-menu * {
 }
 
 .main-page-editor-container {
-  padding: 65px 12%;
+  padding: 65px 10%;
   display: flex;
 }
 
@@ -1083,6 +1083,61 @@ pre code::after,
 .popup-container .popup .close span:hover {
   color: var(--color-red);
 }
+
+/* Animations classes */
+.loading {
+  position: fixed;
+  z-index: 180;
+  height: 4px;
+  width: 0%;
+  top: 0;
+  background-color: #3178c6;
+  animation: progress-bar 4s ease forwards,
+             fade-it 1.2s 4.5s ease infinite;
+}
+
+.blink {
+  animation: fade-it 1s infinite;
+  -webkit-animation: fade-it 1s infinite;
+}
+
+@keyframes progress-bar {
+  to { width: 100%; }
+}
+@-webkit-keyframes progress-bar {
+  to { width: 100%; }
+}
+
+@keyframes fade-it {
+  from {
+    opacity: 1.0;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1.0;
+  }
+}
+
+@-webkit-keyframes fade-it {
+  from {
+    opacity: 1.0;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1.0;
+  }
+}
+
+/* End Animations classes */
+
 
 /* Styling the scroll-bar */
 /* For Mozilla */

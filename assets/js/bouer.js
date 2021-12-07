@@ -957,6 +957,7 @@
 
   var Component = /** @class */ (function () {
     function Component(optionsOrPath) {
+      this.prefetch = false;
       this.title = undefined;
       this.route = undefined;
       this.isDefault = undefined;
@@ -1174,6 +1175,8 @@
             "that returns a function for “getter only” or an object with a “get” and/or “set” function");
         this.propertyValue = undefined;
       }
+      if (typeof this.propertyValue === 'function' && !this.isComputed)
+        this.propertyValue = this.propertyValue.bind(this.context);
     }
     Reactive.prototype.onChange = function (callback, node) {
       var w = new Watch(this, callback, {
@@ -1401,7 +1404,7 @@
   }());
 
   var ComponentHandler = /** @class */ (function () {
-    function ComponentHandler(bouer, appOptions) {
+    function ComponentHandler(bouer) {
       // Handle all the components web requests to avoid multiple requests
       this.requests = {};
       this.components = {};
@@ -1411,9 +1414,6 @@
       this.delimiter = IoC.Resolve(this.bouer, DelimiterHandler);
       this.eventHandler = IoC.Resolve(this.bouer, EventHandler);
       IoC.Register(this);
-      if (appOptions.components) {
-        this.prepare(appOptions.components);
-      }
     }
     ComponentHandler.prototype.check = function (nodeName) {
       return (nodeName in this.components);
@@ -1480,11 +1480,9 @@
         }
         IoC.Resolve(_this.bouer, Routing)
           .configure(_this.components[component.name] = component);
-        var preload = (_a = (_this.bouer.config || {}).preload) !== null && _a !== void 0 ? _a : true;
-        if (!preload)
-          return;
-        if (!isNull(component.path)) {
-          // isBuitInClass
+        var getContent = function (path) {
+          if (!path)
+            return;
           _this.request(component.path, {
             success: function (content) {
               component.template = content;
@@ -1493,7 +1491,16 @@
               Logger.error(buildError(error));
             }
           });
+        };
+        if (!isNull(component.prefetch)) {
+          if (component.prefetch === true)
+            return getContent(component.path);
+          return;
         }
+        var prefetch = (_a = (_this.bouer.config || {}).prefetch) !== null && _a !== void 0 ? _a : true;
+        if (!prefetch)
+          return;
+        return getContent(component.path);
       });
     };
     ComponentHandler.prototype.order = function (componentElement, data, callback) {
@@ -1514,14 +1521,14 @@
             mComponents[$name] = component;
           return;
         }
-        var requestedEvent = _this.addEvent('requested', componentElement, component, _this.bouer);
+        var requestedEvent = _this.addComponentEventAndEmitGlobalEvent('requested', componentElement, component, _this.bouer);
         if (requestedEvent)
           requestedEvent.emit();
         // Make or Add request
         _this.request(component.path, {
           success: function (content) {
             var newComponent = (component instanceof Component) ? component : new Component(component);
-            newComponent.template = content;
+            icomponent.template = newComponent.template = content;
             newComponent.bouer = _this.bouer;
             _this.insert(componentElement, newComponent, data, callback);
             if (component.keepAlive === true)
@@ -1554,7 +1561,7 @@
             });
           return restrictionResult;
         });
-        var blockedEvent_1 = this.addEvent('blocked', componentElement, component, this.bouer);
+        var blockedEvent_1 = this.addComponentEventAndEmitGlobalEvent('blocked', componentElement, component, this.bouer);
         var emitter_1 = function () {
           return blockedEvent_1.emit({
             detail: {
@@ -1589,8 +1596,16 @@
       return null;
     };
     /** Subscribe the hooks of the instance */
-    ComponentHandler.prototype.addEvent = function (eventName, element, component, context) {
+    ComponentHandler.prototype.addComponentEventAndEmitGlobalEvent = function (eventName, element, component, context) {
       var callback = component[eventName];
+      this.eventHandler.emit({
+        eventName: 'component:' + eventName,
+        init: {
+          detail: {
+            component: component
+          }
+        }
+      });
       if (typeof callback !== 'function')
         return {
           emit: (function () {})
@@ -1645,7 +1660,7 @@
             return Logger.error(("The component <" + $name + "></" + $name + "> " +
               "seems to have multiple root element, it must have only one root."));
           component.el = htmlSnippet.children[0];
-          _this.addEvent('created', component.el, component, _this.bouer);
+          _this.addComponentEventAndEmitGlobalEvent('created', component.el, component, _this.bouer);
           component.emit('created');
         });
       }
@@ -1707,7 +1722,7 @@
       var initializer = component.init;
       if (isFunction(initializer))
         initializer.call(component);
-      this.addEvent('beforeMount', component.el, component);
+      this.addComponentEventAndEmitGlobalEvent('beforeMount', component.el, component);
       component.emit('beforeMount');
       container.replaceChild(rootElement, componentElement);
       var rootClassList = {};
@@ -1788,10 +1803,10 @@
           // Executing the mixed scripts
           IoC.Resolve(_this.bouer, Evaluator)
             .execRaw((scriptContent || ''), component);
-          _this.addEvent('mounted', component.el, component);
+          _this.addComponentEventAndEmitGlobalEvent('mounted', component.el, component);
           component.emit('mounted');
           // TODO: Something between this two events
-          _this.addEvent('beforeLoad', component.el, component);
+          _this.addComponentEventAndEmitGlobalEvent('beforeLoad', component.el, component);
           component.emit('beforeLoad');
           IoC.Resolve(_this.bouer, Compiler)
             .compile({
@@ -1803,7 +1818,7 @@
               componentSlot: elementSlots,
               context: component,
               onDone: function () {
-                _this.addEvent('loaded', component.el, component);
+                _this.addComponentEventAndEmitGlobalEvent('loaded', component.el, component);
                 component.emit('loaded');
               }
             });
@@ -1877,7 +1892,7 @@
           Logger.error(("Error loading the <script src=\"" + url + "\"></script> in " +
             "<" + $name + "></" + $name + "> component, remove it in order to be compiled."));
           Logger.log(error);
-          _this.addEvent('failed', componentElement, component, _this.bouer)
+          _this.addComponentEventAndEmitGlobalEvent('failed', componentElement, component, _this.bouer)
             .emit();
         });
       });
@@ -3625,7 +3640,7 @@
       var delimiter = new DelimiterHandler(delimiters, this);
       var eventHandler = new EventHandler(this);
       var routing = new Routing(this);
-      var componentHandler = new ComponentHandler(this, options);
+      var componentHandler = new ComponentHandler(this);
       var compiler = new Compiler(this, options);
       new Converter(this);
       var skeleton = new Skeleton(this);
@@ -3743,6 +3758,8 @@
         eventName: 'beforeLoad',
         attachedNode: el
       });
+      // Registering all the components
+      componentHandler.prepare(options.components || []);
       // compile the app
       compiler.compile({
         el: this.el,
@@ -3756,7 +3773,7 @@
         }
       });
       var isDestroyed = false;
-      GLOBAL.addEventListener('beforeunload', function (evt) {
+      GLOBAL.addEventListener('beforeunload', function () {
         if (isDestroyed)
           return stop();
         eventHandler.emit({

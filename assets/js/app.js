@@ -37,7 +37,7 @@
       // Properties
       selectedLang: lang,
       translations: languages,
-      darkMode: (localStorage.$dark ?? false).toString(),
+      darkMode: (localStorage.$dark || false).toString(),
 
       isLoading: false,
       menuOpened: false,
@@ -58,6 +58,38 @@
         }
       }
       // Methods
+    },
+
+    beforeLoad: function () {
+      // Is loading something
+      var pagesLoading = 0;
+      var self = this;
+
+      function decreasePageLoaded() {
+        pagesLoading--;
+        if (self.data.isLoading == true && pagesLoading <= 0) {
+          self.data.isLoading = false;
+        }
+
+        if (pagesLoading <= 0){
+          pagesLoading = 0;
+        }
+      }
+
+      this.on('component:created', function () {
+        pagesLoading++;
+        if (this.data.isLoading === false)
+          this.data.isLoading = true;
+      });
+
+      // Everything loaded
+      this.on('component:loaded', function () {
+        decreasePageLoaded();
+      });
+
+      this.on('component:failed', function () {
+        decreasePageLoaded();
+      });
     },
     components: BouerComponents({
       lang: lang,
