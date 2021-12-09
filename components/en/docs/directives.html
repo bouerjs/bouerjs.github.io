@@ -470,8 +470,9 @@
       </p>
 
       <p>
-        We can also toggle an attribute, if the result is empty the attribute should be removed otherwise it should be
-        set. To achieve this result with this syntax: <span class="note mark">e-<i>attribute</i>="{ '': boolean }"</span>
+        The attribute it selt is automatically toggleable too, meaning that after the value being removed if the attribute
+        value is empty it should be automatically removed as well. Example:
+        <span class="note mark">e-<i>disabled</i>="{ 'true': isBlocked }"</span>.
       </p>
 
       <div e-skip>

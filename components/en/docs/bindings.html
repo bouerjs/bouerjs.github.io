@@ -5,7 +5,7 @@
     <section class="section">
       <h1> <a id="bindings"> Bindings </a> </h1>
 
-      <h3> <a id="bind-one-way"> One Way </a> </h3>
+      <h3> <a id="binding-one-way"> One Way </a> </h3>
       <p>
         We can achieve One Way Data Binding simply by defining the delimiter in the space or
         attribute we need the value to be.
@@ -41,10 +41,9 @@
 
       <p e-skip>
         If we don't want to do it this way, exposing the delimiter in the actual element attribute, we can still use
-        the directive <span class="note mark">e-<i>attribute</i>="{{ expression }}"</span>,
-        it creates the attribute after being compiled. This divertives is very versatile,
-        we will go into details about it in the <a :href="/docs/directives.html" class="note mark">directives</a>
-        section.
+        the directive <span class="note mark">e-<i>attribute</i>="{{ expression }}"</span>, it creates the attribute
+        after being compiled. This divertives is very versatile, we will go into details about it in the
+        <a :href="/docs/directives.html" class="note mark">directives</a> section.
       </p>
 
       <div e-skip>
@@ -57,12 +56,15 @@
       </div>
 
       <h3> <a id="binding-two-way"> Two Way </a> </h3>
+
       <p>
         We can achieve Two Way Data Binding using the directive <span class="note"><i class="mark">
             e-bind:</i>attribute="<i class="mark">property</i>",</span> by default it binds
         <span class="note">value</span> attribute, it means that if we want to bind the `value` attribute of an
         input we can define like this <span class="note mark">e-bind="property"</span>.
       </p>
+
+      <h4> <a id="binding-two-way-texts">Binding Text Inputs</a> </h4>
 
       <div e-if="typeof noApp === 'undefined'">
         <div e-skip execute>
@@ -79,6 +81,216 @@
         var app2 = new Bouer('#app2', {
           data: {
             value: 'Type something!'
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p>
+        <i class="note mark">TextArea</i> is bound following the same concept as normal input as wel
+        <i class="note mark">contenteditable</i> element.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+          <pre><code lang="html">
+        <div id="app2-1">
+          <p> Typed Content: </p>
+          <p style="white-space: pre-line;"> {{ value }} </p>
+          <textarea e-bind="value" placeholder="Type Something..."></textarea>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app2_1 = new Bouer('#app2-1', {
+          data: {
+            value: ''
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <h4> <a id="binding-two-way-checkables">Binding Checkable Inputs</a> </h4>
+      <p>
+        By default <span class="note mark">e-bind</span> directive target the <i class="note mark">checked</i>
+        property for <i class="note">checkboxes</i>.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+
+          <pre><code lang="html">
+        <div id="app3">
+          <input type="checkbox" e-bind="isVisible" />
+          <b e-show="isVisible"> Click on the checkbox, I'll disappear 😃! </b>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app3 = new Bouer('#app3', {
+          data: {
+            isVisible: true
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p> Multiple checkboxes, can be bound to an Array </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+          <pre><code lang="html">
+        <div id="app3-1">
+          <input type="checkbox" e-bind="movies" value="Iron Man"> Iron Man <br>
+          <input type="checkbox" e-bind="movies" value="Super-Man"> Super-Man <br>
+          <input type="checkbox" e-bind="movies" value="Batman"> Batman <br>
+
+          <p> Selected Movies: {{ movies }}</p>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app3_1 = new Bouer('#app3-1', {
+          data: {
+            movies: []
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p> We can also bind an Array of Objects using compilable value with <i class="note mark">:value</i>.</p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+          <pre><code lang="html">
+        <div id="app3-2">
+          <input type="checkbox" e-bind="movies" :value="{ title: 'Iron Man' }"> Iron Man <br>
+          <input type="checkbox" e-bind="movies" :value="{ title: 'Super-Man' }"> Super-Man <br>
+          <input type="checkbox" e-bind="movies" :value="{ title: 'Batman' }"> Batman <br>
+
+          <p> Selected Movies: {{ movies }}</p>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app3_2 = new Bouer('#app3-2', {
+          data: {
+            movies: []
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p>
+        Using Radio Button the concept is almost the same, by the default it binds the <i class="note mark">value</i>
+        property instead of binding <i class="note mark">checked</i> property.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+          <pre><code lang="html">
+        <div id="app4">
+          <input type="radio" e-bind="selected" name="gender" value="Male 👦"> Male
+          <input type="radio" e-bind="selected" name="gender" value="Female 👧"> Female
+
+          <p> Selected Gender: {{ selected }}</p>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app4 = new Bouer('#app4', {
+          data: {
+            selected: ''
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <h4> <a id="binding-two-way-select">Binding Select</a> </h4>
+      <p>
+        Seletcs are bound the same way as the other Element, by just setting <i class="note mark">e-bind</i>.
+        By default it binds <i class="note mark">value</i> property.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+
+          <pre><code lang="html">
+        <div id="app5">
+          <select e-bind="selected">
+            <option value="Banana">Banana</option>
+            <option value="Strawberry">Strawberry</option>
+            <option value="Mango">Mango</option>
+          </select>
+
+          <p> Selected Fruit: {{ selected }}</p>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app5 = new Bouer('#app5', {
+          data: {
+            selected: ''
+          }
+        });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p>
+        We can also bind a Select-Multiple the same concept, by the default it binds also the
+        <i class="note mark">value</i> property.
+      </p>
+
+      <div e-if="typeof noApp === 'undefined'">
+        <div e-skip execute>
+
+          <pre><code lang="html">
+        <div id="app5-1">
+          <select multiple e-bind="selected">
+            <option value="Banana">Banana</option>
+            <option value="Strawberry">Strawberry</option>
+            <option value="Mango">Mango</option>
+          </select>
+
+          <p> Selected Fruit: {{ selected }}</p>
+        </div>
+          </code></pre>
+
+          <pre><code lang="js">
+        var app5_1 = new Bouer('#app5-1', {
+          data: {
+            selected: []
           }
         });
           </code></pre>
