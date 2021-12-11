@@ -41,6 +41,7 @@
 
       isLoading: false,
       menuOpened: false,
+      docMenuOpened: false,
       menuLangDropdown: false,
       themeIco: 'fa-moon-o',
 
@@ -71,7 +72,7 @@
           self.data.isLoading = false;
         }
 
-        if (pagesLoading <= 0){
+        if (pagesLoading <= 0) {
           pagesLoading = 0;
         }
       }
@@ -116,8 +117,9 @@
         var codes = [].slice.call(el.querySelectorAll('code'));
         for (let i = 0; i < codes.length; i++) {
           var code = codes[i];
+          var codeText = code.innerHTML;
           var lang = code.getAttribute('lang');
-          var highlightedCode = Prism.highlight(code.innerHTML, Prism.languages[lang], lang);
+          var highlightedCode = Prism.highlight(codeText, Prism.languages[lang], lang);
           code.innerHTML = highlightedCode;
         }
 

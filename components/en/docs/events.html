@@ -1,167 +1,166 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="events"> Events </a> </h1>
+        <p>
+          We can use <span class="note mark">on:</span> to listen for DOM events and run some
+          javascript code when it is dispatched. In some examples above we use the click event so we
+          imagine that you must be a little familiar with it.
+        </p>
 
-    <section class="section">
-      <h1> <a id="events"> Events </a> </h1>
-      <p>
-        We can use <span class="note mark">on:</span> to listen for DOM events and run some
-        javascript code when it is dispatched. In some examples above we use the click event so we
-        imagine that you must be a little familiar with it.
-      </p>
+        <p>
+          Bouer events can be categorized into 3 types, which are:
+          <span class="note">DOM Standard</span>, <span class="note">Bouer</span> and
+          <span class="note">Custom</span> events. For all of them, they can be heard
+          with the following syntax:
+          <span class="note mark">on:<i>eventname</i>="function/expression"</span>.
+        </p>
 
-      <p>
-        Bouer events can be categorized into 3 types, which are:
-        <span class="note">DOM Standard</span>, <span class="note">Bouer</span> and
-        <span class="note">Custom</span> events. For all of them, they can be heard
-        with the following syntax:
-        <span class="note mark">on:<i>eventname</i>="function/expression"</span>.
-      </p>
+        <p>
+          When the events are dispatched, the event object can be accessed in the
+          <span class="note">event</span> variable.
+        </p>
 
-      <p>
-        When the events are dispatched, the event object can be accessed in the
-        <span class="note">event</span> variable.
-      </p>
+        <h3> <a id="events-standard"> Standard Events </a> </h3>
+        <p>
+          These are DOM Standard Events, such as onclick, ondblclick, onkeyup, etc.
+        </p>
 
-      <h3> <a id="events-standard"> Standard Events </a> </h3>
-      <p>
-        These are DOM Standard Events, such as onclick, ondblclick, onkeyup, etc.
-      </p>
-
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
-          <pre><code lang="html">
-        <button on:click="count++">
-          Clicked {{ count }}
-        </button>
-                </code></pre>
+        <div e-if="typeof noApp === 'undefined'">
+          <div e-skip>
+            <pre><code lang="html">
+          <button on:click="count++">
+            Clicked {{ count }}
+          </button>
+                  </code></pre>
+          </div>
         </div>
-      </div>
 
-      <h3> <a id="events-bouer"> Bouer Events </a> </h3>
-      <p>
-        These are Bouer's internal events, which we can mention:
-      </p>
+        <h3> <a id="events-bouer"> Bouer Events </a> </h3>
+        <p>
+          These are Bouer's internal events, which we can mention:
+        </p>
 
-      <ul>
-        <li> <span class="note mark">compile</span> &ndash; this event is dispatched when the
-          element containing the event is fully compiled. </li>
-        <li> <span class="note mark">add</span> &ndash; this event is dispatched when an element of the
-          <a class="note mark" :href="/docs/directives.html#directive-e-for">e-for</a> directive is inserted to
-          the DOM. It works with <i class="note mark">e-for</i> and <i class="note mark">e-req</i>.
-        </li>
-        <li> <span class="note mark">request</span> &ndash; this event is dispatched when a request
-          made using a <i class="note">e-req</i> directive.
-        </li>
-        <li> <span class="note mark">response</span> &ndash; this event is dispatched when we get the response using
-          a <i class="note mark">e-req</i> directive.
-        </li>
-        <li> <span class="note mark">fail</span> &ndash; this event is dispatched when a request fails using a
-          <i class="note mark">e-req</i> directive.
-        </li>
-        <li> <span class="note mark">done</span> &ndash; this event is dispatched when a request is finished. </li>
-      </ul>
+        <ul>
+          <li> <span class="note mark">compile</span> &ndash; this event is dispatched when the
+            element containing the event is fully compiled. </li>
+          <li> <span class="note mark">add</span> &ndash; this event is dispatched when an element of the
+            <a class="note mark" :href="/docs/directives.html#directive-e-for">e-for</a> directive is inserted to
+            the DOM. It works with <i class="note mark">e-for</i> and <i class="note mark">e-req</i>.
+          </li>
+          <li> <span class="note mark">request</span> &ndash; this event is dispatched when a request
+            made using a <i class="note">e-req</i> directive.
+          </li>
+          <li> <span class="note mark">response</span> &ndash; this event is dispatched when we get the response using
+            a <i class="note mark">e-req</i> directive.
+          </li>
+          <li> <span class="note mark">fail</span> &ndash; this event is dispatched when a request fails using a
+            <i class="note mark">e-req</i> directive.
+          </li>
+          <li> <span class="note mark">done</span> &ndash; this event is dispatched when a request is finished. </li>
+        </ul>
 
-      <h3> <a id="events-custom"> Custom Events </a> </h3>
-      <p>
-        These are the events that we can freely set the names according to our liking. <span class="note attr-border">Do
-          not use reserved names</span>, which are event names mentioned above.
-        To emit these events we use the <span class="note">app.emit(eventName: <i class="mark">string</i>,
-          options?: <i class="mark">object</i>)</span> method.
-      </p>
+        <h3> <a id="events-custom"> Custom Events </a> </h3>
+        <p>
+          These are the events that we can freely set the names according to our liking. <span class="note attr-border">Do
+            not use reserved names</span>, which are event names mentioned above.
+          To emit these events we use the <span class="note">app.emit(eventName: <i class="mark">string</i>,
+            options?: <i class="mark">object</i>)</span> method.
+        </p>
 
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip>
+        <div e-if="typeof noApp === 'undefined'">
+          <div e-skip>
 
-          <pre><code lang="html">
-        <div id="app">
-          <p on:changetext="change">
-            Hello!
+            <pre><code lang="html">
+          <div id="app">
+            <p on:changetext="change">
+              Hello!
+            </p>
+          </div>
+            </code></pre>
+
+            <pre><code lang="js">
+            var app = new Bouer('#app', {
+              data: {
+                change: function (evt) {
+                  evt.target.innerText = 'Hi! 😃';
+                }
+              },
+              loaded: function () {
+                this.emit('changetext');
+              }
+            });
+            </code></pre>
+
+          </div>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            Always remember to write the names of the events in lower cases.
           </p>
         </div>
-          </code></pre>
 
-          <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              change: function (evt) {
-                evt.target.innerText = 'Hi! 😃';
-              }
-            },
-            loaded: function () {
-              this.emit('changetext');
-            }
-          });
-          </code></pre>
-
-        </div>
-      </div>
-
-      <div class="block-note warn">
+        <h3> <a id="events-modifiers"> Modifiers </a> </h3>
         <p>
-          Always remember to write the names of the events in lower cases.
+          To add modifiers to the events use <span class="note mark">.</span> (dot) after the eventName.
+          The sintax is <span class="note">on:eventName <i class="mark">.modifier1.modifier2</i>="expression"</span>
         </p>
-      </div>
 
-      <h3> <a id="events-modifiers"> Modifiers </a> </h3>
-      <p>
-        To add modifiers to the events use <span class="note mark">.</span> (dot) after the eventName.
-        The sintax is <span class="note">on:eventName <i class="mark">.modifier1.modifier2</i>="expression"</span>
-      </p>
+        <p>
+          The following modifiers are available:
+        </p>
 
-      <p>
-        The following modifiers are available:
-      </p>
+        <ul>
+          <li> <span class="note mark">prevent</span> &ndash; calls <span class="note">event.preventDefault()</span>
+            before running the handler. </li>
+          <li> <span class="note mark">stop</span> &ndash; calls <span class="note">event.stopPropagation()</span>,
+            preventing the event reaching the
+            next element. </li>
+          <li> <span class="note mark">once</span> &ndash; remove the event after the first
+            time call. </li>
+        </ul>
 
-      <ul>
-        <li> <span class="note mark">prevent</span> &ndash; calls <span class="note">event.preventDefault()</span>
-          before running the handler. </li>
-        <li> <span class="note mark">stop</span> &ndash; calls <span class="note">event.stopPropagation()</span>,
-          preventing the event reaching the
-          next element. </li>
-        <li> <span class="note mark">once</span> &ndash; remove the event after the first
-          time call. </li>
-      </ul>
+        <p>
+          Modifiers can be chained together, for example.:
+          <span class="note">on:click<i class="mark">.stopPropagation.once</i>="doSomeThing"</span>
+        </p>
 
-      <p>
-        Modifiers can be chained together, for example.:
-        <span class="note">on:click<i class="mark">.stopPropagation.once</i>="doSomeThing"</span>
-      </p>
-
-      <div>
-        <div e-skip>
-          <pre><code lang="html">
-        <button on:click.once="count++">
-          Clicked {{ count }}
-        </button>
-          </code></pre>
+        <div>
+          <div e-skip>
+            <pre><code lang="html">
+          <button on:click.once="count++">
+            Clicked {{ count }}
+          </button>
+            </code></pre>
+          </div>
         </div>
-      </div>
 
-    </section>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/directives.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Directives</span>
+          </a>
+        </div>
+        <div class="middle">
 
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/directives.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Directives</span>
-        </a>
-      </div>
-      <div class="middle">
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
 
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
-
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/methods.html">
-          <span>Methods</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
-
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/methods.html">
+            <span>Methods</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>

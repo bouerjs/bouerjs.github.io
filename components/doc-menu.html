@@ -1,4 +1,13 @@
-<aside class="menu">
+<aside class="menu" e-class="{ 'side-menu-opened': docMenuOpened }">
+  <!-- Menu icon -->
+  <div class="side-menu-handler">
+    <div class="menu-btn-container">
+      <div class="menu-btn" on:click="docMenuOpened = !docMenuOpened">
+        <span></span>
+      </div>
+    </div>
+  </div>
+
   <ul class="items nice-scroll">
     <li><a :href="/docs/introduction.html#intro">
         <h3> Introduction </h3>

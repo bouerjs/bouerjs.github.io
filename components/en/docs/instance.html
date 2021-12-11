@@ -1,259 +1,258 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="instance"> Instance </a> </h1>
 
-    <section class="section">
-      <h1> <a id="instance"> Instance </a> </h1>
-
-      <p>
-        When we import <span class="note">Bouer</span> it should added a function to the global
-        object, so to begin using it we need to create a new instance of Bouer Class. This
-        constructor expects two parameters:
-      </p>
-
-      <pre><code lang="js">
-        var app = new Bouer(element, options);
-        </code></pre>
-
-      <h3> <a id="instance-el"> Element </a> </h3>
-      <p>
-        The element is the mandatory parameter that represents the section that the Bouer instance
-        should control in the application, it must be passed as a String in the format of a
-        CSS Selector. Example: <span class="note">#app</span>, <span class="note">.main-app</span> or
-        <span class="note">body</span>.
-      </p>
-
-      <h3> <a id="instance-options"> Options </a> </h3>
-      <p>
-        Options is the optional parameter, which can be used to set initial <i class="note mark">data</i>,
-        <i class="note mark">app configurations</i>, <i class="note mark">components</i> (we'll talk about
-        this later), etc. If passed, it must be an object containing all the information we need when the
-        instance is created.
-      </p>
-
-      <h3> <a id="properties"> Properties</a> </h3>
-      <p>
-        As previously stated, in the options parameter several properties can be defined which
-        are:
-      </p>
-
-      <pre><code lang="js">
-        var app = new Bouer('selector', {
-          /** The data of the application, havig the properties and methods */
-          data: Object,
-
-          /** The data that cross scopes (New Scope or Components Scope)   */
-          globalData: Object,
-
-          /** The configuration of the instance */
-          config: IBouerConfig {
-            /** Allow to use hash (#) on page navigation, by default is `true` */
-            usehash?: boolean;
-
-            /** Allow to keep the data modified during the component lifecycle */
-            activeClassName?: string;
-
-            /** Allow to prefetch the component content when the application is ready, by default is `true` */
-            prefetch?: boolean;
-
-            /** Defines the default color of the skeleton */
-            skeleton?: { background: string, wave: string }
-          },
-
-          /** The components of the application */
-          components: Component[],
-
-          /** The custom directives for the application */
-          directives: { [key: string]: Directive },
-
-          /** The dependencies of the instance */
-          dependencies: { [key: string]: Object },
-
-          /** Appends delimiters to the instance */
-          delimiters: Delimiter[],
-
-          /** Middlewares that should be used in the application */
-          middleware: function (
-            function configure (
-              /** Directive to intercept */
-              directive: string,
-              /** Actions to intercept */
-              actions: function (bind, update) {}
-            ) { },
-            app: Bouer
-          ) { },
-
-          /** The hook that should be called before the component is loaded */
-          beforeLoad(event: CustomEvent) { },
-
-          /** The hook that should be called after the component is loaded (Compiled) */
-          loaded(event: CustomEvent) { },
-
-          /** The hook that should be called before the component is destroyed */
-          beforeDestroy(event: CustomEvent) { },
-
-          /** The hook that should be called after the component is destroyed */
-          destroyed(event: CustomEvent) { },
-        });
-        </code></pre>
-
-      <h3> <a id="prop-data">Data & GlobalData</a> </h3>
-      <p>
-        As already mentioned, the data property allows you to set the data that the application should have
-        when it starts, however there is a way to add data while it is already running with the
-        <span class="note">app.set(<i class="mark">{ ... }</i>)</span> method (We'll talk about that in the
-        <a :href="/docs/methods.html" class="mark">methods</a> section).
-        <br>
-        The properties set on <span class="note mark">data</span> are reactive, this means that they react to
-        changes made to them.
-      </p>
-
-      <p>
-        The same concept is applied for <i class="note mark">globalData</i> property, the main difference is
-        that globalData properties always appear regardless of scope.
-      </p>
-
-      <div e-skip>
-
-        <pre><code lang="html">
-        <div id="app1">
-          <h4> {{ message }} </h4>
-        </div>
-          </code></pre>
+        <p>
+          When we import <span class="note">Bouer</span> it should added a function to the global
+          object, so to begin using it we need to create a new instance of Bouer Class. This
+          constructor expects two parameters:
+        </p>
 
         <pre><code lang="js">
-        var app1 = new Bouer('#app1', {
-          data: {
-            message: 'Hello World!'
+          var app = new Bouer(element, options);
+          </code></pre>
+
+        <h3> <a id="instance-el"> Element </a> </h3>
+        <p>
+          The element is the mandatory parameter that represents the section that the Bouer instance
+          should control in the application, it must be passed as a String in the format of a
+          CSS Selector. Example: <span class="note">#app</span>, <span class="note">.main-app</span> or
+          <span class="note">body</span>.
+        </p>
+
+        <h3> <a id="instance-options"> Options </a> </h3>
+        <p>
+          Options is the optional parameter, which can be used to set initial <i class="note mark">data</i>,
+          <i class="note mark">app configurations</i>, <i class="note mark">components</i> (we'll talk about
+          this later), etc. If passed, it must be an object containing all the information we need when the
+          instance is created.
+        </p>
+
+        <h3> <a id="properties"> Properties</a> </h3>
+        <p>
+          As previously stated, in the options parameter several properties can be defined which
+          are:
+        </p>
+
+        <pre><code lang="js">
+          var app = new Bouer('selector', {
+            /** The data of the application, havig the properties and methods */
+            data: Object,
+
+            /** The data that cross scopes (New Scope or Components Scope)   */
+            globalData: Object,
+
+            /** The configuration of the instance */
+            config: IBouerConfig {
+              /** Allow to use hash (#) on page navigation, by default is `true` */
+              usehash?: boolean;
+
+              /** Allow to keep the data modified during the component lifecycle */
+              activeClassName?: string;
+
+              /** Allow to prefetch the component content when the application is ready, by default is `true` */
+              prefetch?: boolean;
+
+              /** Defines the default color of the skeleton */
+              skeleton?: { background: string, wave: string }
+            },
+
+            /** The components of the application */
+            components: Component[],
+
+            /** The custom directives for the application */
+            directives: { [key: string]: Directive },
+
+            /** The dependencies of the instance */
+            dependencies: { [key: string]: Object },
+
+            /** Appends delimiters to the instance */
+            delimiters: Delimiter[],
+
+            /** Middlewares that should be used in the application */
+            middleware: function (
+              function configure (
+                /** Directive to intercept */
+                directive: string,
+                /** Actions to intercept */
+                actions: function (bind, update) {}
+              ) { },
+              app: Bouer
+            ) { },
+
+            /** The hook that should be called before the component is loaded */
+            beforeLoad(event: CustomEvent) { },
+
+            /** The hook that should be called after the component is loaded (Compiled) */
+            loaded(event: CustomEvent) { },
+
+            /** The hook that should be called before the component is destroyed */
+            beforeDestroy(event: CustomEvent) { },
+
+            /** The hook that should be called after the component is destroyed */
+            destroyed(event: CustomEvent) { },
+          });
+          </code></pre>
+
+        <h3> <a id="prop-data">Data & GlobalData</a> </h3>
+        <p>
+          As already mentioned, the data property allows you to set the data that the application should have
+          when it starts, however there is a way to add data while it is already running with the
+          <span class="note">app.set(<i class="mark">{ ... }</i>)</span> method (We'll talk about that in the
+          <a :href="/docs/methods.html" class="mark">methods</a> section).
+          <br>
+          The properties set on <span class="note mark">data</span> are reactive, this means that they react to
+          changes made to them.
+        </p>
+
+        <p>
+          The same concept is applied for <i class="note mark">globalData</i> property, the main difference is
+          that globalData properties always appear regardless of scope.
+        </p>
+
+        <div e-skip>
+
+          <pre><code lang="html">
+          <div id="app1">
+            <h4> {{ message }} </h4>
+          </div>
+            </code></pre>
+
+          <pre><code lang="js">
+          var app1 = new Bouer('#app1', {
+            data: {
+              message: 'Hello World!'
+            }
+          });
+
+          app1.set({ version: '3.0.0' });
+          </code></pre>
+        </div>
+
+        <p>
+          Is in data property where the <i class="note mark">functions</i> need to be defined too, and
+          they do not respect <i class="note mark">scopes</i> (we'll talk about this later), they can be
+          accessed even if a scope is created.
+        </p>
+
+        <h3> <a id="prop-dependencies">Dependencies </a> </h3>
+        <p>
+          This property allow to add dependencies in the current instance... All the dependencies can be accessed at
+          <span class="note">app.dependencies</span> object, which are defined providing a
+          <i class="note">[key: <i class="mark">string</i>]</i> and The dependency object.
+          <i class="note mark">{ 'my-dependency': {...} }</i>
+        </p>
+
+        <pre><code lang="js">
+        var app = new Bouer('#app', {
+          dependencies: {
+            'html-parser': HTMLParser
           }
         });
 
-        app1.set({ version: '3.0.0' });
+        var parser = app.dependencies['html-parser'];
         </code></pre>
-      </div>
 
-      <p>
-        Is in data property where the <i class="note mark">functions</i> need to be defined too, and
-        they do not respect <i class="note mark">scopes</i> (we'll talk about this later), they can be
-        accessed even if a scope is created.
-      </p>
+        <div class="block-note info">
+          <p>
+            We can create an instance without a variable, meaning that the instance cannot be accessed by the browser
+            console.
+          </p>
+        </div>
 
-      <h3> <a id="prop-dependencies">Dependencies </a> </h3>
-      <p>
-        This property allow to add dependencies in the current instance... All the dependencies can be accessed at
-        <span class="note">app.dependencies</span> object, which are defined providing a
-        <i class="note">[key: <i class="mark">string</i>]</i> and The dependency object.
-        <i class="note mark">{ 'my-dependency': {...} }</i>
-      </p>
-
-      <pre><code lang="js">
-      var app = new Bouer('#app', {
-        dependencies: {
-          'html-parser': HTMLParser
-        }
-      });
-
-      var parser = app.dependencies['html-parser'];
-      </code></pre>
-
-      <div class="block-note info">
+        <h3> <a id="prop-middleware">Middleware</a> </h3>
         <p>
-          We can create an instance without a variable, meaning that the instance cannot be accessed by the browser
-          console.
+          Middlewares in Bouer are used to intercept directive actions like <i class="note mark">Bind</i> or
+          <i class="note mark">Update</i>, it used also to configure
+          <a href="/docs/directives.html#directive-e-req" class="note mark">e-req</a> request.
         </p>
-      </div>
 
-      <h3> <a id="prop-middleware">Middleware</a> </h3>
-      <p>
-        Middlewares in Bouer are used to intercept directive actions like <i class="note mark">Bind</i> or
-        <i class="note mark">Update</i>, it used also to configure
-        <a href="/docs/directives.html#directive-e-req" class="note mark">e-req</a> request.
-      </p>
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+              middleware: function (configure, app) {
 
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-            middleware: function (configure, app) {
+                // Configure function is used to configure the interceptions
+                configure('e-title', function (bind, update) {
 
-              // Configure function is used to configure the interceptions
-              configure('e-title', function (bind, update) {
+                  // Interceptors:
+                  // Argument -> bind: a function configure a behavior after bound
+                  // Argument -> update: a function configure a behavior after update
 
-                // Interceptors:
-                // Argument -> bind: a function configure a behavior after bound
-                // Argument -> update: a function configure a behavior after update
+                  bind(function (context, next) {
+                    // TODO: Your after bind logic code here...
+                  });
 
-                bind(function (context, next) {
-                  // TODO: Your after bind logic code here...
+                  bind(function (context, next) {
+                    // TODO: Your update logic code here...
+                  });
+
                 });
+              }
+          });
+          </code></pre>
+        </div>
 
-                bind(function (context, next) {
-                  // TODO: Your update logic code here...
-                });
+        <p>
+          Note that the <i class="note">Interceptors</i> callback function has two arguments, which are the
+          <i class="note mark"><i>context:</i> object</i> and <i class="note mark"><i>next():</i> Function</i>
+        </p>
 
-              });
-            }
-        });
-        </code></pre>
-      </div>
+        <b> <i class="note mark"><i>context:</i> object</i> </b>
 
-      <p>
-        Note that the <i class="note">Interceptors</i> callback function has two arguments, which are the
-        <i class="note mark"><i>context:</i> object</i> and <i class="note mark"><i>next():</i> Function</i>
-      </p>
+        <p>
+          The object containing the <i class="note">BinderConfig</i> object and the <i class="note">details</i>
+          (Optional) of the Interceptor, it's structured as follows:
+        </p>
 
-      <b> <i class="note mark"><i>context:</i> object</i> </b>
+        <div e-skip>
+          <pre><code lang="js">
+          {
+            binder: {
+              node: Node,
+              data: object,
+              nodeName: string,
+              nodeValue: string,
+              fields: Delimiters[],
+              parent: Element,
+              value: string
+            },
+            detail: object
+          }
+          </code></pre>
+        </div>
 
-      <p>
-        The object containing the <i class="note">BinderConfig</i> object and the <i class="note">details</i>
-        (Optional) of the Interceptor, it's structured as follows:
-      </p>
+        <b> <i class="note mark"><i>next():</i> Function</i> </b>
+        <p>
+          This function is used to get the <i class="note">next</i> Interceptor of that directive when using
+          multiple configuration. we strongly advise using the <i class="note mark">return</i>.
+        </p>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/installation.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Installation</span>
+          </a>
+        </div>
+        <div class="middle">
 
-      <div e-skip>
-        <pre><code lang="js">
-        {
-          binder: {
-            node: Node,
-            data: object,
-            nodeName: string,
-            nodeValue: string,
-            fields: Delimiters[],
-            parent: Element,
-            value: string
-          },
-          detail: object
-        }
-        </code></pre>
-      </div>
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
 
-      <b> <i class="note mark"><i>next():</i> Function</i> </b>
-      <p>
-        This function is used to get the <i class="note">next</i> Interceptor of that directive when using
-        multiple configuration. we strongly advise using the <i class="note mark">return</i>.
-      </p>
-    </section>
-
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/installation.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Installation</span>
-        </a>
-      </div>
-      <div class="middle">
-
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
-
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/delimiters.html">
-          <span>Delimiters</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
-
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/delimiters.html">
+            <span>Delimiters</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>

@@ -1,555 +1,559 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
-
-    <section class="section">
-      <h1><a id="components"> Components </a></h1>
-      <p>
-        It is a concept that allows the reuse of HTML Snippet. Bouer creates and handles components
-        in a different way, we will see in the chapters below. There are two types of components,
-        <span class="note mark">Cloned</span> and <span class="note mark">Registered</span>,
-        and these two ways are used the same way.
-      </p>
-
-      <h3> <a id="component-cloned"> Cloned </a> </h3>
-      <p>
-        These are components that are based on a copy of an element during compilation process, it's
-        like copy and paste. It can be achived by defining
-        <span class="note mark">e-entry<i>="component-name"</i></span> in the element that needs to be
-        copied (registered) and include it where it needs to pasted.
-        <i class="note warn-border">The order matters.</i>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <!-- Copying -->
-        <div e-entry="logo">
-          <label> Logo </label>
-        </div>
-
-        <!-- Pasting -->
-        <logo></logo>
-
-        <!-- Pasting -->
-        <logo></logo>
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-registered"> Registered</a> </h3>
-      <p>
-        These are the components that are registered directly in the instance, it can be done in
-        <span class="note mark">Bouer</span> instance options at
-        <i class="note">{ <i class="mark">components</i>: [ {...} ] }</i> or using the component handler
-        object in <i class="note">app.<i class="mark">$components.add(<i>{...}</i>)</i></i>.
-      </p>
-
-      <h3> <a id="component-registering"> Registering </a> </h3>
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          // Registering directly in the instance
-          components: [{
-            /** The name of the component */
-            name?: string,
-
-            /** The path of the component (required) */
-            path: string,
-
-            /** The component html template [hard code component] */
-            template?: string,
-
-            /** The default data that should be injected in the component */
-            data?: object,
-
-            /** Allow the component the keep the last state */
-            keepAlive?: boolean,
-
-            /** restrictions of this component */
-            restrictions?: (function (component: Component): boolean { })[],
-
-            // Lifecycles Hooks
-
-            /** It's called when the component was blocked by restrictions */
-            blocked?: (event: CustomEvent) { },
-
-            /** The hook that should be called when the component is requested */
-            requested?: (event: CustomEvent) { },
-
-            /** The hook that should be called when the component is created */
-            created?: (event: CustomEvent) { },
-
-            /** The hook that should be called before the component is mounted */
-            beforeMount?: (event: CustomEvent) { },
-
-            /** The hook that should be called after the component is mounted */
-            mounted?: (event: CustomEvent) { },
-
-            /** The hook that should be called before the component is loaded */
-            beforeLoad?: (event: CustomEvent) { },
-
-            /** The hook that should be called after the component is loaded */
-            loaded?: (event: CustomEvent) { },
-
-            /** The hook that should be called before the component is destroyed */
-            beforeDestroy?: (event: CustomEvent) { },
-
-            /** The hook that should be called after the component is destroyed */
-            destroyed?: (event: CustomEvent) { },
-
-            /** The hook that should be called after the component request is failed */
-            failed?: (event: CustomEvent) { }
-          }]
-        });
-
-        // Adding or Registering new component with the handler
-        app.$components.add(Component);
-        </code></pre>
-      </div>
-
-      <p>
-        We can listen to hooks of all the components at once using the <i class="note mark"><i>app.</i>on</i>,
-        we just need to append <i class="note mark">component:</i> before the hook we want to listen.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app'. {
-          components: [ ... ]
-        });
-
-        app.on('component:loaded', function (evt) {
-          // TODO: Your logic here...
-        });
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-handing"></a> Handling Components </h3>
-      <p>
-        The object <i class="note">app.<i class="mark">$components</i></i> allow us to manage
-        components. It is structured as following:
-      </p>
-
-      <ul>
-        <li> <span class="note mark">add</span> &ndash; it is a method that allow to add
-          components to the instance. It expects an object having the component element: <i
-            class="note mark">add(<i>Component</i>)</i>. </li>
-        <li> <span class="note mark">get</span> &ndash; it is a method that allow to get a
-          component. It expects the <span class="note mark">component-name</span> of
-          the component: <span class="note mark">get(<i>string</i>)</span>. </li>
-      </ul>
-
-      <h3> <a id="component-format"> Component Format </a> </h3>
-      <p>
-        They are written into .html files, containing <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i>
-        (optional), <i class="note code-style">&lt;<i class="mark">script</i>&gt;</i> (optional) and the
-        <i class="note">root element</i> like <i class="note code-style">&lt;<i class="mark">div</i>&gt;</i> (required).
-      </p>
-
-      <h3> <a id="component-style"> Styles </a> </h3>
-      <p>
-        The <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i> tag here works as expected, by default the
-        styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This adds a
-        class
-        like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="xml">
-        <style>
-          /* Global Style */
-        </style>
-
-        <style scoped>
-          /* Scoped Style */
-        </style>
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-root"> Root Element </a> </h3>
-      <p>
-        A block element like a div that should be added to the DOM.
-      </p>
-
-      <h3> <a id="component-script"> Scripts </a> </h3>
-      <p>
-        A block containing the JavaScript code that runs after the component is created. The context
-        (<i class="note mark">this</i>) is the component instance.
-      </p>
-
-      <div class="block-note info">
+    <div class="content">
+      <section class="section">
+        <h1><a id="components"> Components </a></h1>
         <p>
-          The <i class="note">Bouer</i> instance of this component can be accessed in <i class="note"><i
-              class="mark">this</i>.bouer</i>.
+          It is a concept that allows the reuse of HTML Snippet. Bouer creates and handles components
+          in a different way, we will see in the chapters below. There are two types of components,
+          <span class="note mark">Cloned</span> and <span class="note mark">Registered</span>,
+          and these two ways are used the same way.
         </p>
-      </div>
 
-      <div class="block-note info">
+        <h3> <a id="component-cloned"> Cloned </a> </h3>
         <p>
-          It is recommended to put any data request (<i class="note mark">fetch</i>) in
-          <i class="note mark">mounted</i> hooks, according to the speed of the response,
-          the component should be shown with data already.
+          These are components that are based on a copy of an element during compilation process, it's
+          like copy and paste. It can be achived by defining
+          <span class="note mark">e-entry<i>="component-name"</i></span> in the element that needs to be
+          copied (registered) and include it where it needs to pasted.
+          <i class="note warn-border">The order matters.</i>.
         </p>
-      </div>
 
-      <h3> <a id="component-exporting"> Exporting </a> </h3>
-      <p>
-        The method that is used to export data from the script to the template is <span class="mark">export</span>.
-        To be able to export the data, it needs to be defined as following: <i
-          class="note mark">this.export(<i>{...}</i>)</i>.
-      </p>
-
-      <div e-skip>
-
-        <pre><code lang="xml">
-        <div>
-          <!-- Component Element -->
-        </div>
-        <script>
-          /*   Component Script   */
-        </script>
-        <style scoped>
-          /*   Component Scope Style   */
-        </style>
-        </code></pre>
-
-      </div>
-
-      <h3> <a id="component-structure"> Component Structure </a> </h3>
-      <p>
-        The component object has the following structure:
-      </p>
-
-      <div e-skip>
-        <pre><code lang="js">
-        Component {
-          /** The component name */
-          name: string;
-
-          /** The component element */
-          el: Element;
-
-          /** The app instance */
-          bouer: Bouer;
-
-          /** The data of the component */
-          data: object;
-
-          /**
-           * Allow to prefetch the component content when the application is ready.
-           * Note: it overrides the global prefetch value
-           */
-          prefetch?: boolean;
-
-          /** Method used to export data to the element */
-          export(options: object);
-
-          /** Method used to destroy the component */
-          destroy();
-
-          /** Method used to build the `url attributes` or `query parameters` */
-          params(): Object;
-
-          /** Component Events Handler */
-
-          /**Events:  beforeMount, mounted, beforeLoad, loaded, beforeDestroy, destroyed */
-          /** Method to used to add an event */
-          on(eventName: string, callback: function (event: CustomEvent) { });
-
-          /** Method to used to remove an event */
-          off(eventName: string, callback: function (event: CustomEvent) { });
-
-          /** Method to used to dispatch an event */
-          emit(eventName: string, init ? : CustomEventInit);
-        }
-        </code></pre>
-      </div>
-
-      <div class="block-note info">
-        <p>
-          We use <i class="note mark">this</i> keyword in order to get access of the component
-          object in the HTML Template.
-        </p>
-      </div>
-
-      <h3> <a id="component-data"> Component with <i class="note-mark">data</i> </a> </h3>
-      <p>
-        A component can be combined with <i class="note mark">data</i> directive to inject data
-        in the component. This data can be accessed in the property <i class="note mark">this.data</i>
-        inside of the component's script.
-      </p>
-
-      <div class="block-note info">
-        <p>
-          The attributes defined in component element are transfered to the component root element
-          (for example: <i class="note mark">div</i>) of the component.
-        </p>
-      </div>
-
-      <div e-skip>
-        <pre><code lang="html">
-      <footer data="{ version: '3.0.0', author: 'AfonsoMatElias' }"></footer>
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-dynamic-injection"> Component Dynamic Injection </a> </h3>
-      <p>
-        A component can be dynamically injected into a element using the <i class="note mark">e-put</i>
-        directive. <i class="note warn-border">No delimiter needed</i>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-      <div class="tab-container" e-put="currentTab"></div>
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-keep-alive"> Keep Alive </a> </h3>
-      <p>
-        By default, the components are re-created when they are requested to be injected do the DOM, to
-        keep the element with it information just set <i class="note mark">keep-alive</i> attribute.
-        <i class="note warn-border">All the scripts will be reloaded</i>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-      <customer-form keep-alive></customer-form>
-        </code></pre>
-      </div>
-
-      <h3> <a id="component-slots"> Component with `slots` </a> </h3>
-      <p>
-        Elements can be easily nested using slots, just define a
-        <i class="note code-style">&lt;<i class="mark">slot</i>&gt;</i> tag with <i class="note mark">default</i>
-        attribute into the component body where we want the element to be included and fill the component body
-        with the elements to include.
-      </p>
-
-      <div e-skip>
-        <label>DOM</label>
-        <pre><code lang="html">
-        <input-field>
-          <input type="text" name="Name">
-        </input-field>
-        </code></pre>
-
-        <label>Component</label>
-        <pre><code lang="html">
-        <div>
-          <label> {{ label }} </label>
-          <slot default></slot>
-          <span> {{ msg }} </span>
-        </div>
-        </code></pre>
-      </div>
-
-      <p>
-
-        But, if we want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
-        <i class="note mark">name</i> attribute with a value and mark with <i class="note mark">slot</i>
-        attribute with the same value in the element we want to include.
-      </p>
-
-      <div e-skip>
-        <label>DOM</label>
-        <pre><code lang="html">
-        <app-table>
-          <div slot="head" class="head">
-            <label> Name </label>
-            <label> Age </label>
+        <div e-skip>
+          <pre><code lang="html">
+          <!-- Copying -->
+          <div e-entry="logo">
+            <label> Logo </label>
           </div>
 
-          <div slot="body" class="body">
-            <div e-for="users">
-              <label> {{ name }} </label>
-              <label> {{ age }} </label>
+          <!-- Pasting -->
+          <logo></logo>
+
+          <!-- Pasting -->
+          <logo></logo>
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-registered"> Registered</a> </h3>
+        <p>
+          These are the components that are registered directly in the instance, it can be done in
+          <span class="note mark">Bouer</span> instance options at
+          <i class="note">{ <i class="mark">components</i>: [ {...} ] }</i> or using the component handler
+          object in <i class="note">app.<i class="mark">$components.add(<i>{...}</i>)</i></i>.
+        </p>
+
+        <h3> <a id="component-registering"> Registering </a> </h3>
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            // Registering directly in the instance
+            components: [{
+              /** The name of the component */
+              name?: string,
+
+              /** The path of the component (required) */
+              path: string,
+
+              /** The component html template [hard code component] */
+              template?: string,
+
+              /** The default data that should be injected in the component */
+              data?: object,
+
+              /** Allow the component the keep the last state */
+              keepAlive?: boolean,
+
+              /** restrictions of this component */
+              restrictions?: (function (component: Component): boolean { })[],
+
+              // Lifecycles Hooks
+
+              /** It's called when the component was blocked by restrictions */
+              blocked?: (event: CustomEvent) { },
+
+              /** The hook that should be called when the component is requested */
+              requested?: (event: CustomEvent) { },
+
+              /** The hook that should be called when the component is created */
+              created?: (event: CustomEvent) { },
+
+              /** The hook that should be called before the component is mounted */
+              beforeMount?: (event: CustomEvent) { },
+
+              /** The hook that should be called after the component is mounted */
+              mounted?: (event: CustomEvent) { },
+
+              /** The hook that should be called before the component is loaded */
+              beforeLoad?: (event: CustomEvent) { },
+
+              /** The hook that should be called after the component is loaded */
+              loaded?: (event: CustomEvent) { },
+
+              /** The hook that should be called before the component is destroyed */
+              beforeDestroy?: (event: CustomEvent) { },
+
+              /** The hook that should be called after the component is destroyed */
+              destroyed?: (event: CustomEvent) { },
+
+              /** The hook that should be called after the component request is failed */
+              failed?: (event: CustomEvent) { }
+            }]
+          });
+
+          // Adding or Registering new component with the handler
+          app.$components.add(Component);
+          </code></pre>
+        </div>
+
+        <p>
+          We can listen to hooks of all the components at once using the <i class="note mark"><i>app.</i>on</i>,
+          we just need to append <i class="note mark">component:</i> before the hook we want to listen.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app'. {
+            components: [ ... ]
+          });
+
+          app.on('component:loaded', function (evt) {
+            // TODO: Your logic here...
+          });
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-handing"></a> Handling Components </h3>
+        <p>
+          The object <i class="note">app.<i class="mark">$components</i></i> allow us to manage
+          components. It is structured as following:
+        </p>
+
+        <ul>
+          <li> <span class="note mark">add</span> &ndash; it is a method that allow to add
+            components to the instance. It expects an object having the component element: <i
+              class="note mark">add(<i>Component</i>)</i>. </li>
+          <li> <span class="note mark">get</span> &ndash; it is a method that allow to get a
+            component. It expects the <span class="note mark">component-name</span> of
+            the component: <span class="note mark">get(<i>string</i>)</span>. </li>
+        </ul>
+
+        <h3> <a id="component-format"> Component Format </a> </h3>
+        <p>
+          They are written into .html files, containing <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i>
+          (optional), <i class="note code-style">&lt;<i class="mark">script</i>&gt;</i> (optional) and the
+          <i class="note">root element</i> like <i class="note code-style">&lt;<i class="mark">div</i>&gt;</i>
+          (required).
+        </p>
+
+        <h3> <a id="component-style"> Styles </a> </h3>
+        <p>
+          The <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i> tag here works as expected, by default
+          the
+          styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This adds
+          a
+          class
+          like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="xml">
+          <style>
+            /* Global Style */
+          </style>
+
+          <style scoped>
+            /* Scoped Style */
+          </style>
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-root"> Root Element </a> </h3>
+        <p>
+          A block element like a div that should be added to the DOM.
+        </p>
+
+        <h3> <a id="component-script"> Scripts </a> </h3>
+        <p>
+          A block containing the JavaScript code that runs after the component is created. The context
+          (<i class="note mark">this</i>) is the component instance.
+        </p>
+
+        <div class="block-note info">
+          <p>
+            The <i class="note">Bouer</i> instance of this component can be accessed in <i class="note"><i
+                class="mark">this</i>.bouer</i>.
+          </p>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            It is recommended to put any data request (<i class="note mark">fetch</i>) in
+            <i class="note mark">mounted</i> hooks, according to the speed of the response,
+            the component should be shown with data already.
+          </p>
+        </div>
+
+        <h3> <a id="component-exporting"> Exporting </a> </h3>
+        <p>
+          The method that is used to export data from the script to the template is <span class="mark">export</span>.
+          To be able to export the data, it needs to be defined as following: <i
+            class="note mark">this.export(<i>{...}</i>)</i>.
+        </p>
+
+        <div e-skip>
+
+          <pre><code lang="xml">
+          <div>
+            <!-- Component Element -->
+          </div>
+          <script>
+            /*   Component Script   */
+          </script>
+          <style scoped>
+            /*   Component Scope Style   */
+          </style>
+          </code></pre>
+
+        </div>
+
+        <h3> <a id="component-structure"> Component Structure </a> </h3>
+        <p>
+          The component object has the following structure:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          Component {
+            /** The component name */
+            name: string;
+
+            /** The component element */
+            el: Element;
+
+            /** The app instance */
+            bouer: Bouer;
+
+            /** The data of the component */
+            data: object;
+
+            /**
+             * Allow to prefetch the component content when the application is ready.
+             * Note: it overrides the global prefetch value
+             */
+            prefetch?: boolean;
+
+            /** Method used to export data to the element */
+            export(options: object);
+
+            /** Method used to destroy the component */
+            destroy();
+
+            /** Method used to build the `url attributes` or `query parameters` */
+            params(): Object;
+
+            /** Component Events Handler */
+
+            /**Events:  beforeMount, mounted, beforeLoad, loaded, beforeDestroy, destroyed */
+            /** Method to used to add an event */
+            on(eventName: string, callback: function (event: CustomEvent) { });
+
+            /** Method to used to remove an event */
+            off(eventName: string, callback: function (event: CustomEvent) { });
+
+            /** Method to used to dispatch an event */
+            emit(eventName: string, init ? : CustomEventInit);
+          }
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            We use <i class="note mark">this</i> keyword in order to get access of the component
+            object in the HTML Template.
+          </p>
+        </div>
+
+        <h3> <a id="component-data"> Component with <i class="note-mark">data</i> </a> </h3>
+        <p>
+          A component can be combined with <i class="note mark">data</i> directive to inject data
+          in the component. This data can be accessed in the property <i class="note mark">this.data</i>
+          inside of the component's script.
+        </p>
+
+        <div class="block-note info">
+          <p>
+            The attributes defined in component element are transfered to the component root element
+            (for example: <i class="note mark">div</i>) of the component.
+          </p>
+        </div>
+
+        <div e-skip>
+          <pre><code lang="html">
+        <footer data="{ version: '3.0.0', author: 'AfonsoMatElias' }"></footer>
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-dynamic-injection"> Component Dynamic Injection </a> </h3>
+        <p>
+          A component can be dynamically injected into a element using the <i class="note mark">e-put</i>
+          directive. <i class="note warn-border">No delimiter needed</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+        <div class="tab-container" e-put="currentTab"></div>
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-keep-alive"> Keep Alive </a> </h3>
+        <p>
+          By default, the components are re-created when they are requested to be injected do the DOM, to
+          keep the element with it information just set <i class="note mark">keep-alive</i> attribute.
+          <i class="note warn-border">All the scripts will be reloaded</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+        <customer-form keep-alive></customer-form>
+          </code></pre>
+        </div>
+
+        <h3> <a id="component-slots"> Component with `slots` </a> </h3>
+        <p>
+          Elements can be easily nested using slots, just define a
+          <i class="note code-style">&lt;<i class="mark">slot</i>&gt;</i> tag with <i class="note mark">default</i>
+          attribute into the component body where we want the element to be included and fill the component body
+          with the elements to include.
+        </p>
+
+        <div e-skip>
+          <label>DOM</label>
+          <pre><code lang="html">
+          <input-field>
+            <input type="text" name="Name">
+          </input-field>
+          </code></pre>
+
+          <label>Component</label>
+          <pre><code lang="html">
+          <div>
+            <label> {{ label }} </label>
+            <slot default></slot>
+            <span> {{ msg }} </span>
+          </div>
+          </code></pre>
+        </div>
+
+        <p>
+
+          But, if we want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
+          <i class="note mark">name</i> attribute with a value and mark with <i class="note mark">slot</i>
+          attribute with the same value in the element we want to include.
+        </p>
+
+        <div e-skip>
+          <label>DOM</label>
+          <pre><code lang="html">
+          <app-table>
+            <div slot="head" class="head">
+              <label> Name </label>
+              <label> Age </label>
             </div>
+
+            <div slot="body" class="body">
+              <div e-for="users">
+                <label> {{ name }} </label>
+                <label> {{ age }} </label>
+              </div>
+            </div>
+          </app-table>
+          </code></pre>
+
+          <label>Component</label>
+          <pre><code lang="html">
+          <div class="table">
+            <slot name="head"></slot>
+            <slot name="body"></slot>
           </div>
-        </app-table>
-        </code></pre>
-
-        <label>Component</label>
-        <pre><code lang="html">
-        <div class="table">
-          <slot name="head"></slot>
-          <slot name="body"></slot>
+          </code></pre>
         </div>
-        </code></pre>
-      </div>
 
-      <div class="block-note info">
+        <div class="block-note info">
+          <p>
+            For live usage, you may keep learning in Tutorial Page.
+            <a :href="/tutorial.html" class="mark">Take me there</a>!
+          </p>
+        </div>
+
+        <h3> <a id="component-custom"> Customizing Component </a> </h3>
         <p>
-          For live usage, you may keep learning in Tutorial Page.
-          <a :href="/tutorial.html" class="mark">Take me there</a>!
+          Using modules, we can customize a component by extending the <i class="mark">Component</i> class.
         </p>
-      </div>
 
-      <h3> <a id="component-custom"> Customizing Component </a> </h3>
-      <p>
-        Using modules, we can customize a component by extending the <i class="mark">Component</i> class.
-      </p>
+        <div e-skip>
+          <pre><code lang="txt">
+          |_ Project
+            |_ components
+            |   |_ home
+            |     |_ home.html
+            |     |_ home.css
+            |     |_ home.js
 
-      <div e-skip>
-        <pre><code lang="txt">
-        |_ Project
-          |_ components
-          |   |_ home
-          |     |_ home.html
-          |     |_ home.css
-          |     |_ home.js
+            |  |_ about
+            |     |_ about.html
+            |     |_ about.css
+            |     |_ about.js
 
-          |  |_ about
-          |     |_ about.html
-          |     |_ about.css
-          |     |_ about.js
+            |_ js
+            |  |_ bouer.esm.js
+            |_ app.js
+              </code></pre>
+        </div>
 
-          |_ js
-          |  |_ bouer.esm.js
-          |_ app.js
-            </code></pre>
-      </div>
-
-      <p>
-        Given this project structure above, we can represent it as follows:
-      </p>
-
-      <div e-skip>
-        <pre><code lang="js">
-        // home.js
-        import { Component } from "./js/bouer.esm.js";
-
-        export class Home extends Component {
-          constructor(){
-            super("/components/home/home.html");
-          }
-
-          init(){
-            this.addAssets([
-              { src: './home.css' }
-            ]);
-          }
-        }
-        </code></pre>
-
-        <pre><code lang="js">
-        // about.js
-        import { Component } from "./js/bouer.esm.js";
-
-        export class About extends Component {
-          constructor(){
-            super("/components/about/about.html");
-          }
-
-          init(){
-            this.addAssets([
-              { src: './about.css' }
-            ]);
-          }
-        }
-        </code></pre>
-
-        <pre><code lang="js">
-        // app.js
-        import Bouer from "./js/bouer.esm.js";
-        import Home from "./components/home/home.js";
-        import About from "./components/about/about.js";
-
-        var app = new Bouer('#app', {
-          components: [ new Home(), new About() ]
-        });
-        </code></pre>
-      </div>
-
-      <div class="block-note info">
         <p>
-          The <i class="note mark">super</i> keyword expects the HTML component file path or the
-          component options object.
+          Given this project structure above, we can represent it as follows:
         </p>
-      </div>
 
-      <p>
-        The <i class="note mark">init</i> method is called after the component is instantiated, and
-        commonly used for code initialization, like <i class="mark">addAssets(<i>[ { ... } ]</i>)</i>.
-      </p>
+        <div e-skip>
+          <pre><code lang="js">
+          // home.js
+          import { Component } from "./js/bouer.esm.js";
 
-      <p>
-        The component <i class="note mark">addAssets(<i>[ { ... } ]</i>)</i> method is used for adding assets like
-        .js and/or .css files to the component. It expects a list of
-        <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>,
-          scoped: <i class="mark">boolean</i> }</i>, where:
-      </p>
+          export class Home extends Component {
+            constructor(){
+              super("/components/home/home.html");
+            }
 
-      <ul>
-        <li> <span class="note mark">type</span> &ndash; the type of the asset, which can be <i class="mark">style</i>,
-          <i class="mark">css</i>, <i class="mark">link</i>, <i class="mark">script</i>, <i class="mark">js</i>.
-        </li>
-        <li> <span class="note mark">src</span> &ndash; the source of the file, if the path ends with the file extension
-          like <i class="note mark">.js</i> or <i class="note mark">.css</i> the <i class="note mark">type</i> property
-          can be optional.
-        </li>
-        <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="note mark">scoped</i>.
-          By default the value is <i class="note mark">true</i>.
-        </li>
-      </ul>
-
-      <p>
-        As we extend the Component class, we can set the existing hooks or even add custom methods
-        to this class, to be able to access this method we use <i class="mark">this</i> keyword.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="js">
-        class BlogForm extends Component {
-          constructor(){
-            super({
-              template: `
-              <form on:submit.prevent="this.submit">
-                <!-- ... inputs ... -->
-                <button on:click="this.clear">Clear</button>
-                <button on:click="this.submit">Submit</button>
-              </form>`
-            });
+            init(){
+              this.addAssets([
+                { src: './home.css' }
+              ]);
+            }
           }
+          </code></pre>
 
-          loaded(evt) {
-            // ...
+          <pre><code lang="js">
+          // about.js
+          import { Component } from "./js/bouer.esm.js";
+
+          export class About extends Component {
+            constructor(){
+              super("/components/about/about.html");
+            }
+
+            init(){
+              this.addAssets([
+                { src: './about.css' }
+              ]);
+            }
           }
+          </code></pre>
 
-          submit(evt) {
-            // Submit a blog
+          <pre><code lang="js">
+          // app.js
+          import Bouer from "./js/bouer.esm.js";
+          import Home from "./components/home/home.js";
+          import About from "./components/about/about.js";
+
+          var app = new Bouer('#app', {
+            components: [ new Home(), new About() ]
+          });
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            The <i class="note mark">super</i> keyword expects the HTML component file path or the
+            component options object.
+          </p>
+        </div>
+
+        <p>
+          The <i class="note mark">init</i> method is called after the component is instantiated, and
+          commonly used for code initialization, like <i class="mark">addAssets(<i>[ { ... } ]</i>)</i>.
+        </p>
+
+        <p>
+          The component <i class="note mark">addAssets(<i>[ { ... } ]</i>)</i> method is used for adding assets like
+          .js and/or .css files to the component. It expects a list of
+          <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>,
+            scoped: <i class="mark">boolean</i> }</i>, where:
+        </p>
+
+        <ul>
+          <li> <span class="note mark">type</span> &ndash; the type of the asset, which can be <i
+              class="mark">style</i>,
+            <i class="mark">css</i>, <i class="mark">link</i>, <i class="mark">script</i>, <i class="mark">js</i>.
+          </li>
+          <li> <span class="note mark">src</span> &ndash; the source of the file, if the path ends with the file
+            extension
+            like <i class="note mark">.js</i> or <i class="note mark">.css</i> the <i class="note mark">type</i>
+            property
+            can be optional.
+          </li>
+          <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="note mark">scoped</i>.
+            By default the value is <i class="note mark">true</i>.
+          </li>
+        </ul>
+
+        <p>
+          As we extend the Component class, we can set the existing hooks or even add custom methods
+          to this class, to be able to access this method we use <i class="mark">this</i> keyword.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          class BlogForm extends Component {
+            constructor(){
+              super({
+                template: `
+                <form on:submit.prevent="this.submit">
+                  <!-- ... inputs ... -->
+                  <button on:click="this.clear">Clear</button>
+                  <button on:click="this.submit">Submit</button>
+                </form>`
+              });
+            }
+
+            loaded(evt) {
+              // ...
+            }
+
+            submit(evt) {
+              // Submit a blog
+            }
+
+            clear(evt) {
+              // Clear blog form
+            }
           }
+          </code></pre>
+        </div>
 
-          clear(evt) {
-            // Clear blog form
-          }
-        }
-        </code></pre>
-      </div>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/methods.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Methods</span>
+          </a>
+        </div>
+        <div class="middle">
 
-    </section>
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
 
-
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/methods.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Methods</span>
-        </a>
-      </div>
-      <div class="middle">
-
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
-
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/routing.html">
-          <span>Routing</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
-
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/routing.html">
+            <span>Routing</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>

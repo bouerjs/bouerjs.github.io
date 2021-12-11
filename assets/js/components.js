@@ -28,10 +28,6 @@ function BouerComponents(sharedOptions) {
       route: '/',
     },
     {
-      path: '/components/' + lang + '/docs.component.html',
-      route: '/docs.html',
-    },
-    {
       path: '/components/' + lang + '/cli.docs.component.html',
       route: '/cli.docs.html',
       title: 'CLI Documentation'

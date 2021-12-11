@@ -1,97 +1,96 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="delimiters"> Delimiters </a> </h1>
 
-    <section class="section">
-      <h1> <a id="delimiters"> Delimiters </a> </h1>
+        <p>
+          By default Bouer brings some delimiters, which one of them is used by Vue.js, Angular.js, and others.
+        </p>
 
-      <p>
-        By default Bouer brings some delimiters, which one of them is used by Vue.js, Angular.js, and others.
-      </p>
+        <p>
+          The delimiters open a space in HTML to execute some javascript code, it means that we
+          can execute any pure js code variables, function, ternary operatiors, etc. It only need
+          to return a value.
+        </p>
 
-      <p>
-        The delimiters open a space in HTML to execute some javascript code, it means that we
-        can execute any pure js code variables, function, ternary operatiors, etc. It only need
-        to return a value.
-      </p>
+        <p>
+          Whenever data is an Object it turn it to <a
+            href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON"
+            class="note mark">JSON</a>.
+        </p>
 
-      <p>
-        Whenever data is an Object it turn it to <a
-          href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON"
-          class="note mark">JSON</a>.
-      </p>
+        <h3> <a id="delimiter-common"> Common </a> </h3>
 
-      <h3> <a id="delimiter-common"> Common </a> </h3>
+        <p e-skip>
+          To use this delimiter just do the following: <span class="note">
+            <span class="mark">{{</span> [Content] <span class="mark">}}</span> </span>
+        </p>
 
-      <p e-skip>
-        To use this delimiter just do the following: <span class="note">
-          <span class="mark">{{</span> [Content] <span class="mark">}}</span> </span>
-      </p>
+        <h3> <a id="delimiter-html"> HTML Delimiter</a> </h3>
 
-      <h3> <a id="delimiter-html"> HTML Delimiter</a> </h3>
+        <p e-skip>
+          To use this delimiter just do the following: <span class="note">
+            <span class="mark">{{:html</span> [Property] <span class="mark">}}</span> </span>
+          <br> Which is used to process html snippets passed by a property.
+        </p>
 
-      <p e-skip>
-        To use this delimiter just do the following: <span class="note">
-          <span class="mark">{{:html</span> [Property] <span class="mark">}}</span> </span>
-        <br> Which is used to process html snippets passed by a property.
-      </p>
+        <p>
+          We can check all the available delimiters in property
+          <i class="note">app.$delimiters.<i class="mark">get()</i></i>. These values is unalterable
+          by this property.
+        </p>
 
-      <p>
-        We can check all the available delimiters in property
-        <i class="note">app.$delimiters.<i class="mark">get()</i></i>. These values is unalterable
-        by this property.
-      </p>
-
-      <p>
-        To be able to add our own delimiter, we use the method <i class="note">
-          app.$delimiters.<i class="mark">add({ ... })</i></i>, it expects an object having the
+        <p>
+          To be able to add our own delimiter, we use the method <i class="note">
+            app.$delimiters.<i class="mark">add({ ... })</i></i>, it expects an object having the
           following structure:
-      </p>
+        </p>
 
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-        app.$delimiters.add({
-          /** The name of the delimiter */
-          name: string,
-          /** The delimiter structure */
-          delimiter: {
-            /** The open syntax */
-            open: string,
-            /** The close syntax */
-            close: string
-          },
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+          app.$delimiters.add({
+            /** The name of the delimiter */
+            name: string,
+            /** The delimiter structure */
+            delimiter: {
+              /** The open syntax */
+              open: string,
+              /** The close syntax */
+              close: string
+            },
 
-          /** The action that should be performed */
-          action?: (valueToSet: string, node: Node, data: object): string { }
-        });
-        </code></pre>
-      </div>
+            /** The action that should be performed */
+            action?: (valueToSet: string, node: Node, data: object): string { }
+          });
+          </code></pre>
+        </div>
 
-    </section>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/instance.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Instance</span>
+          </a>
+        </div>
+        <div class="middle">
 
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/instance.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Instance</span>
-        </a>
-      </div>
-      <div class="middle">
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
 
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
-
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/bindings.html">
-          <span>Bindings</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
-
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/bindings.html">
+            <span>Bindings</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>

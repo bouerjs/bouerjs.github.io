@@ -1,675 +1,675 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="directives"> Directives </a> </h1>
+        <p>
+          Bouer has some directives that are used as attributes in elements, each one has its
+          peculiarity and way of using it, we will explain each step by step how and where it
+          can be used.
+        </p>
 
-    <section class="section">
-      <h1> <a id="directives"> Directives </a> </h1>
-      <p>
-        Bouer has some directives that are used as attributes in elements, each one has its
-        peculiarity and way of using it, we will explain each step by step how and where it
-        can be used.
-      </p>
+        <h3> <a id="directive-data"> data </a> </h3>
+        <p>
+          It allows defining a data scope for a certain element, the syntax is
+          <span class="note"><i class="mark">data</i>="{...}"</span>. If it's defined without
+          value, the element should have the data of the <i class="note mark">main scope</i>, app.data.
+        </p>
 
-      <h3> <a id="directive-data"> data </a> </h3>
-      <p>
-        It allows defining a data scope for a certain element, the syntax is
-        <span class="note"><i class="mark">data</i>="{...}"</span>. If it's defined without
-        value, the element should have the data of the <i class="note mark">main scope</i>, app.data.
-      </p>
+        <div e-skip>
+          <pre><code lang="html">
+          <div id="app">
+            <h4> {{ value }} </h4>
 
-      <div e-skip>
-        <pre><code lang="html">
-        <div id="app">
-          <h4> {{ value }} </h4>
-
-          <div data="scope1">
-              <h4> {{ value }} </h4>
+            <div data="scope1">
+                <h4> {{ value }} </h4>
+            </div>
           </div>
-        </div>
-        </code></pre>
+          </code></pre>
 
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            value: 'Value from main scope',
-            scope1: {
-              value: 'Value from Scope 1'
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              value: 'Value from main scope',
+              scope1: {
+                value: 'Value from Scope 1'
+              }
             }
-          }
-        });
-        </code></pre>
-      </div>
+          });
+          </code></pre>
+        </div>
 
-      <p>
-        We can also create an identifier for the data to be able to retrieve the data scope.
-        To be able to achieve that we need to define as follows
-        <span class="note">data:<i class="mark">[scope-key]</i>="{ ... }"</span>. <br>
-        To retrieve the data we use the method
-        <span class="note">app.$data.get(<i class="mark">'scope-key'</i>)</span>.
-      </p>
+        <p>
+          We can also create an identifier for the data to be able to retrieve the data scope.
+          To be able to achieve that we need to define as follows
+          <span class="note">data:<i class="mark">[scope-key]</i>="{ ... }"</span>. <br>
+          To retrieve the data we use the method
+          <span class="note">app.$data.get(<i class="mark">'scope-key'</i>)</span>.
+        </p>
 
-      <div e-skip>
+        <div e-skip>
 
-        <pre><code lang="html">
-        <div id="app">
+          <pre><code lang="html">
+          <div id="app">
+            <h4> {{ value }} </h4>
+
+            <div data:[scope-1]="scope1">
+              <h4> {{ value }} </h4>
+            </div>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              value: 'Value from main scope',
+              scope1: {
+                value: 'Value from Scope 1'
+              }
+            }
+          });
+
+          var scope1 = app.$data.get('scope-1');
+          </code></pre>
+        </div>
+
+        <p>
+          The <i class="note">data</i> scope value with key can be get using
+          <i class="note">app.$data.get(<i class="mark">'data-key'</i>)</i> and can be unset using
+          <i class="note">app.$data.unset(<i class="mark">'data-key'</i>)</i>.
+        </p>
+
+        <b> Getting the Current Scope </b>
+        <p>
+          To be able to get the current scope we use <i class="note mark">$data</i>, it's a `variable`
+          that keeps the current scope in the expression of <i class="note mark">data</i> directive.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
           <h4> {{ value }} </h4>
 
-          <div data:[scope-1]="scope1">
+          <div data="$data">
             <h4> {{ value }} </h4>
           </div>
+          </code></pre>
         </div>
-        </code></pre>
 
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            value: 'Value from main scope',
-            scope1: {
-              value: 'Value from Scope 1'
-            }
-          }
-        });
-
-        var scope1 = app.$data.get('scope-1');
-        </code></pre>
-      </div>
-
-      <p>
-        The <i class="note">data</i> scope value with key can be get using
-        <i class="note">app.$data.get(<i class="mark">'data-key'</i>)</i> and can be unset using
-        <i class="note">app.$data.unset(<i class="mark">'data-key'</i>)</i>.
-      </p>
-
-      <b> Getting the Current Scope </b>
-      <p>
-        To be able to get the current scope we use <i class="note mark">$data</i>, it's a `variable`
-        that keeps the current scope in the expression of <i class="note mark">data</i> directive.
-      </p>
-
-      <div e-skip>
-
-        <pre><code lang="html">
-        <h4> {{ value }} </h4>
-
-        <div data="$data">
-          <h4> {{ value }} </h4>
-        </div>
-        </code></pre>
-      </div>
-
-      <div class="block-note warn">
-        <p>
-          The <i class="node mark">$data</i> variable is only available in the <i class="note mark">data</i>
-          directive.
-        </p>
-      </div>
-
-      <h3> <a id="directive-wait-data"> wait-data </a> </h3>
-      <p>
-        Allows the element where it is defined to be skipped in the compilation, waiting for it's
-        data to be provided. It's defined as follows:
-        <span class="note mark">wait-data="data-key"</span>. In order to make the element data available,
-        we use the <span class="note">app.$wait.set(<i class="mark">'data-key', {...}</i>)</span> method.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <h4 wait-data="waiting"> {{ message }} </h4>
-        </code></pre>
-
-        <pre><code lang="js">
-        app.$wait.set('waiting', { message: 'Hello 😀' });
-        </code></pre>
-      </div>
-
-      <div class="block-note info">
-        <p>
-          The data passed it the expose method for wait-data, automatically become reactive,
-          then it is no longer necessary to use the <span class="note mark">reactive</span>
-          method in this directive.
-        </p>
-      </div>
-
-      <p>
-        The <i class="note">wait-data</i> value can be get using
-        <span class="note">app.$wait.get(<i class="mark">'data-key'</i>)</span> and can be unset using
-        <span class="note">app.$wait.unset(<i class="mark">'data-key'</i>)</span>.
-      </p>
-
-      <p>
-        We don't know about you, but for us the result of the example above is kind of ugly with
-        the delimiters in sight, fortunately we have <span class="note">e-content</span>.
-      </p>
-
-      <h3> <a id="directive-e-content"> e-content </a> </h3>
-      <p>
-        It is a way to define a value that should be put in the container after the element is
-        compiled.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <h4 wait-data="waiting" e-content="{{ message }}">...</h4>
-        </code></pre>
-
-        <pre><code lang="js">
-        app.$wait.set('waiting', { message: 'Hello 😀' });
-        </code></pre>
-      </div>
-
-      <p>
-        This way it looks much better, but we can still improve it, let's combine it with a
-        skeleton.
-      </p>
-
-      <h3> <a id="directive-e-skeleton"> e-skeleton </a> </h3>
-      <p>
-        It is a way of showing that information from a specific area is being loaded, it is used
-        a lot in today's applications.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <h4 wait-data="waiting" e-skeleton>{{ message }}</h4>
-        </code></pre>
-
-        <pre><code lang="js">
-        app.$wait.set('waiting', { message: 'Hello 😀' });
-        </code></pre>
-      </div>
-
-      <p>
-        When <span class="mark">e-skeleton</span> is defined for an element, it takes the form of the element to be
-        able to present itself, this means that the element must have some width and height (anything that give shapes
-        on it). And by default the background color is light gray and the wave is lightest.
-      </p>
-
-      <p>
-        There are two ways to use it, <span class="note mark">e-skeleton</span> and <span
-          class="note mark">e-skeleton="some-id"</span>. Without an identifier, the skeleton is removed after the
-        element has been compiled. With an identifier, the skeleton(s) must be removed manually using
-        <span class="note">app.skeleton.clear([some-id])</span> extension method or simply remove the
-        `e-skeleton` attribute from the elements.
-      </p>
-
-      <div e-skip>
-
-        <pre><code lang="html">
-        <div id="app">
-          <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
-
-          <button on:click="removeSkeleton" > Remove Skeleton</button>
-        </div>
-        </code></pre>
-
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            /* Properties */
-            message: 'Hello',
-
-            /* Methods */
-            removeSkeleton: function () {
-              this.$skeleton.clear('skeleton1');
-            }
-          }
-        });
-        </code></pre>
-      </div>
-
-      <p>
-        To set the skeleton colors we use, app.skeleton.set({ ... }) method, it expects an object having this structure
-        <span class="note">{ background: <i class="mark">'color'</i>, wave: <i class="mark">'color'</i> }</span>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-        app.skeleton.set({
-          background: '#444546',
-          wave: '#747576'
-        });
-        </code></pre>
-      </div>
-
-      <h3> <a id="directive-e-def"> e-def </a> </h3>
-      <p>
-        It is a short name of <span class="note">e-definer</span>, it allows to dynamically
-        set properties (Reactives) in the current scope. It's syntax is
-        <span class="note mark">e-def="{...}"</span>, it expects
-        <a href="https://www.dyn-web.com/tutorials/object-literal/" class="mark">Object
-          Literal</a>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <div e-def="{ dynamicProperty: 'I was created dynamically' }">
-          {{ dynamicProperty }}!
-        </div>
-        </code></pre>
-      </div>
-
-      <div class="block-note warn">
-        <p>
-          The order of definition matters a lot, e-def must always be above the elements where
-          it should be used.
-        </p>
-      </div>
-
-      <h3> <a id="directive-e-if"> e-if </a> </h3>
-      <p>
-        The <span class="note mark">e-if</span> directive is very similar to the <span class="mark">Vue.js</span>
-        <span class="note">v-if</span> directive... It is used to conditionally render a block (element).
-        The block should be shown if the directive expression returns a truthy value. It is accompanied with
-        the <i class="note mark">e-else-if</i> and <i class="note mark">e-else</i> directives.
-      </p>
-
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip execute>
-          <pre><code lang="html">
-        <div id="app1">
-          <input type="number" e-bind="binary" /> <br>
-
-          <p e-if="binary == 1">
-              {{ binary }} is on 🙂
-          </p>
-          <p e-else-if="binary == 0">
-              {{ binary }} is off 🙁
-          </p>
-          <p e-else>
-              {{ binary }} is not binary 🤨
+        <div class="block-note warn">
+          <p>
+            The <i class="node mark">$data</i> variable is only available in the <i class="note mark">data</i>
+            directive.
           </p>
         </div>
-          </code></pre>
 
-          <pre><code lang="js">
-        var app1 = new Bouer('#app1', {
-          data: {
-            binary: 1
-          }
-        });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
-      </div>
-
-      <h3> <a id="directive-e-show"> e-show </a> </h3>
-      <p>
-        The <span class="note">e-show</span> directive is very similar to the
-        <span class="mark">Vue.js</span> <span class="note">v-show</span> directive... It is
-        used to conditionally show an block (element), it toggles CSS
-        <span class="note mark">display:none</span> property.
-        The block should be visible if the directive expression returns a truthy value.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <div class="input-field">
-          <label for="name-in">Name</label>
-          <input type="text" id="name-in" name="Name">
-          <span e-show="!isValid">Name is required*</span>
-        </div>
-        </code></pre>
-      </div>
-
-      <h3> <a id="directive-e-for"> e-for </a> </h3>
-      <p>
-        The <span class="note">e-for</span> directive is very similar to the
-        <span class="mark">Vue.js</span> <span class="note">v-for</span> directive...
-        It is used to render a list of items based an array.
-      </p>
-
-      <p>
-        This directive can be used in two ways, with <i class="mark">of</i> or <i class="mark">in</i>,
-        we use <i class="note">e-for="... <i class="mark">of</i> ..."</i> to iterate in `Array` and <i
-          class="note">e-for="... <i class="mark">in</i> ..."</i> to iterate in `Object`.
-      </p>
-
-      <div e-if="typeof noApp === 'undefined'">
-        <div e-skip execute>
-
-          <pre><code lang="html">
-        <div id="app2">
-          <h4> Array</h4>
-          <ul>
-              <li e-for="fruit of fruits"> {{ fruit }} </li>
-          </ul>
-
-          <h4> Object</h4>
-          <ul>
-              <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
-          </ul>
-        </div>
-          </code></pre>
-
-          <pre><code lang="js">
-        var app2 = new Bouer('#app2', {
-          data: {
-            fruits: [ 'Bananas', 'Mango' ],
-            person: {
-              firstName: 'Afonso',
-              lastName: 'Matumona',
-              country: 'Angola',
-            }
-          }
-        });
-          </code></pre>
-
-          <div class="result"></div>
-        </div>
-      </div>
-
-      <p>
-        Using <i class="mark">for-of</i> expression, two variables can be defined, the <i class="mark">item</i>
-        and <i class="mark">index</i> of the item... Using <i class="mark">for-in</i> expression, three
-        variables can be defined, the <i class="mark">key</i>, <i class="mark">value</i>
-        and <i class="mark">index</i> of the item, the order of the items is according to javascript
-        <i class="node">Object.keys(...)</i>.
-      </p>
-
-      <h4> <a id="directive-e-for-filters"> e-for with filters </a> </h4>
-      <p>
-        We can add filters in <i class="note">e-for</i> what should change behavior of the array while it's being
-        rendered. The available filters are: <i class="mark">where</i> and <i class="mark">order</i>. To add the
-        filter we use <span class="note mark">|</span> after <a class="note mark">e-for</a> expression and then
-        the filter name: <i class="note"><i class="mark">| where</i>:search</i> or
-        <i class="note"><i class="mark">| order</i>:asc</i>. they can be combined.
-      </p>
-
-      <h4> <a id="directive-e-for-w-where"> e-for with `where` filter </a> </h4>
-      <p>
-        The <i class="note">where</i> filter apply differents conditions according to the expression defined,
-        it's can be defined in two ways:
-        <i class="note">where:[<i class="mark">prop</i>]:[<i class="mark">propsToMatch?</i>]</i>
-        or <i class="note">where:[<i class="mark">filterFunction</i>]</i>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <input type="text" e-def="{ search: '' }" e-bind="search" />
-
-        <ul>
-          <li e-for="food of foods | where:search">
-            {{ food.name }}
-          </li>
-        </ul>
-        </code></pre>
-      </div>
-
-      <h4> <a id="directive-e-for-w-order"> e-for with `order` filter </a> </h4>
-      <p>
-        The <i class="note">order</i> sorts the list according to the expression defined,
-        it's can be defined in two ways:
-        <i class="note">order:[<i class="mark">type</i>]:[<i class="mark">property?</i>]</i>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <ul>
-          <li e-for="food of foods | order:asc:name">
-            {{ food.name }}
-          </li>
-        </ul>
-        </code></pre>
-      </div>
-
-      <div class="block-note info">
-        <p e-skip>
-          The directive accepts delimiters, this means that it can be defined like this, for example:
-          <i class="note">| order:<i class="mark">{{orderType}}</i>:<i class="mark">{{orderBy}}</i></i>
-        </p>
-      </div>
-
-      <h3> Array Change Detection</h3>
-      <p>
-        Bouer links with the main methods of an array, making them become reactive, the methods
-        are: <span class="note mark"> push() </span>, <span class="note mark"> pop() </span>,
-        <span class="note mark"> unshift() </span>, <span class="note mark"> shift() </span>,
-        <span class="note mark"> splice() </span>.
-      </p>
-
-      <div class="block-note info">
+        <h3> <a id="directive-wait-data"> wait-data </a> </h3>
         <p>
-          If we use some method that changes the array even if it's not in the list above
-          the user interface should be updated too.
+          Allows the element where it is defined to be skipped in the compilation, waiting for it's
+          data to be provided. It's defined as follows:
+          <span class="note mark">wait-data="data-key"</span>. In order to make the element data available,
+          we use the <span class="note">app.$wait.set(<i class="mark">'data-key', {...}</i>)</span> method.
         </p>
-      </div>
 
-      <div class="block-note dont">
-        <p>
-          Bouer cannot detect changes when we modify the length of the array. For example:
-          <span class="note attr-border"> array.length = newLength </span>
-          It will not have effects to the user interface.
-        </p>
-      </div>
-
-      <h3> <a id="directive-e"> e-[attribute] </a> </h3>
-      <p>
-        As we said above, it is the most versatile directive according to the defined expression,
-        because on the one hand it creates an attribute after being compiled and on the other hand, it
-        creates the attribute and toggles a value on it.
-      </p>
-
-      <p>
-        The sintax for simply attribute creation is <span class="note mark">e-<i>attribute</i>="expression"</span>.
-        In this case the expression must contain delimiter, otherwise it should not be compiled.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-          <img e-src="{{ url }}" />
-        </code></pre>
-      </div>
-
-      <p>
-        The sintax for attribute creation (if it does not exists) with toggleable value is
-        <span class="note mark">e-<i>attribute</i>="{ 'value-to-toggle' : condition }"</span>.
-        <br>
-        <span class="note attr-border">Do not use delimiters in the expression</span>.
-      </p>
-
-      <p>
-        The attribute it selt is automatically toggleable too, meaning that after the value being removed if the attribute
-        value is empty it should be automatically removed as well. Example:
-        <span class="note mark">e-<i>disabled</i>="{ 'true': isBlocked }"</span>.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <button e-class="{ 'active' : isActive }"
-                on:click="isActive = !isActive">
-          Click Me
-        </button>
-        </code></pre>
-      </div>
-
-      <h3> <a id="directive-e-skip"> e-skip </a> </h3>
-      <p>
-        The e-skip directive allow to skip an element an all it children on the compilation process.
-      </p>
-
-      <div e-skip>
-        <pre><code lang="html">
         <div e-skip>
-          <!-- element ignored -->
+          <pre><code lang="html">
+          <h4 wait-data="waiting"> {{ message }} </h4>
+          </code></pre>
+
+          <pre><code lang="js">
+          app.$wait.set('waiting', { message: 'Hello 😀' });
+          </code></pre>
         </div>
-        </code></pre>
-      </div>
 
-      <h3> <a id="directive-silent"> silent </a> </h3>
-      <p>
-        The silent directive allow to hide an element/component untill the compilation process is done.
-      </p>
+        <div class="block-note info">
+          <p>
+            The data passed it the expose method for wait-data, automatically become reactive,
+            then it is no longer necessary to use the <span class="note mark">reactive</span>
+            method in this directive.
+          </p>
+        </div>
 
-      <div class="block-note warn">
         <p>
-          It is applyable on compilable elements, such as: <i class="mark">Root Element</i>,
-          <i class="mark">Components</i>, <i class="mark">e-for</i>,
-          <i class="mark">e-if</i>, <i class="mark">wait-data</i>, <i class="mark">req</i>.
+          The <i class="note">wait-data</i> value can be get using
+          <span class="note">app.$wait.get(<i class="mark">'data-key'</i>)</span> and can be unset using
+          <span class="note">app.$wait.unset(<i class="mark">'data-key'</i>)</span>.
         </p>
-      </div>
 
-      <h3><a id="directive-ref"> ref (reference) </a></h3>
-      <p>
-        It's a way mark an element an access it in the instance, to achieve that, we need to use the
-        <i class="note mark">ref</i> directive. To get the refs, we use <i class="note">app.refs</i>.
-      </p>
+        <p>
+          We don't know about you, but for us the result of the example above is kind of ugly with
+          the delimiters in sight, fortunately we have <span class="note">e-content</span>.
+        </p>
 
-      <div e-skip>
-        <pre><code lang="html">
-        <div id="app">
-          <input type="text" ref="username">
+        <h3> <a id="directive-e-content"> e-content </a> </h3>
+        <p>
+          It is a way to define a value that should be put in the container after the element is
+          compiled.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <h4 wait-data="waiting" e-content="{{ message }}">...</h4>
+          </code></pre>
+
+          <pre><code lang="js">
+          app.$wait.set('waiting', { message: 'Hello 😀' });
+          </code></pre>
         </div>
-        </code></pre>
 
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-        var userNameInput = app.refs.username;
-        </code></pre>
-      </div>
+        <p>
+          This way it looks much better, but we can still improve it, let's combine it with a
+          skeleton.
+        </p>
 
-      <h3> <a id="directive-e-req"> req (request) </a> </h3>
-      <p>
-        This the directive we use to mark web calls and automatically display the response using a simple syntax,
-        it's very similar to <i class="mark">e-for</i> directive. It has two ways usage,
-        with <i class="note mark">of</i> and with <i class="note mark">as</i>.
-      </p>
+        <h3> <a id="directive-e-skeleton"> e-skeleton </a> </h3>
+        <p>
+          It is a way of showing that information from a specific area is being loaded, it is used
+          a lot in today's applications.
+        </p>
 
-      <div e-skip>
-        <pre><code lang="html">
-        <div class="users" e-req="user of users">
-          <label>Name: {{ user.name }}</label>
-          <label>Username: {{ user.username }}</label>
+        <div e-skip>
+          <pre><code lang="html">
+          <h4 wait-data="waiting" e-skeleton>{{ message }}</h4>
+          </code></pre>
+
+          <pre><code lang="js">
+          app.$wait.set('waiting', { message: 'Hello 😀' });
+          </code></pre>
         </div>
-        </code></pre>
-      </div>
 
-      <h3> <a id="directive-e-req-structure"> Directive Structure </a> </h3>
-      <p>
-        The basic structure is divided by three main sections: <i class="note mark">variables</i>,
-        <i class="note mark">request type</i>, and <i class="note mark">request path</i>.
-      </p>
+        <p>
+          When <span class="mark">e-skeleton</span> is defined for an element, it takes the form of the element to be
+          able to present itself, this means that the element must have some width and height (anything that give shapes
+          on it). And by default the background color is light gray and the wave is lightest.
+        </p>
 
-      <b>Variables</b>
+        <p>
+          There are two ways to use it, <span class="note mark">e-skeleton</span> and <span
+            class="note mark">e-skeleton="some-id"</span>. Without an identifier, the skeleton is removed after the
+          element has been compiled. With an identifier, the skeleton(s) must be removed manually using
+          <span class="note">app.skeleton.clear([some-id])</span> extension method or simply remove the
+          `e-skeleton` attribute from the elements.
+        </p>
 
-      <ul>
-        <li> <span class="note mark">variables</span> &ndash; the variable where the value of the
-          response should placed. like <i class="mark">e-for</i> it can be `item` and `index` in case of
-          response type: <i class="note mark">of</i>.</li>
-      </ul>
+        <div e-skip>
 
-      <b>Request Type</b>
+          <pre><code lang="html">
+          <div id="app">
+            <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
 
-      <ul>
-        <li> <span class="note">request type: <i class="mark">of</i></span> &ndash; treat the response as array type.
-        </li>
-        <li> <span class="note">request type: <i class="mark">as</i></span> &ndash; treat the response as object type.
-        </li>
-      </ul>
+            <button on:click="removeSkeleton" > Remove Skeleton</button>
+          </div>
+          </code></pre>
 
-      <b>Request Path</b>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              /* Properties */
+              message: 'Hello',
 
-      <ul>
-        <li> <span class="note">request path &ndash; represents the path where the value should be retrieved. </li>
-      </ul>
+              /* Methods */
+              removeSkeleton: function () {
+                this.$skeleton.clear('skeleton1');
+              }
+            }
+          });
+          </code></pre>
+        </div>
 
-      <h3> <a id="directive-e-req-init"> Initialization </a> </h3>
-      <p>
-        The <i class="note">e-req</i> need to be Initialized in order to specify where the request need to made, for
-        this we use configure it into the middlewares function.
-      </p>
+        <p>
+          To set the skeleton colors we use, app.skeleton.set({ ... }) method, it expects an object having this
+          structure
+          <span class="note">{ background: <i class="mark">'color'</i>, wave: <i class="mark">'color'</i> }</span>.
+        </p>
 
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-            middleware: function (configure, app) {
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+          app.skeleton.set({
+            background: '#444546',
+            wave: '#747576'
+          });
+          </code></pre>
+        </div>
 
-              // 'req' Interceptor is used for request interception
-              configure('req', function (bind, update) {
+        <h3> <a id="directive-e-def"> e-def </a> </h3>
+        <p>
+          It is a short name of <span class="note">e-definer</span>, it allows to dynamically
+          set properties (Reactives) in the current scope. It's syntax is
+          <span class="note mark">e-def="{...}"</span>, it expects
+          <a href="https://www.dyn-web.com/tutorials/object-literal/" class="mark">Object
+            Literal</a>.
+        </p>
 
-                bind(function (context) {
-                  var path = context.detail.requestPath;
-                  var baseURL = "https://jsonplaceholder.typicode.com/";
+        <div e-skip>
+          <pre><code lang="html">
+          <div e-def="{ dynamicProperty: 'I was created dynamically' }">
+            {{ dynamicProperty }}!
+          </div>
+          </code></pre>
+        </div>
 
-                  var fetchPromise = fetch(baseURL + path, {
-                    headers: {
-                      'Content-Type': "application/json"
-                    }
-                  }).then(function (response) {
+        <div class="block-note warn">
+          <p>
+            The order of definition matters a lot, e-def must always be above the elements where
+            it should be used.
+          </p>
+        </div>
 
-                    if (!response.ok)
-                      throw new Error(response.statusText);
+        <h3> <a id="directive-e-if"> e-if </a> </h3>
+        <p>
+          The <span class="note mark">e-if</span> directive is very similar to the <span class="mark">Vue.js</span>
+          <span class="note">v-if</span> directive... It is used to conditionally render a block (element).
+          The block should be shown if the directive expression returns a truthy value. It is accompanied with
+          the <i class="note mark">e-else-if</i> and <i class="note mark">e-else</i> directives.
+        </p>
 
-                    return response.json();
-                  }).then(function (json) {
+        <div e-if="typeof noApp === 'undefined'">
+          <div e-skip execute>
+            <pre><code lang="html">
+          <div id="app1">
+            <input type="number" e-bind="binary" /> <br>
 
-                    // the response must be always into a object with `data` property
-                    return { data: json };
+            <p e-if="binary == 1">
+                {{ binary }} is on 🙂
+            </p>
+            <p e-else-if="binary == 0">
+                {{ binary }} is off 🙁
+            </p>
+            <p e-else>
+                {{ binary }} is not binary 🤨
+            </p>
+          </div>
+            </code></pre>
 
-                  }).catch(function (error) {
-                    return error
+            <pre><code lang="js">
+          var app1 = new Bouer('#app1', {
+            data: {
+              binary: 1
+            }
+          });
+            </code></pre>
+
+            <div class="result"></div>
+          </div>
+        </div>
+
+        <h3> <a id="directive-e-show"> e-show </a> </h3>
+        <p>
+          The <span class="note">e-show</span> directive is very similar to the
+          <span class="mark">Vue.js</span> <span class="note">v-show</span> directive... It is
+          used to conditionally show an block (element), it toggles CSS
+          <span class="note mark">display:none</span> property.
+          The block should be visible if the directive expression returns a truthy value.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <div class="input-field">
+            <label for="name-in">Name</label>
+            <input type="text" id="name-in" name="Name">
+            <span e-show="!isValid">Name is required*</span>
+          </div>
+          </code></pre>
+        </div>
+
+        <h3> <a id="directive-e-for"> e-for </a> </h3>
+        <p>
+          The <span class="note">e-for</span> directive is very similar to the
+          <span class="mark">Vue.js</span> <span class="note">v-for</span> directive...
+          It is used to render a list of items based an array.
+        </p>
+
+        <p>
+          This directive can be used in two ways, with <i class="mark">of</i> or <i class="mark">in</i>,
+          we use <i class="note">e-for="... <i class="mark">of</i> ..."</i> to iterate in `Array` and <i
+            class="note">e-for="... <i class="mark">in</i> ..."</i> to iterate in `Object`.
+        </p>
+
+        <div e-if="typeof noApp === 'undefined'">
+          <div e-skip execute>
+
+            <pre><code lang="html">
+          <div id="app2">
+            <h4> Array</h4>
+            <ul>
+                <li e-for="fruit of fruits"> {{ fruit }} </li>
+            </ul>
+
+            <h4> Object</h4>
+            <ul>
+                <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
+            </ul>
+          </div>
+            </code></pre>
+
+            <pre><code lang="js">
+          var app2 = new Bouer('#app2', {
+            data: {
+              fruits: [ 'Bananas', 'Mango' ],
+              person: {
+                firstName: 'Afonso',
+                lastName: 'Matumona',
+                country: 'Angola',
+              }
+            }
+          });
+            </code></pre>
+
+            <div class="result"></div>
+          </div>
+        </div>
+
+        <p>
+          Using <i class="mark">for-of</i> expression, two variables can be defined, the <i class="mark">item</i>
+          and <i class="mark">index</i> of the item... Using <i class="mark">for-in</i> expression, three
+          variables can be defined, the <i class="mark">key</i>, <i class="mark">value</i>
+          and <i class="mark">index</i> of the item, the order of the items is according to javascript
+          <i class="node">Object.keys(...)</i>.
+        </p>
+
+        <h4> <a id="directive-e-for-filters"> e-for with filters </a> </h4>
+        <p>
+          We can add filters in <i class="note">e-for</i> what should change behavior of the array while it's being
+          rendered. The available filters are: <i class="mark">where</i> and <i class="mark">order</i>. To add the
+          filter we use <span class="note mark">|</span> after <a class="note mark">e-for</a> expression and then
+          the filter name: <i class="note"><i class="mark">| where</i>:search</i> or
+          <i class="note"><i class="mark">| order</i>:asc</i>. they can be combined.
+        </p>
+
+        <h4> <a id="directive-e-for-w-where"> e-for with `where` filter </a> </h4>
+        <p>
+          The <i class="note">where</i> filter apply differents conditions according to the expression defined,
+          it's can be defined in two ways:
+          <i class="note">where:[<i class="mark">prop</i>]:[<i class="mark">propsToMatch?</i>]</i>
+          or <i class="note">where:[<i class="mark">filterFunction</i>]</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <input type="text" e-def="{ search: '' }" e-bind="search" />
+
+          <ul>
+            <li e-for="food of foods | where:search">
+              {{ food.name }}
+            </li>
+          </ul>
+          </code></pre>
+        </div>
+
+        <h4> <a id="directive-e-for-w-order"> e-for with `order` filter </a> </h4>
+        <p>
+          The <i class="note">order</i> sorts the list according to the expression defined,
+          it's can be defined in two ways:
+          <i class="note">order:[<i class="mark">type</i>]:[<i class="mark">property?</i>]</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <ul>
+            <li e-for="food of foods | order:asc:name">
+              {{ food.name }}
+            </li>
+          </ul>
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p e-skip>
+            The directive accepts delimiters, this means that it can be defined like this, for example:
+            <i class="note">| order:<i class="mark">{{orderType}}</i>:<i class="mark">{{orderBy}}</i></i>
+          </p>
+        </div>
+
+        <h3> Array Change Detection</h3>
+        <p>
+          Bouer links with the main methods of an array, making them become reactive, the methods
+          are: <span class="note mark"> push() </span>, <span class="note mark"> pop() </span>,
+          <span class="note mark"> unshift() </span>, <span class="note mark"> shift() </span>,
+          <span class="note mark"> splice() </span>.
+        </p>
+
+        <div class="block-note info">
+          <p>
+            If we use some method that changes the array even if it's not in the list above
+            the user interface should be updated too.
+          </p>
+        </div>
+
+        <div class="block-note dont">
+          <p>
+            Bouer cannot detect changes when we modify the length of the array. For example:
+            <span class="note attr-border"> array.length = newLength </span>
+            It will not have effects to the user interface.
+          </p>
+        </div>
+
+        <h3> <a id="directive-e"> e-[attribute] </a> </h3>
+        <p>
+          As we said above, it is the most versatile directive according to the defined expression,
+          because on the one hand it creates an attribute after being compiled and on the other hand, it
+          creates the attribute and toggles a value on it.
+        </p>
+
+        <p>
+          The sintax for simply attribute creation is <span class="note mark">e-<i>attribute</i>="expression"</span>.
+          In this case the expression must contain delimiter, otherwise it should not be compiled.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+            <img e-src="{{ url }}" />
+          </code></pre>
+        </div>
+
+        <p>
+          The sintax for attribute creation (if it does not exists) with toggleable value is
+          <span class="note mark">e-<i>attribute</i>="{ 'value-to-toggle' : condition }"</span>.
+          <br>
+          <span class="note attr-border">Do not use delimiters in the expression</span>.
+        </p>
+
+        <p>
+          The attribute it selt is automatically toggleable too, meaning that after the value being removed if the
+          attribute
+          value is empty it should be automatically removed as well. Example:
+          <span class="note mark">e-<i>disabled</i>="{ 'true': isBlocked }"</span>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <button e-class="{ 'active' : isActive }"
+                  on:click="isActive = !isActive">
+            Click Me
+          </button>
+          </code></pre>
+        </div>
+
+        <h3> <a id="directive-e-skip"> e-skip </a> </h3>
+        <p>
+          The e-skip directive allow to skip an element an all it children on the compilation process.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <div e-skip>
+            <!-- element ignored -->
+          </div>
+          </code></pre>
+        </div>
+
+        <h3> <a id="directive-silent"> silent </a> </h3>
+        <p>
+          The silent directive allow to hide an element/component untill the compilation process is done.
+        </p>
+
+        <div class="block-note warn">
+          <p>
+            It is applyable on compilable elements, such as: <i class="mark">Root Element</i>,
+            <i class="mark">Components</i>, <i class="mark">e-for</i>,
+            <i class="mark">e-if</i>, <i class="mark">wait-data</i>, <i class="mark">req</i>.
+          </p>
+        </div>
+
+        <h3><a id="directive-ref"> ref (reference) </a></h3>
+        <p>
+          It's a way mark an element an access it in the instance, to achieve that, we need to use the
+          <i class="note mark">ref</i> directive. To get the refs, we use <i class="note">app.refs</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <div id="app">
+            <input type="text" ref="username">
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+          var userNameInput = app.refs.username;
+          </code></pre>
+        </div>
+
+        <h3> <a id="directive-e-req"> req (request) </a> </h3>
+        <p>
+          This the directive we use to mark web calls and automatically display the response using a simple syntax,
+          it's very similar to <i class="mark">e-for</i> directive. It has two ways usage,
+          with <i class="note mark">of</i> and with <i class="note mark">as</i>.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <div class="users" e-req="user of users">
+            <label>Name: {{ user.name }}</label>
+            <label>Username: {{ user.username }}</label>
+          </div>
+          </code></pre>
+        </div>
+
+        <h3> <a id="directive-e-req-structure"> Directive Structure </a> </h3>
+        <p>
+          The basic structure is divided by three main sections: <i class="note mark">variables</i>,
+          <i class="note mark">request type</i>, and <i class="note mark">request path</i>.
+        </p>
+
+        <b>Variables</b>
+
+        <ul>
+          <li> <span class="note mark">variables</span> &ndash; the variable where the value of the
+            response should placed. like <i class="mark">e-for</i> it can be `item` and `index` in case of
+            response type: <i class="note mark">of</i>.</li>
+        </ul>
+
+        <b>Request Type</b>
+
+        <ul>
+          <li> <span class="note">request type: <i class="mark">of</i></span> &ndash; treat the response as array type.
+          </li>
+          <li> <span class="note">request type: <i class="mark">as</i></span> &ndash; treat the response as object type.
+          </li>
+        </ul>
+
+        <b>Request Path</b>
+
+        <ul>
+          <li> <span class="note">request path &ndash; represents the path where the value should be retrieved. </li>
+        </ul>
+
+        <h3> <a id="directive-e-req-init"> Initialization </a> </h3>
+        <p>
+          The <i class="note">e-req</i> need to be Initialized in order to specify where the request need to made, for
+          this we use configure it into the middlewares function.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+              middleware: function (configure, app) {
+
+                // 'req' Interceptor is used for request interception
+                configure('req', function (bind, update) {
+
+                  bind(function (context) {
+                    var path = context.detail.requestPath;
+                    var baseURL = "https://jsonplaceholder.typicode.com/";
+
+                    var fetchPromise = fetch(baseURL + path, {
+                      headers: {
+                        'Content-Type': "application/json"
+                      }
+                    }).then(function (response) {
+
+                      if (!response.ok)
+                        throw new Error(response.statusText);
+
+                      return response.json();
+                    }).then(function (json) {
+
+                      // the response must be always into a object with `data` property
+                      return { data: json };
+
+                    }).catch(function (error) {
+                      return error
+                    });
+
+                    return fetchPromise;
                   });
 
-                  return fetchPromise;
                 });
 
-              });
-
-            }
-        });
-        </code></pre>
-      </div>
-
-      <h3> <a id="directive-e-req-w-where"> e-req filters </a> </h3>
-      <p>
-        We can apply filters in <i class="note mark">e-req</i> with <i class="note mark">of</i>
-        request type, just add the filters as if you where adding in <i class="note">e-for</i>.
-      </p>
-
-      <h3> <a id="directive-e-req-w-where"> e-for with `where` </a> </h3>
-      <div e-skip>
-        <pre><code lang="html">
-        <div class="users" e-req="user of users | where:search:name ">
-          <label>Name: {{ user.name }}</label>
-          <label>Username: {{ user.username }}</label>
+              }
+          });
+          </code></pre>
         </div>
-        </code></pre>
-      </div>
 
-      <h3> <a id="directive-e-req-w-order"> e-for with `order` </a> </h3>
-      <div e-skip>
-        <pre><code lang="html">
-        <div class="users" e-req="user of users | order:asc:name ">
-          <label>Name: {{ user.name }}</label>
-          <label>Username: {{ user.username }}</label>
+        <h3> <a id="directive-e-req-w-where"> e-req filters </a> </h3>
+        <p>
+          We can apply filters in <i class="note mark">e-req</i> with <i class="note mark">of</i>
+          request type, just add the filters as if you where adding in <i class="note">e-for</i>.
+        </p>
+
+        <h3> <a id="directive-e-req-w-where"> e-for with `where` </a> </h3>
+        <div e-skip>
+          <pre><code lang="html">
+          <div class="users" e-req="user of users | where:search:name ">
+            <label>Name: {{ user.name }}</label>
+            <label>Username: {{ user.username }}</label>
+          </div>
+          </code></pre>
         </div>
-        </code></pre>
-      </div>
-    </section>
 
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/bindings.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Bindings</span>
-        </a>
-      </div>
-      <div class="middle">
+        <h3> <a id="directive-e-req-w-order"> e-for with `order` </a> </h3>
+        <div e-skip>
+          <pre><code lang="html">
+          <div class="users" e-req="user of users | order:asc:name ">
+            <label>Name: {{ user.name }}</label>
+            <label>Username: {{ user.username }}</label>
+          </div>
+          </code></pre>
+        </div>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/bindings.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Bindings</span>
+          </a>
+        </div>
+        <div class="middle">
 
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
 
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/events.html">
-          <span>Events</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
-
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/events.html">
+            <span>Events</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>

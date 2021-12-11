@@ -78,7 +78,7 @@
       <div class="alternator">
         <button on:click="this.bouer.data.sMenuClosed = false">Tutorial</button>
         <button on:click="showResult = false" e-class="{ 'active-side' : !showResult }">Code</button>
-        <button on:click="runCodeShowResult" e-class="{ 'active-side' : showResult }">Result</button>
+        <button on:click="runCodeShowResult" e-class="{ 'active-side' : showResult }">Output</button>
       </div>
     </div>
   </div>
@@ -103,13 +103,13 @@
       smartIndent: true,
     }
   };
+  var resizeCallback;
 
   this.on('mounted', function (evt) {
     var element = evt.target;
     var editor = element.children[0];
     var $classes = editor.classList;
     var resultScreen = element.querySelector('.editor-result .screen');
-
 
     var exec = bouer.lazy(function (width) {
       var has = $classes.contains('mobile');
@@ -120,11 +120,11 @@
       }
     }, 200);
 
-    evtResize = resultScreen.addEventListener('resize', function (evt) {
+    (resizeCallback = function (evt) {
       exec(element.clientWidth);
-    });
+    })(element.clientWidth);
 
-    exec(element.clientWidth);
+    window.addEventListener('resize', resizeCallback, false);
   });
 
   this.on('loaded', function (evt) {
@@ -317,6 +317,10 @@
     }
 
     mEditor.runCode();
+  });
+
+  this.on('destroyed', () => {
+    window.removeEventListener('resize', resizeCallback, false);
   });
 
   this.export({
@@ -753,31 +757,5 @@
     height: auto;
     margin: 0;
   }
-
-  /* .CodeMirror.cm-s-default .CodeMirror-simplescroll-vertical,
-  .CodeMirror.cm-s-default .CodeMirror-simplescroll-horizontal {
-    background-color: var(--color-scroll-track)!important;
-  } */
-
-  .CodeMirror .CodeMirror-code .cm-tag {
-    color: #905 !important;
-  }
-
-  .CodeMirror .CodeMirror-code .cm-tag.cm-bracket {
-    color: #999 !important;
-  }
-
-  .CodeMirror .CodeMirror-code .cm-string {
-    color: #690;
-  }
-
-  .CodeMirror .CodeMirror-code .cm-comment {
-    color: #008000 !important;
-  }
-
-  .CodeMirror .CodeMirror-code .cm-attribute {
-    color: #856e3d !important;
-  }
-
   /* End CodeMirror */
 </style>

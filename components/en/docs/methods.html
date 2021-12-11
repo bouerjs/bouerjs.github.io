@@ -1,374 +1,373 @@
 <div class="page documentation">
-  <doc-menu data="$data"></doc-menu>
+  <doc-menu data></doc-menu>
   <aside class="view nice-scroll">
-
-    <section class="section">
-      <h1><a id="methods"> Methods </a></h1>
-      <p>
-        There are some built-in methods that can be used in the application, which are:
-      </p>
-
-      <h3><a id="method-set">set</a></h3>
-      <p>
-        It is used to set properties in the data scope. It sintax is
-        <span class="note">app.set(object: <i class="mark">object</i>, targetObject?: <i
-            class="mark">object</i>)</span>.
-      </p>
-      <ul>
-        <li> <span class="note mark">object</span> &ndash; represents object a
-          containing the properties that must be added to the scope. </li>
-        <li> <span class="note mark">targetObject</span> &ndash; represents the
-          target scope to add the properties. It is optional, if not defined the
-          properties should be set to the <span class="note mark">main scope</span>. </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            firstName: 'Maria',
-          }
-        });
-
-        app.set({
-          lastName: 'Matumona',
-          country: 'Angola'
-        });
-        </code></pre>
-      </div>
-
-      <h3><a id="method-on">on</a></h3>
-      <p>
-        It allows adding an event to the instance so that it can be used anywhere in the
-        application. The method expects three parameters: <span class="note">
-          app.on(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>, options?: <i
-            class="mark">object</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">eventName</span> &ndash; the name of the event to be added. </li>
-        <li> <span class="note mark">callback</span> &ndash; the callback having your code. </li>
-        <li> <span class="note mark">options</span> &ndash; an object having the
-          <i class="mark">Event AttachedNode</i> and the <i class="mark">Event Modifiers</i>.
-        </li>
-        <li> <span class="note mark">{ EventSubscription } returns</span> &ndash; an object
-          having the event name and the callback we can use to remove the event.
-        </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-
-        app.on('eventName', function(evt) {
-          // TODO: your code here...
-        });
-        </code></pre>
-      </div>
-
-      <h3><a id="method-off">off</a></h3>
-      <p>
-        Allows you to remove an event added to the instance. The method expects three parameters:
-        <span class="note">app.off(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
-          attachedNode?:
-          <i class="mark">Element</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">eventName</span> &ndash; The name of the event to be removed. </li>
-        <li> <span class="note mark">callback</span> &ndash; The callback returned from
-          <span class="note mark">on</span> method.
-        </li>
-        <li> <span class="note mark">attachedNode</span> &ndash; The element having the event to be removed. </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-
-        var event = app.on('eventName', function(data) {
-          // Todo: your code here...
-        });
-
-        app.off('eventName', event.callback);
-        </code></pre>
-      </div>
-
-      <h3><a id="method-emit">emit</a></h3>
-      <p>
-        Allows to dispatch a specific event, whether customized (events added in elements) or added in the instance.
-        The method expects two parameters:
-        <span class="note">app.emit(eventName: <i class="mark">string</i>, options?: <i class="mark">object</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">eventName</span> &ndash; the name of the
-          event to be emitted. </li>
-        <li> <span class="note mark">Options</span> &ndash; an object that can be set
-          the <i class="note">element: <i class="mark">Node</i></i>,
-          <i class="note">init?: <i class="mark">CustomEventInit</i></i>, <i class="note">once?:
-            <i class="mark">boolean</i></i>.
-        </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="html">
-        <div id="app">
-          <p on:change_p_text="changeParagraphText"></p>
-        </div>
-            </code></pre>
-
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            changeParagraphText: function(evt) {
-              evt.target.innerText = 'Hello!';
-            }
-          }
-        });
-
-        var event = app.on('change_p_text', function(data) {
-          alert('paragraph value was changed');
-        });
-
-        app.emit('change_p_text');
-        </code></pre>
-      </div>
-
-      <b>CustomEventInit structure: </b>
-      <div e-skip>
-        <pre><code lang="js">
-        CustomEventInit {
-          bubbles?: boolean;
-          cancelable?: boolean;
-          composed?: boolean;
-          detail?: object;
-        }
-        </code></pre>
-      </div>
-
-      <div class="block-note info">
+    <div class="content">
+      <section class="section">
+        <h1><a id="methods"> Methods </a></h1>
         <p>
-          You can read more about CustomEvent <a target="_blank"
-            href="https://javascript.info/dispatch-events#event-constructor" class="mark">Here</a>.
+          There are some built-in methods that can be used in the application, which are:
         </p>
-      </div>
 
-      <h3><a id="method-tojsObj">toJsObj</a></h3>
-      <p>
-        It allows creating a structured javascript object, based on the structure of the HTML
-        element. Object that can be sent to a server.
-      </p>
+        <h3><a id="method-set">set</a></h3>
+        <p>
+          It is used to set properties in the data scope. It sintax is
+          <span class="note">app.set(object: <i class="mark">object</i>, targetObject?: <i
+              class="mark">object</i>)</span>.
+        </p>
+        <ul>
+          <li> <span class="note mark">object</span> &ndash; represents object a
+            containing the properties that must be added to the scope. </li>
+          <li> <span class="note mark">targetObject</span> &ndash; represents the
+            target scope to add the properties. It is optional, if not defined the
+            properties should be set to the <span class="note mark">main scope</span>. </li>
+        </ul>
 
-      <p>
-        To be able to generate the structure, this method depends of some directives, whitch are:
-      </p>
-
-      <ul>
-        <li> <a id="method-tojsobj_build" class="note mark">
-            e-build </a> &ndash; allows you to build one object within another. The syntax
-          is <span class="note mark">e-build="<i>path</i>"</span>. The path always need to
-          be complete, from the base object untill the property it needs to create. When you
-          need to create an object inside of an array you don't need to put the property and
-          the index (property[0]) of the array, just property name, by the default it maps all
-          the array.</li>
-        <li> <a id="method-tojsobj_array" class="note mark">
-            e-array </a> &ndash; allows to build a array of the element where it is defined.
-          Even if it is not defined by default it creates an array if the elements repeats.
-
-        </li>
-      </ul>
-
-      <p>
-        The method expects three parameters: <span class="note">
-          app.toJsObj(selector: <i class="mark">string | Element</i>, options?:
-          <i class="mark">object</i>, onset?: <i class="mark">Function</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">selector</span> &ndash; the selector
-          of the element to be generated or the element it self. </li>
-        <li> <span class="note mark">options</span> &ndash; options that indicates
-          attributes it needs to look and from this ones which attributes it needs to get the
-          value. It sintax is <i class="note">{ names: <i class="mark">'[attribute1],[attribute2]'</i>,
-            values: <i class="mark">'[attribute1],[attribute2]'</i> }</i>. The order really matters, it takes
-          what it finds first. The default value is <span class="note">{ names: <i class="mark">'[name]'</i>,
-            values: <i class="mark">'[value]'</i> }</span>. </li>
-        <li> <span class="note mark">onset</span> &ndash; a function that should be
-          called whenever a property is setted. </li>
-      </ul>
-
-      <div e-if="typeof noApp === 'undefined'">
         <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              firstName: 'Maria',
+            }
+          });
 
-          <pre><code lang="html">
-        <form id="form">
-          <input type="text" name="firstName" placeholder="First Name" />
-          <input type="text" name="lastName" placeholder="Last Name" />
-
-          <!-- Build an phones property as an array -->
-          <div e-build="phones" e-array>
-            <input type="text" name="code" placeholder="Country Code" />
-            <input type="text" name="text" placeholder="Number" />
-          </div>
-
-          <!-- Build an identification property as an object -->
-          <div e-build="identification">
-            <select name="type">
-              <option disabled> Identification Type </option>
-              <option> Id Card </option>
-              <option> Passport </option>
-            </select>
-
-            <input type="text" name="code" placeholder="Identification Code" />
-          </div>
-
-        </form>
+          app.set({
+            lastName: 'Matumona',
+            country: 'Angola'
+          });
           </code></pre>
+        </div>
+
+        <h3><a id="method-on">on</a></h3>
+        <p>
+          It allows adding an event to the instance so that it can be used anywhere in the
+          application. The method expects three parameters: <span class="note">
+            app.on(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>, options?: <i
+              class="mark">object</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">eventName</span> &ndash; the name of the event to be added. </li>
+          <li> <span class="note mark">callback</span> &ndash; the callback having your code. </li>
+          <li> <span class="note mark">options</span> &ndash; an object having the
+            <i class="mark">Event AttachedNode</i> and the <i class="mark">Event Modifiers</i>.
+          </li>
+          <li> <span class="note mark">{ EventSubscription } returns</span> &ndash; an object
+            having the event name and the callback we can use to remove the event.
+          </li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+
+          app.on('eventName', function(evt) {
+            // TODO: your code here...
+          });
+          </code></pre>
+        </div>
+
+        <h3><a id="method-off">off</a></h3>
+        <p>
+          Allows you to remove an event added to the instance. The method expects three parameters:
+          <span class="note">app.off(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
+            attachedNode?:
+            <i class="mark">Element</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">eventName</span> &ndash; The name of the event to be removed. </li>
+          <li> <span class="note mark">callback</span> &ndash; The callback returned from
+            <span class="note mark">on</span> method.
+          </li>
+          <li> <span class="note mark">attachedNode</span> &ndash; The element having the event to be removed. </li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+
+          var event = app.on('eventName', function(data) {
+            // Todo: your code here...
+          });
+
+          app.off('eventName', event.callback);
+          </code></pre>
+        </div>
+
+        <h3><a id="method-emit">emit</a></h3>
+        <p>
+          Allows to dispatch a specific event, whether customized (events added in elements) or added in the instance.
+          The method expects two parameters:
+          <span class="note">app.emit(eventName: <i class="mark">string</i>, options?: <i class="mark">object</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">eventName</span> &ndash; the name of the
+            event to be emitted. </li>
+          <li> <span class="note mark">Options</span> &ndash; an object that can be set
+            the <i class="note">element: <i class="mark">Node</i></i>,
+            <i class="note">init?: <i class="mark">CustomEventInit</i></i>, <i class="note">once?:
+              <i class="mark">boolean</i></i>.
+          </li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <div id="app">
+            <p on:change_p_text="changeParagraphText"></p>
+          </div>
+              </code></pre>
 
           <pre><code lang="js">
-        var app = new Bouer('#app');
-        var formObj = app.toJsObj('#form');
+          var app = new Bouer('#app', {
+            data: {
+              changeParagraphText: function(evt) {
+                evt.target.innerText = 'Hello!';
+              }
+            }
+          });
+
+          var event = app.on('change_p_text', function(data) {
+            alert('paragraph value was changed');
+          });
+
+          app.emit('change_p_text');
           </code></pre>
         </div>
-      </div>
 
-      <div class="block-note info">
-        <p>
-          We can build complex objects with using this method, simply create the structure we
-          need in HTML.
-        </p>
-      </div>
-
-      <h3><a id="method-watch">watch</a></h3>
-      <p>
-        It is used to watch changes in specific property in the data scope. It sintax is
-        <span class="note">app.watch(propertyName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
-          targetObject?: <i class="mark">object</i>)</span>.
-      </p>
-      <ul>
-        <li> <span class="note mark">propertyName</span> &ndash; represents the
-          name of the property in the data scope. </li>
-        <li> <span class="note mark">callback</span> &ndash; represents the
-          callback where all the logic should be fired when the property changes. The first
-          argument is the new value and the second is the old value of the property. </li>
-        <li> <span class="note mark">targetObject</span> &ndash; represents the
-          target scope having the property to watch. It is optional, if not defined the
-          <span class="note mark">main scope</span> should be used.
-        </li>
-        <li> <span class="note mark">returns</span> &ndash; the watch object, that
-          can be used to destroy the watch listener. </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            firstName: 'Neves',
-            lastName: 'Manuel'
+        <b>CustomEventInit structure: </b>
+        <div e-skip>
+          <pre><code lang="js">
+          CustomEventInit {
+            bubbles?: boolean;
+            cancelable?: boolean;
+            composed?: boolean;
+            detail?: object;
           }
-        });
+          </code></pre>
+        </div>
 
-        var watch = app.watch('firstName', function(newValue, oldValue) {
-          // Todo: your code here...
-        });
+        <div class="block-note info">
+          <p>
+            You can read more about CustomEvent <a target="_blank"
+              href="https://javascript.info/dispatch-events#event-constructor" class="mark">Here</a>.
+          </p>
+        </div>
 
-        watch.destroy();
-        </code></pre>
-      </div>
-
-      <h3><a id="method-react">react</a></h3>
-      <p>
-        It is used to watch all reactive properties in the provided scope. It sintax is
-        <span class="note">app.react(watchableScope: <i class="mark">Function</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">watchableScope</span> &ndash; the function that should be called when the any
-          reactive property change. </li>
-        <li> <span class="note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
-          and the method to destroy watches at once.
-        </li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app', {
-          data: {
-            result: 0,
-            value1: 1,
-            value2: 1
-          }
-        });
-
-        // If any of the reactive property changes the callback should be called
-        var watches = app.react(function() {
-          var src = this.data;
-          src.result = src.value1 + src.value2;
-        });
-
-        watches.destroy();
-        </code></pre>
-      </div>
-
-      <h3><a id="method-compile">compile</a></h3>
-      <p>
-        It's used to compile a html element. It expects one parameter: <span class="note">
-          app.compile(options: <i class="mark">object</i>)</span>.
-      </p>
-
-      <ul>
-        <li> <span class="note mark">{ Element } options.el</span> &ndash; the element to be compiled. </li>
-        <li> <span class="note mark">{ Object } config.data?</span> &ndash; the data that should be injected
-          in the element compilation.</li>
-        <li> <span class="note mark">{ Object } config.context?</span> &ndash; the context object of the
-          this compilation process, what can be <i class="mark">Bouer</i> or <i class="mark">Component</i>.
-        </li>
-        <li> <span class="note mark">{ Function } config.onDone?</span> &ndash; the function that is called
-          when the element compilation is completed.</li>
-      </ul>
-
-      <div e-skip>
-        <pre><code lang="js">
-        var app = new Bouer('#app');
-        var elCompiled = app.compile({ el: element });
-        </code></pre>
-      </div>
-
-      <div class="block-note warn">
+        <h3><a id="method-tojsObj">toJsObj</a></h3>
         <p>
-          The element to be compiled need to be added already to the DOM.
+          It allows creating a structured javascript object, based on the structure of the HTML
+          element. Object that can be sent to a server.
         </p>
-      </div>
 
-      <h3><a id="method-destroy">destroy</a></h3>
-      <p>
-        The method used to destroy the application. It expects no parameters.
-      </p>
-    </section>
+        <p>
+          To be able to generate the structure, this method depends of some directives, whitch are:
+        </p>
 
-    <section class="navigator">
-      <div class="left">
-        <a class="next" :href="/docs/events.html">
-          <i class="fa fa-angle-left"></i>
-          <span>Events</span>
-        </a>
-      </div>
-      <div class="middle">
+        <ul>
+          <li> <a id="method-tojsobj_build" class="note mark">
+              e-build </a> &ndash; allows you to build one object within another. The syntax
+            is <span class="note mark">e-build="<i>path</i>"</span>. The path always need to
+            be complete, from the base object untill the property it needs to create. When you
+            need to create an object inside of an array you don't need to put the property and
+            the index (property[0]) of the array, just property name, by the default it maps all
+            the array.</li>
+          <li> <a id="method-tojsobj_array" class="note mark">
+              e-array </a> &ndash; allows to build a array of the element where it is defined.
+            Even if it is not defined by default it creates an array if the elements repeats.
 
-        <small>
-          Help us improve this documentation on github!
-          <a href="" title="Take me to Github">Edit this on Github</a>
-        </small>
+          </li>
+        </ul>
 
-      </div>
-      <div class="right">
-        <a class="next" :href="/docs/components.html">
-          <span>Components</span>
-          <i class="fa fa-angle-right"></i>
-        </a>
-      </div>
-    </section>
+        <p>
+          The method expects three parameters: <span class="note">
+            app.toJsObj(selector: <i class="mark">string | Element</i>, options?:
+            <i class="mark">object</i>, onset?: <i class="mark">Function</i>)</span>.
+        </p>
 
+        <ul>
+          <li> <span class="note mark">selector</span> &ndash; the selector
+            of the element to be generated or the element it self. </li>
+          <li> <span class="note mark">options</span> &ndash; options that indicates
+            attributes it needs to look and from this ones which attributes it needs to get the
+            value. It sintax is <i class="note">{ names: <i class="mark">'[attribute1],[attribute2]'</i>,
+              values: <i class="mark">'[attribute1],[attribute2]'</i> }</i>. The order really matters, it takes
+            what it finds first. The default value is <span class="note">{ names: <i class="mark">'[name]'</i>,
+              values: <i class="mark">'[value]'</i> }</span>. </li>
+          <li> <span class="note mark">onset</span> &ndash; a function that should be
+            called whenever a property is setted. </li>
+        </ul>
+
+        <div e-if="typeof noApp === 'undefined'">
+          <div e-skip>
+
+            <pre><code lang="html">
+          <form id="form">
+            <input type="text" name="firstName" placeholder="First Name" />
+            <input type="text" name="lastName" placeholder="Last Name" />
+
+            <!-- Build an phones property as an array -->
+            <div e-build="phones" e-array>
+              <input type="text" name="code" placeholder="Country Code" />
+              <input type="text" name="text" placeholder="Number" />
+            </div>
+
+            <!-- Build an identification property as an object -->
+            <div e-build="identification">
+              <select name="type">
+                <option disabled> Identification Type </option>
+                <option> Id Card </option>
+                <option> Passport </option>
+              </select>
+
+              <input type="text" name="code" placeholder="Identification Code" />
+            </div>
+
+          </form>
+            </code></pre>
+
+            <pre><code lang="js">
+          var app = new Bouer('#app');
+          var formObj = app.toJsObj('#form');
+            </code></pre>
+          </div>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            We can build complex objects with using this method, simply create the structure we
+            need in HTML.
+          </p>
+        </div>
+
+        <h3><a id="method-watch">watch</a></h3>
+        <p>
+          It is used to watch changes in specific property in the data scope. It sintax is
+          <span class="note">app.watch(propertyName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
+            targetObject?: <i class="mark">object</i>)</span>.
+        </p>
+        <ul>
+          <li> <span class="note mark">propertyName</span> &ndash; represents the
+            name of the property in the data scope. </li>
+          <li> <span class="note mark">callback</span> &ndash; represents the
+            callback where all the logic should be fired when the property changes. The first
+            argument is the new value and the second is the old value of the property. </li>
+          <li> <span class="note mark">targetObject</span> &ndash; represents the
+            target scope having the property to watch. It is optional, if not defined the
+            <span class="note mark">main scope</span> should be used.
+          </li>
+          <li> <span class="note mark">returns</span> &ndash; the watch object, that
+            can be used to destroy the watch listener. </li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              firstName: 'Neves',
+              lastName: 'Manuel'
+            }
+          });
+
+          var watch = app.watch('firstName', function(newValue, oldValue) {
+            // Todo: your code here...
+          });
+
+          watch.destroy();
+          </code></pre>
+        </div>
+
+        <h3><a id="method-react">react</a></h3>
+        <p>
+          It is used to watch all reactive properties in the provided scope. It sintax is
+          <span class="note">app.react(watchableScope: <i class="mark">Function</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">watchableScope</span> &ndash; the function that should be called when the any
+            reactive property change. </li>
+          <li> <span class="note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
+            and the method to destroy watches at once.
+          </li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              result: 0,
+              value1: 1,
+              value2: 1
+            }
+          });
+
+          // If any of the reactive property changes the callback should be called
+          var watches = app.react(function() {
+            var src = this.data;
+            src.result = src.value1 + src.value2;
+          });
+
+          watches.destroy();
+          </code></pre>
+        </div>
+
+        <h3><a id="method-compile">compile</a></h3>
+        <p>
+          It's used to compile a html element. It expects one parameter: <span class="note">
+            app.compile(options: <i class="mark">object</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">{ Element } options.el</span> &ndash; the element to be compiled. </li>
+          <li> <span class="note mark">{ Object } config.data?</span> &ndash; the data that should be injected
+            in the element compilation.</li>
+          <li> <span class="note mark">{ Object } config.context?</span> &ndash; the context object of the
+            this compilation process, what can be <i class="mark">Bouer</i> or <i class="mark">Component</i>.
+          </li>
+          <li> <span class="note mark">{ Function } config.onDone?</span> &ndash; the function that is called
+            when the element compilation is completed.</li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('#app');
+          var elCompiled = app.compile({ el: element });
+          </code></pre>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            The element to be compiled need to be added already to the DOM.
+          </p>
+        </div>
+
+        <h3><a id="method-destroy">destroy</a></h3>
+        <p>
+          The method used to destroy the application. It expects no parameters.
+        </p>
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/events.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Events</span>
+          </a>
+        </div>
+        <div class="middle">
+
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
+
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/components.html">
+            <span>Components</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
   </aside>
 </div>
