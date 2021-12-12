@@ -769,6 +769,22 @@ a.active-doc-menu * {
   justify-content: center;
 }
 
+.documentation .view .navigator .left a,
+.documentation .view .navigator .right a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.documentation .view .navigator .left a span,
+.documentation .view .navigator .right a span {
+  flex: 1;
+  display: flex;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .documentation .view .navigator .middle small a {
   color: var(--color-blue);
   font-weight: 500;
@@ -1235,6 +1251,14 @@ ul.top-menu-opened {
   .main-page-editor-container {
     padding: 65px 30px;
     padding-bottom: 20px;
+  }
+
+  .documentation .view .navigator {
+    flex-direction: column;
+  }
+
+  .documentation .view .navigator>div {
+    padding: 10px 46px;
   }
 }
 
