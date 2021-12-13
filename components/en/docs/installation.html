@@ -59,8 +59,8 @@
 
         <pre><code lang="html">
         <script type="module">
-      import Bouer from 'https://cdn.jsdelivr.net/gh/bouerjs@3.0.0/dist/bouer.esm.js'
-    </script>
+          import Bouer from 'https://cdn.jsdelivr.net/gh/bouerjs@3.0.0/dist/bouer.esm.js'
+        </script>
         </code></pre>
 
         <p>
@@ -87,6 +87,29 @@
           serve the application, builds and deploy.
         </p>
 
+        <h2> <a id="install-builds"> Builds </a> </h2>
+        <p>
+          There are differents of Bouer.js that we can find in <i class="code-style note mark">dist<i>/</i> </i>
+          folder, such as:
+        </p>
+
+        <ul>
+          <li> <i class="note mark">UMD</i> &ndash; <i class="note">bouer.js</i> can be used directly in the browser
+            via a <i class="note code-style"> &lt;<i class="mark">script</i>&gt;</i> tag. Minified version:
+            <i class="note">bouer.min.js</i>.
+          </li>
+
+          <li> <i class="note mark">ESM</i> &ndash; <i class="note">bouer.esm.js</i> stands for ES Modules. It is
+            Javascript's proposal to implement a standard module system. Minified version:
+            <i class="note">bouer.esm.min.js</i>.
+          </li>
+
+          <li> <i class="note mark">CommonJS</i> &ndash; <i class="note">bouer.common.js</i> wraps each module in a
+            function called <i class="note">require</i>, and includes an object called
+            <i class="note mark"><i>module.</i>exports</i>, which exports code for availability to be required by
+            other modules. Minified version: <i class="note">bouer.common.min.js</i>.
+          </li>
+        </ul>
       </section>
       <section class="navigator">
         <div class="left">
