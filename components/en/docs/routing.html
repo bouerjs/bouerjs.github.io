@@ -136,7 +136,7 @@
         <h3> <a id="routing-params"> Route Params </a> </h3>
         <p>
           To define a parameter in the route, we use <i class="note">{<i class="mark">paramName</i>}</i> and to
-          extract the data of the route's parameters, we use <i class="note mark">this.getParams()</i> in the
+          extract the data of the route's parameters, we use <i class="note mark">this.params()</i> in the
           component instance, returning an object containing all the <i class="mark">route parameters</i>
           and <i class="mark">query parameters</i>.
         </p>
@@ -178,16 +178,16 @@
             base: string;
 
             /** Navigates to a certain page without reloading all the page */
-            navigate(route: string, changeUrl?: boolean);
+            navigate(route: string, changeUrl?: boolean): void;
 
             /** Navigates to previous page according to a number of go back */
-            popState(times?: number);
+            popState(times?: number): void;
 
             /** Changes the current url to a new one provided */
-            pushState(url: string, title?: string);
+            pushState(url: string, title?: string): void;
 
             /** Mark all anchors having the route provided as active */
-            markActiveAnchors(route: string);
+            markActiveAnchors(route: string): void;
           }
           </code></pre>
         </div>
