@@ -40,10 +40,10 @@
         <pre><code lang="js">
           var app = new Bouer('selector', {
             /** The data of the application, havig the properties and methods */
-            data: Object,
+            data: object,
 
             /** The data that cross scopes (New Scope or Components Scope)   */
-            globalData: Object,
+            globalData: object,
 
             /** The configuration of the instance */
             config: IBouerConfig {
@@ -67,21 +67,23 @@
             directives: { [key: string]: Directive },
 
             /** The dependencies of the instance */
-            dependencies: { [key: string]: Object },
+            deps: { [key: string]: object | Function },
 
             /** Appends delimiters to the instance */
             delimiters: IDelimiter[],
 
             /** Middlewares that should be used in the application */
-            middleware: function (
-              function configure (
+            middleware(configure: (
                 /** Directive to intercept */
                 directive: string,
                 /** Actions to intercept */
-                actions: function (bind, update) {}
-              ) { },
+                actions(
+                  bind(configure(context: IMiddleware): Promise): void,
+                  update(configure(context: IMiddleware): Promise): void
+                ): void
+              ): void,
               app: Bouer
-            ) { },
+            ): void,
 
             /** The hook that should be called before the component is loaded */
             beforeLoad(event: CustomEvent) { },
@@ -138,22 +140,22 @@
           accessed even if a scope is created.
         </p>
 
-        <h3> <a id="prop-dependencies">Dependencies </a> </h3>
+        <h3> <a id="prop-dependencies">Dependencies</a> </h3>
         <p>
           This property allow to add dependencies in the current instance... All the dependencies can be accessed at
-          <span class="note">app.dependencies</span> object, which are defined providing a
+          <span class="note">app.deps</span> object, which are defined providing a
           <i class="note">[key: <i class="mark">string</i>]</i> and The dependency object.
           <i class="note mark">{ 'my-dependency': {...} }</i>
         </p>
 
         <pre><code lang="js">
         var app = new Bouer('#app', {
-          dependencies: {
+          deps: {
             'html-parser': HTMLParser
           }
         });
 
-        var parser = app.dependencies['html-parser'];
+        var parser = app.deps['html-parser'];
         </code></pre>
 
         <div class="block-note info">
@@ -179,8 +181,8 @@
                 configure('e-title', function (bind, update) {
 
                   // Interceptors:
-                  // Argument -> bind: a function configure a behavior after bound
-                  // Argument -> update: a function configure a behavior after update
+                  // Argument - bind: a function configure a behavior after bound
+                  // Argument - update: a function configure a behavior after update
 
                   bind(function (context, next) {
                     // TODO: Your after bind logic code here...

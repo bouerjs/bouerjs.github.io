@@ -61,43 +61,47 @@
               /** The default data that should be injected in the component */
               data?: object,
 
+              /** Allow to prefetch the component content when the application is ready. */
+              // Note: it overrides the global prefetch value
+              prefetch?: boolean;
+
               /** Allow the component the keep the last state */
               keepAlive?: boolean,
 
               /** restrictions of this component */
-              restrictions?: (function (component: Component): boolean { })[],
+              restrictions?: ((component: Component): boolean)[],
 
               // Lifecycles Hooks
 
               /** It's called when the component was blocked by restrictions */
-              blocked?: (event: CustomEvent) { },
+              blocked?(event: CustomEvent): void,
 
               /** The hook that should be called when the component is requested */
-              requested?: (event: CustomEvent) { },
+              requested?(event: CustomEvent): void,
 
               /** The hook that should be called when the component is created */
-              created?: (event: CustomEvent) { },
+              created?(event: CustomEvent): void,
 
               /** The hook that should be called before the component is mounted */
-              beforeMount?: (event: CustomEvent) { },
+              beforeMount?(event: CustomEvent): void,
 
               /** The hook that should be called after the component is mounted */
-              mounted?: (event: CustomEvent) { },
+              mounted?(event: CustomEvent): void,
 
               /** The hook that should be called before the component is loaded */
-              beforeLoad?: (event: CustomEvent) { },
+              beforeLoad?(event: CustomEvent): void,
 
               /** The hook that should be called after the component is loaded */
-              loaded?: (event: CustomEvent) { },
+              loaded?(event: CustomEvent): void,
 
               /** The hook that should be called before the component is destroyed */
-              beforeDestroy?: (event: CustomEvent) { },
+              beforeDestroy?(event: CustomEvent): void,
 
               /** The hook that should be called after the component is destroyed */
-              destroyed?: (event: CustomEvent) { },
+              destroyed?(event: CustomEvent): void,
 
               /** The hook that should be called after the component request is failed */
-              failed?: (event: CustomEvent) { }
+              failed?(event: CustomEvent): void
             }]
           });
 
@@ -237,32 +241,26 @@
             /** The data of the component */
             data: object;
 
-            /**
-             * Allow to prefetch the component content when the application is ready.
-             * Note: it overrides the global prefetch value
-             */
-            prefetch?: boolean;
-
             /** Method used to export data to the element */
-            export(options: object);
+            export(options: object): void;
 
             /** Method used to destroy the component */
-            destroy();
+            destroy(): void;
 
             /** Method used to build the `url attributes` or `query parameters` */
-            params(): Object;
+            params(): object;
 
             /** Component Events Handler */
 
-            /**Events:  beforeMount, mounted, beforeLoad, loaded, beforeDestroy, destroyed */
+            /** Events:  beforeMount, mounted, beforeLoad, loaded, beforeDestroy, destroyed */
             /** Method to used to add an event */
-            on(eventName: string, callback: function (event: CustomEvent) { });
+            on(eventName: string, callback(event: CustomEvent): void): void;
 
             /** Method to used to remove an event */
-            off(eventName: string, callback: function (event: CustomEvent) { });
+            off(eventName: string, callback(event: CustomEvent): void): void;
 
             /** Method to used to dispatch an event */
-            emit(eventName: string, init ? : CustomEventInit);
+            emit(eventName: string, init ? : CustomEventInit): void;
           }
           </code></pre>
         </div>
@@ -345,8 +343,9 @@
           </code></pre>
         </div>
 
-        <p>
+        <br>
 
+        <p>
           But, if we want targeted slots, we need to replace the <i class="note mark">default</i> attribute to
           <i class="note mark">name</i> attribute with a value and mark with <i class="note mark">slot</i>
           attribute with the same value in the element we want to include.
@@ -376,6 +375,25 @@
             <slot name="head"></slot>
             <slot name="body"></slot>
           </div>
+          </code></pre>
+        </div>
+
+        <br>
+
+        <p>
+          To be able to replace just the content (children) of the element, we need to provide a <i
+            class="note code-style">&lt;<i class="mark">slot</i>&gt;</i> tag with <i class="note mark">slot</i>
+          attribute.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+          <app-table>
+            <slot slot="head">
+              <label> Name </label>
+              <label> Age </label>
+            </slot>
+          </app-table>
           </code></pre>
         </div>
 

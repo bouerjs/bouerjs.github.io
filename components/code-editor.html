@@ -6,8 +6,8 @@
         <div class="top">
           <div class="tab-container">
             <div class="tab active" tab-id="main" on:click="selectTab(event)">
-              <span class="fa fa-globe" title="The Main Code"></span>
-              <label e-title="{{ options.name }}"> Editor </label>
+              <i class="fa fa-globe" title="The Main Code" onclick="this.parentNode.click()"></i>
+              <label e-title="{{ options.name }}" onclick="this.parentNode.click()"> Bouer Editor </label>
             </div>
 
             <!-- List of tabs -->
@@ -540,8 +540,10 @@
   }
 
   .editor-aside .tab-container {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   .editor-aside .tab-container::-webkit-scrollbar {
@@ -757,5 +759,6 @@
     height: auto;
     margin: 0;
   }
+
   /* End CodeMirror */
 </style>

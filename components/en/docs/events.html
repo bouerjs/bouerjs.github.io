@@ -51,7 +51,7 @@
             the DOM. It works with <i class="note mark">e-for</i> and <i class="note mark">e-req</i>.
           </li>
           <li> <span class="note mark">request</span> &ndash; this event is dispatched when a request
-            made using a <i class="note">e-req</i> directive.
+            made using a <i class="note mark">e-req</i> directive.
           </li>
           <li> <span class="note mark">response</span> &ndash; this event is dispatched when we get the response using
             a <i class="note mark">e-req</i> directive.
@@ -75,9 +75,7 @@
 
             <pre><code lang="html">
           <div id="app">
-            <p on:changetext="change">
-              Hello!
-            </p>
+            <p on:changetext="change"> Hello! </p>
           </div>
             </code></pre>
 
@@ -125,7 +123,7 @@
 
         <p>
           Modifiers can be chained together, for example.:
-          <span class="note">on:click<i class="mark">.stopPropagation.once</i>="doSomeThing"</span>
+          <span class="note">on:click<i class="mark">.stop.once</i>="doSomeThing"</span>
         </p>
 
         <div>
