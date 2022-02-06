@@ -39,6 +39,7 @@ i {
 
 :root {
   --bouer-yellow: #F0DB4F;
+  --bouer-blue: #3178c6;;
 
   --note-green: #3bbd418a;
   --note-yellow: #f0Db4f8a;
@@ -414,7 +415,7 @@ a.active-doc-menu * {
   border-radius: 50%;
   top: 13pt;
   position: relative;
-  border: 4px solid #3178c6;
+  border: 4px solid var(--bouer-blue);
 }
 
 .banner .top .logo .wrapper .yellow {
@@ -1175,6 +1176,50 @@ ul.top-menu-opened {
 
 .popup-container .popup .close span:hover {
   color: var(--color-red);
+}
+
+.container-404>div {
+  margin: 10px 0;
+}
+
+.unavailable-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unavailable-section .page-icon {
+  display: flex;
+  justify-content: center;
+  font-size: 32pt;
+}
+
+.unavailable-section .page-icon h1 {
+  display: flex;
+  align-items: center;
+}
+
+.unavailable-section .page-icon span {
+  background-color: var(--bouer-black);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 48pt;
+  margin: 0 4px;
+  margin-top: 10px;
+  border: 4px solid var(--bouer-blue);
+}
+
+.unavailable-section .page-icon span i {
+  color: var(--bouer-yellow);
+  position: relative;
+  top: -3px;
+  font-weight: bolder;
 }
 
 /* Animations classes */

@@ -288,7 +288,7 @@
 
         <div e-skip>
           <pre><code lang="html">
-        <footer data="{ version: '3.0.0', author: 'AfonsoMatElias' }"></footer>
+        <app-footer data="{ version: '3.0.0', author: 'AfonsoMatElias' }"></app-footer>
           </code></pre>
         </div>
 
@@ -438,7 +438,7 @@
           // home.js
           import { Component } from "./js/bouer.esm.js";
 
-          export class Home extends Component {
+          export default class Home extends Component {
             constructor(){
               super("/components/home/home.html");
             }
@@ -455,15 +455,13 @@
           // about.js
           import { Component } from "./js/bouer.esm.js";
 
-          export class About extends Component {
+          export default class About extends Component {
             constructor(){
               super("/components/about/about.html");
             }
 
             init(){
-              this.addAssets([
-                { src: './about.css' }
-              ]);
+              this.addAssets([ './about.css' ]);
             }
           }
           </code></pre>
@@ -482,21 +480,29 @@
 
         <div class="block-note info">
           <p>
-            The <i class="note mark">super</i> keyword expects the HTML component file path or the
-            component options object.
+            The <i class="note mark">super</i> keyword expects the HTML component file path or the component options
+            object.
+          </p>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            Using <i class="note mark">customized component</i> approach, by the default the <i class="mark">name</i> of
+            the component should be the <i class="mark note">filename</i> unless there is already a component with the
+            same name, in this case a random sufix is added to the component name.
           </p>
         </div>
 
         <p>
           The <i class="note mark">init</i> method is called after the component is instantiated, and
-          commonly used for code initialization, like <i class="mark">addAssets(<i>[ { ... } ]</i>)</i>.
+          commonly used for code initialization, like <i class="mark">addAssets(<i>[ string | { ... } ]</i>)</i>.
         </p>
 
         <p>
-          The component <i class="note mark">addAssets(<i>[ { ... } ]</i>)</i> method is used for adding assets like
-          .js and/or .css files to the component. It expects a list of
-          <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>,
-            scoped: <i class="mark">boolean</i> }</i>, where:
+          The component <i class="note mark">addAssets(<i>[ string | { ... } ]</i>)</i> method is used for adding assets
+          like .js and/or .css files to the component. It expects a list of the asset's path or
+          <i class="note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>, scoped:
+          <i class="mark">boolean</i> }</i>, where:
         </p>
 
         <ul>
@@ -505,10 +511,9 @@
             <i class="mark">css</i>, <i class="mark">link</i>, <i class="mark">script</i>, <i class="mark">js</i>.
           </li>
           <li> <span class="note mark">src</span> &ndash; the source of the file, if the path ends with the file
-            extension
-            like <i class="note mark">.js</i> or <i class="note mark">.css</i> the <i class="note mark">type</i>
-            property
-            can be optional.
+            extension like <i class="note mark">.js</i> or <i class="note mark">.css</i> the <i
+              class="note mark">type</i>
+            property can be optional.
           </li>
           <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="note mark">scoped</i>.
             By default the value is <i class="note mark">true</i>.

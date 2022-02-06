@@ -191,7 +191,7 @@
               <span e-if="show_2nd_phrase">Comes great responsibility.</span>”
             </p>
 
-            <b> - Stan Lee: </b>
+            <b> - Stan Lee </b>
           </div>
           </code></pre>
 
@@ -268,9 +268,9 @@
           <pre><code lang="js">
           var app7 = new Bouer('#app7', {
             middleware: function (configure, app) {
-              configure('req', function (bind, update) {
+              configure('req', function (onBind, onUpdate) {
 
-                bind(function (context) {
+                onBind(function (context) {
 
                   // the type of the request: `of` or `as`
                   var type = context.detail.requestType;

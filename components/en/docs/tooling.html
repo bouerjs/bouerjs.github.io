@@ -1,0 +1,331 @@
+<div class="page documentation">
+  <doc-menu data></doc-menu>
+  <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+
+        <h1> <a id="tooling"> Tooling </a> </h1>
+        <p>
+          Bouer can be combined with builder tools that can help to improve the application development.
+        </p>
+
+        <h3> <a id="tooling-code-splitting"> Code Splitting </a> </h3>
+        <p>
+          We can extract the <i class="note">JavaScript</i> and <i class="note">CSS</i> logic from the component to
+          each own files and import them in the component as normal html imports, with
+          <i class="note code-style">&lt;<i class="mark">script</i>&gt;</i> and
+          <i class="note code-style">&lt;<i class="mark">link</i>&gt;</i> elements. This way we can easily organize the
+          .js and .css files in the component folder.
+        </p>
+
+        <div e-skip>
+
+          <pre><code lang="xml">
+          <div>
+            <!-- Component Element -->
+          </div>
+
+          <!-- Adding the script -->
+          <script src="./component.js"></script>
+
+          <!-- Adding the style -->
+          <link href="./component.css" scoped/>
+          </code></pre>
+
+        </div>
+
+        <h3> <a id="tooling-build-tools"> Using Build Tools </a> </h3>
+        <p>
+          We are able to combined <i class="note mark">Bouer</i> with build tools like <a target="_blank"
+            href="https://webpack.js.org/" class="mark">Webpack</a> in order to use it as a module in the project. In
+          case of full app built with Bouer there is some basic configuration that must be done in Webpack.
+        </p>
+
+        <h4> <a id="tooling-use-build-tools-init">Initialization</a> </h4>
+        <p>
+          First we need to install the basic dependencies we are going to use to configure the webpack, and also install
+          specific loaders to handle the files, the main ones are:
+          <a target="_blank" href="https://webpack.js.org/loaders/html-loader/" class="note mark">html-loader</a>,
+          <a target="_blank" href="https://webpack.js.org/loaders/css-loader/" class="note mark">css-loader</a>,
+          <a target="_blank" href="https://webpack.js.org/loaders/file-loader/" class="note mark">file-loader</a>,
+          <a target="_blank" href="https://v4.webpack.js.org/loaders/extract-loader/"
+            class="note mark">extract-loader</a>,
+          <a target="_blank" href="https://webpack.js.org/loaders/babel-loader/" class="note mark">babel-loader</a> with
+          the preset according to the target
+          <a href="https://babeljs.io/docs/en/babel-preset-env" class="note mark">@babel/preset-env</a>.
+        </p>
+
+        <div class="block-note warn">
+          <p>
+            The file-loader is very important for files copy, and the extract-loader we use it combined with file-loader
+            to extract styles files (like <i class="mark"><i>.</i>css</i>, <i class="mark"><i>.</i>scss</i>,
+            <i class="mark"><i>.</i>less</i>, etc).
+          </p>
+        </div>
+
+        <h4> <a id="tooling-use-build-tools-config">Configuring</a> </h4>
+        <p>
+          We are going to share the basic <a target="_blank" href="https://webpack.js.org/configuration/"
+            class="note mark">webpack.config.js</a> file with the structure:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // webpack.config.js
+
+          {
+            entry: "src/app.js",
+            output: {
+              path: "dist",
+              filename: 'app.js'
+            },
+            module: {
+              rules: [
+                { // Processing `js` files
+                  test: /\.js$/,
+                  use: ['babel-loader'],
+                  exclude: /node_modules/,
+                },
+
+                { // Processing `html` files
+                  test: /\.html$/i,
+                  use: {
+                    loader: "file-loader",
+                    options: {
+                      name: '[path][name].[ext]',
+                      context: './src',
+                    }
+                  },
+                  exclude: /node_modules/
+                },
+
+                { // Processing `css` files
+                  test: /\.css$/,
+                  use: {
+                    loader: "file-loader",
+                    options: {
+                      name: '[path][name].[ext]',
+                      context: './src',
+                    }
+                  },
+                  exclude: /node_modules/
+                }
+              ]
+            }
+          }
+          </code></pre>
+        </div>
+
+        <br>
+
+        <p>
+          By the default the files (except .js file) are not minified, to achieve this result we are going need to use
+          webpack plugins, such as:
+          <a target="_blank" href="https://webpack.js.org/plugins/html-minimizer-webpack-plugin/"
+            class="note mark">HtmlMinimizerPlugin</a>,
+          <a target="_blank" href="https://webpack.js.org/plugins/css-minimizer-webpack-plugin/"
+            class="note mark">CssMinimizerPlugin</a>,
+          <a target="_blank" href="https://webpack.js.org/plugins/terser-webpack-plugin/"
+            class="note mark">TerserPlugin</a>. For production, we recommend to use them. Here the configuration
+          structure:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // webpack.config.js
+
+          {
+            entry: "src/app.js",
+            output: { ... },
+            module: { ... },
+            optimization: {
+              minimize: true,
+              minimizer: [
+                  new CssMinimizerPlugin({
+                      test: /\.css$/i,
+                  }),
+                  new HtmlMinimizerPlugin({
+                      test: /\.html$/i,
+                  }),
+                  new TerserPlugin({
+                      test: /\.js(\?.*)?$/i,
+                  }),
+              ],
+            }
+          }
+          </code></pre>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            <a href="https://babeljs.io/" target="_blank" class="mark">Babel</a> also need to be configured according to
+            the presets that will be use, click <a href="https://babeljs.io/docs/en/presets" target="_blank"
+              class="mark">here</a> to see more.
+          </p>
+        </div>
+
+        <p>
+          Example of babel configuration file
+        </p>
+        <div e-skip>
+          <pre><code lang="js">
+          // .babelrc
+
+          {
+            "presets": ["@babel/preset-env"]
+          }
+          </code></pre>
+        </div>
+
+        <p>
+          With all that configured we are good to go and build our awesome application with
+          <i class="note">Bouer</i> + <i class="note">Webpack</i> 😊.
+        </p>
+
+        <p>
+          Using builder tools we can also use the imported .html object provide directly in the constructor of the
+          component class, use the .css object directily in addAssets.
+        </p>
+
+        <br>
+        <p>
+          Let's reuse one of the Customizing Component example.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // home.js
+          import { Component } from "bouerjs";
+          import html from "./home.html";
+          import style from "./home.css";
+
+          export class Home extends Component {
+            constructor(){
+              super(html);
+            }
+
+            init(){
+              this.addAssets([ style ]);
+            }
+          }
+          </code></pre>
+        </div>
+
+        <h3> <a id="tooling-ts"> TypeScript Support </a> </h3>
+        <p>
+          Giving a step forward. <i class="note">Bouer</i> also offers us support for TypeScript which will help us
+          to foresee many errors when developing the application.
+        </p>
+
+        <h4> <a id="tooling-ts-build-tools-init">Initialization</a> </h4>
+        <p>
+          First we need to install the <a target="_blank" href="https://webpack.js.org/loaders/ts-loader/"
+            class="note mark">ts-loader</a> with the <a href="https://babeljs.io/docs/en/babel-preset-typescript"
+            class="note mark">@babel/preset-typescript</a> and add it to the <i class="note mark">.babelrc</i> file.
+        </p>
+
+        <p>
+          We also need to create <i class="note mark">.d.ts</i> file in order to be able to import static files like <i
+            class="mark"><i>.</i>css</i>, <i class="mark"><i>.</i>scss</i>,
+          <i class="mark"><i>.</i>less</i>, etc.
+        </p>
+
+        <h4> <a id="tooling-ts-build-tools-config">Configuring</a> </h4>
+        <p>
+          In the <i class="note mark">.d.ts</i> we need to declare what extension files should be recognized as module and include it in
+          <i class="note mark">tsconfig.json</i>, it need to have the following structure, for example:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // /typings/index.d.ts
+
+          declare module '*.html' {
+            const value: string;
+            export default value;
+          }
+
+          declare module '*.css' {
+            const value: string;
+            export default value;
+          }
+          </code></pre>
+        </div>
+
+        <h4> Here a basic recommended tsconfig.json file </h4>
+        <div e-skip>
+          <pre><code lang="js">
+          // tsconfig.json
+
+          {
+            "compilerOptions": {
+              "strict": true,
+              "target": "es5",
+              "module": "ES2015",
+              "moduleResolution": "Node",
+            },
+            "include": ["typings/**/*.d.ts", "src/**/*"]
+          }
+          </code></pre>
+        </div>
+
+        <p>
+          See <a target="_blank" href="https://www.typescriptlang.org/docs/handbook/compiler-options.html"
+            class="mark">TypeScript compiler options docs</a> for more details.
+        </p>
+
+        <p>
+          Now we need to add the ts-loader into the <a target="_blank" href="https://webpack.js.org/configuration/"
+            class="note mark">webpack.config.js</a> file:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // webpack.config.js
+
+          {
+            ...
+
+            module: {
+              rules: [
+                ...
+
+                { // Processing `ts` files
+                    test: /\.ts$/,
+                    use: ['ts-loader'],
+                    exclude: /node_modules/,
+                }
+              ]
+            },
+
+            // Allow to import .ts files without explicitly provide the file extension
+            resolve: { extensions: ['.ts'] },
+          }
+          </code></pre>
+        </div>
+
+        <p>
+          With all that configured we are good to go and build our awesome application with
+          <i class="note">Bouer</i> + <i class="note">TypeScript</i> + <i class="note">Webpack</i> 😊.
+        </p>
+
+      </section>
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/routing.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Routing</span>
+          </a>
+        </div>
+        <div class="middle">
+
+          <small>
+            Help us improve this documentation on github!
+            <a href="" title="Take me to Github">Edit this on Github</a>
+          </small>
+
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>

@@ -78,8 +78,8 @@
                 directive: string,
                 /** Actions to intercept */
                 actions(
-                  bind(configure(context: IMiddleware): Promise): void,
-                  update(configure(context: IMiddleware): Promise): void
+                  onBind(configure(context: IMiddleware): Promise): void,
+                  onUpdate(configure(context: IMiddleware): Promise): void
                 ): void
               ): void,
               app: Bouer
@@ -100,6 +100,8 @@
           </code></pre>
 
         <h3> <a id="prop-data">Data & GlobalData</a> </h3>
+
+        <h4> <a id="prop-data-property">Property</a> </h4>
         <p>
           As already mentioned, the data property allows you to set the data that the application should have
           when it starts, however there is a way to add data while it is already running with the
@@ -132,6 +134,7 @@
 
           app1.set({ version: '3.0.0' });
           </code></pre>
+
         </div>
 
         <p>
@@ -139,6 +142,81 @@
           they do not respect <i class="note mark">scopes</i> (we'll talk about this later), they can be
           accessed even if a scope is created.
         </p>
+
+        <h4> <a id="prop-data-computed-property">Computed Property</a> </h4>
+        <p>
+          Computed property is used to add some logic to the process of getting or setting a property. to be able to
+          defined a computed property we use to set a function with the name <i class="note mark">$computed</i>.
+        </p>
+
+        <p>
+          There are two ways to configure it, such as:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // Inferred `get`
+          function $computed() {
+            return value;
+          }
+          </code></pre>
+          <pre><code lang="js">
+          // Descripted `get` and `set`
+          function $computed() {
+            return {
+              get(): any,
+              set(value: any): void,
+            }
+          }
+          </code></pre>
+        </div>
+
+        <br>
+        <p>
+          With computed properties we can customize how we want a value go be printed in the UI, and controll a value
+          need to distribuited as this example shows:
+        </p>
+
+        <div e-skip execute>
+
+          <pre><code lang="html">
+          <div id="app2">
+            <input type="text" e-bind="fullName" />
+            <h4> {{ fullName }} </h4>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app2 = new Bouer('#app2', {
+            data: {
+              firstName: 'Afonso',
+              lastName: 'Matumona',
+
+              // Computed
+              fullName: function $computed(){
+                var app = this;
+                return {
+                  get: function(){
+                    // joining the first and last name
+                    return [app.data.firstName || '', app.data.lastName || ''].join(' ')
+                  },
+                  set: function(v) {
+                    var value = v || '';
+                    var splitted = value.split(' ');
+
+                    // getting the first and last name
+                    app.data.firstName = splitted[0];
+                    app.data.lastName = splitted[splitted.length - 1] || '';
+                  }
+                }
+              }
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+
+        </div>
 
         <h3> <a id="prop-dependencies">Dependencies</a> </h3>
         <p>
@@ -178,17 +256,17 @@
               middleware: function (configure, app) {
 
                 // Configure function is used to configure the interceptions
-                configure('e-title', function (bind, update) {
+                configure('e-title', function (onBind, onUpdate) {
 
                   // Interceptors:
                   // Argument - bind: a function configure a behavior after bound
                   // Argument - update: a function configure a behavior after update
 
-                  bind(function (context, next) {
+                  onBind(function (context, next) {
                     // TODO: Your after bind logic code here...
                   });
 
-                  bind(function (context, next) {
+                  onUpdate(function (context, next) {
                     // TODO: Your update logic code here...
                   });
 

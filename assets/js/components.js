@@ -42,6 +42,13 @@ function BouerComponents(sharedOptions) {
       route: '/tutorial.html',
       title: 'Tutorial'
     },
+    {
+      name: 'page-404',
+      path: '/components/' + lang + '/404.html',
+      route: '/404.html',
+      title: 'Page NotFound',
+      isNotFound: true
+    },
 
     // Documentation sections
     {
@@ -113,6 +120,13 @@ function BouerComponents(sharedOptions) {
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/routing.html'
+    },
+    {
+      name: 'tooling',
+      path: base + 'tooling.html',
+      mounted: mountedEvent,
+      loaded: loadedEvent,
+      route: '/docs/tooling.html'
     },
   ]
 }

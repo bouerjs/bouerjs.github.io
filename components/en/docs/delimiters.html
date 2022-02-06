@@ -43,29 +43,71 @@
         </p>
 
         <p>
-          To be able to add our own delimiter, we use the method <i class="note">
-            app.$delimiters.<i class="mark">add({ ... })</i></i>, it expects an object having the
-          following structure:
+          To be able to add our own delimiter, we can <i class="mark">bouerOptions.delimiters</i> property
+          or use the method <i class="note">app.$delimiters.<i class="mark">add({ ... })</i></i>, it expects
+          an object having the following structure:
         </p>
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app');
-          app.$delimiters.add({
-            /** The name of the delimiter */
-            name: string,
-            /** The delimiter structure */
-            delimiter: {
-              /** The open syntax */
-              open: string,
-              /** The close syntax */
-              close: string
-            },
+          // adding directly to the instance
+          var app = new Bouer('#app', {
+            delimiters: [{
+              /** The name of the delimiter */
+              name: string,
+              /** The delimiter structure */
+              delimiter: {
+                /** The open syntax */
+                open: string,
+                /** The close syntax */
+                close: string
+              },
 
-            /** fires when the element updates */
-            update?(valueToSet: string, node: Node, data: object): string
+              /** fires when the element updates */
+              onUpdate?(valueToSet: string, node: Node, data: object): string
+            }]
+          });
+
+          // Adding by the handler
+          app.$delimiters.add({ ... });
+          </code></pre>
+        </div>
+
+        <div class="block-note warn">
+          <p e-skip>
+            The open and close syntax are processed by a <a target="_blank"
+              href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp"
+              class="mark">RegExp</a>, so we always have to keep that in mind and be careful when defining them</i>
+          </p>
+        </div>
+
+        <p>
+          For example, we going to add <i class="note mark">JavaScript Template Strings</i> delimiter type:
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app">
+            <h4> ${message} </h4>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app = new Bouer('#app', {
+            data: {
+              message: 'I was shown using js-template-string'
+            },
+            delimiters: [{
+              name: 'js-template-string',
+              delimiter: {
+                open: '\\${',
+                close: '}'
+              }
+            }]
           });
           </code></pre>
+
+          <div class="result"></div>
         </div>
 
       </section>

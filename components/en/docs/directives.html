@@ -137,10 +137,10 @@
 
         <p>
           We don't know about you, but for us the result of the example above is kind of ugly with
-          the delimiters in sight, fortunately we have <span class="note">e-content</span>.
+          the delimiters in sight, fortunately we have <span class="note">e-text</span>.
         </p>
 
-        <h3> <a id="directive-e-content"> e-content </a> </h3>
+        <h3> <a id="directive-e-text"> e-text </a> </h3>
         <p>
           It is a way to define a value that should be put in the container after the element is
           compiled.
@@ -148,7 +148,7 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <h4 wait-data="waiting" e-content="{{ message }}">...</h4>
+          <h4 wait-data="waiting" e-text="{{ message }}">...</h4>
           </code></pre>
 
           <pre><code lang="js">
@@ -498,7 +498,7 @@
           </code></pre>
         </div>
 
-        <h3> <a id="directive-silent"> silent </a> </h3>
+        <h3> <a id="directive-silent"> silent (--s) </a> </h3>
         <p>
           The silent directive allow to hide an element/component untill the compilation process is done.
         </p>
@@ -587,9 +587,9 @@
               middleware: function (configure, app) {
 
                 // 'req' Interceptor is used for request interception
-                configure('req', function (bind, update) {
+                configure('req', function (onBind, onUpdate) {
 
-                  bind(function (context) {
+                  onBind(function (context) {
                     var path = context.detail.requestPath;
                     var baseURL = "https://jsonplaceholder.typicode.com/";
 
