@@ -26,6 +26,7 @@ function BouerComponents(sharedOptions) {
       isDefault: true,
       path: '/components/' + lang + '/home.component.html',
       route: '/',
+      title: 'Bouer'
     },
     {
       path: '/components/' + lang + '/cli.docs.component.html',
@@ -56,77 +57,88 @@ function BouerComponents(sharedOptions) {
       path: base + 'bindings.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/bindings.html'
+      route: '/docs/bindings.html',
+      title: 'Bindings • Bouer'
     },
     {
       name: 'directives',
       path: base + 'directives.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/directives.html'
+      route: '/docs/directives.html',
+      title: 'Directives • Bouer'
     },
     {
       name: 'components',
       path: base + 'components.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/components.html'
+      route: '/docs/components.html',
+      title: 'Components • Bouer'
     },
     {
       name: 'delimiters',
       path: base + 'delimiters.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/delimiters.html'
+      route: '/docs/delimiters.html',
+      title: 'Delimiters • Bouer'
     },
     {
       name: 'events',
       path: base + 'events.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/events.html'
+      route: '/docs/events.html',
+      title: 'Events • Bouer'
     },
     {
       name: 'installation',
       path: base + 'installation.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/installation.html'
+      route: '/docs/installation.html',
+      title: 'Installation • Bouer'
     },
     {
       name: 'instance',
       path: base + 'instance.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/instance.html'
+      route: '/docs/instance.html',
+      title: 'Tnstance • Bouer'
     },
     {
       name: 'introduction',
       path: base + 'introduction.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/introduction.html'
+      route: '/docs/introduction.html',
+      title: 'Introduction • Bouer'
     },
     {
       name: 'methods',
       path: base + 'methods.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/methods.html'
+      route: '/docs/methods.html',
+      title: 'Methods • Bouer'
     },
     {
       name: 'routing',
       path: base + 'routing.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/routing.html'
+      route: '/docs/routing.html',
+      title: 'Routing • Bouer'
     },
     {
       name: 'tooling',
       path: base + 'tooling.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
-      route: '/docs/tooling.html'
+      route: '/docs/tooling.html',
+      title: 'Tooling • Bouer'
     },
   ]
 }
