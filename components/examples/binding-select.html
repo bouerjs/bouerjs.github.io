@@ -1,0 +1,16 @@
+<div id="app">
+  <select e-bind="selected">
+    <option value="Banana">Banana</option>
+    <option value="Strawberry">Strawberry</option>
+    <option value="Mango">Mango</option>
+  </select>
+
+  <p> Selected Fruit: {{ selected }}</p>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      selected: []
+    }
+  });
+</script>

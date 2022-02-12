@@ -1,0 +1,10 @@
+<div id="app">
+  <h3 e-text="{{ message }}">Default Text</h3>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      message: 'This text was injected from e-text directive 😎!'
+    }
+  });
+</script>

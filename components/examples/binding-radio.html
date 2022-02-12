@@ -1,0 +1,13 @@
+<div id="app">
+  <input type="radio" e-bind="selected" name="gender" value="Male 👦"> Male
+  <input type="radio" e-bind="selected" name="gender" value="Female 👧"> Female
+
+  <p> Selected Gender: {{ selected }}</p>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      selected: ''
+    }
+  });
+</script>

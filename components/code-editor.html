@@ -7,7 +7,7 @@
           <div class="tab-container">
             <div class="tab active" tab-id="main" on:click="selectTab(event)">
               <i class="fa fa-globe" title="The Main Code" onclick="this.parentNode.click()"></i>
-              <label e-title="{{ options.name }}" onclick="this.parentNode.click()"> Bouer Editor </label>
+              <label e-title="{{ name }}" onclick="this.parentNode.click()"> Bouer Editor </label>
             </div>
 
             <!-- List of tabs -->
@@ -303,11 +303,11 @@
     }
 
     // Editor initialization
-    mEditor = element.$editor = new Editor(element, this.data.options || {});
+    mEditor = new Editor(element, this.data.options || {});
 
     // Add the tabs if exists
     if (Array.isArray(mEditor.tabs)) {
-      this.data.tabList = mEditor.tabs.map((tab, i) => {
+      this.data.tabList = mEditor.tabs.map(function (tab, i) {
         return {
           id: component.data.tab_id++,
           content: tab.content,
@@ -319,13 +319,13 @@
     mEditor.runCode();
   });
 
-  this.on('destroyed', () => {
+  this.on('destroyed', function () {
     window.removeEventListener('resize', resizeCallback, false);
   });
 
   this.export({
     tab_id: 1,
-    name: this.name,
+    name: (this.data.options || {}).name || this.name,
     showResult: false,
     tabList: [],
     addTab: function () {

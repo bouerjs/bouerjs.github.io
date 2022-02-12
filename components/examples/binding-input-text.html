@@ -1,0 +1,14 @@
+<div id="app">
+  <!-- Two Ways Data Binding -->
+  <input type="text" e-bind="value" /><br>
+
+  <h4> {{ value }} </h4>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+      data: {
+          value: 'Change me!',
+      }
+  });
+</script>

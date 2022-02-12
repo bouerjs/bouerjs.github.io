@@ -1,3 +1,194 @@
-<div class="page">
-    
+<div class="page playground">
+  <div class="examples-view" e-class="{ 'side-menu-opened': docMenuOpened }">
+
+    <!-- Menu icon -->
+    <div class="side-menu-handler">
+      <div class="menu-btn-container">
+        <div class="menu-btn" on:click="docMenuOpened = !docMenuOpened">
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Examples</h3>
+
+    <div class="examples-container nice-scroll">
+
+      <div class="item" e-for="exp of examples" on:click="loadExample(exp, event.target)">
+        <p e-text="{{ exp.text }}" e-class="{ 'active-item' : exp.name == active }"> Example Name </p>
+        <small e-text="{{ exp.desc }}">Example description</small>
+      </div>
+
+    </div>
+  </div>
+  <div class="editor-view">
+    <code-editor wait-data="playground-app" data="{ options: $data }"></code-editor>
+  </div>
 </div>
+<script>
+  var bouer = this.bouer;
+  var params = this.params();
+  var component = this;
+
+  function getExample(name) {
+    var editorView = component.el.querySelector('.editor-view');
+    editorView.classList.remove('error');
+
+    function setter(content) {
+      bouer.$wait.set('playground-app', {
+        name: 'Playground',
+        content: content,
+        type: 'expanded',
+        resizable: 'y',
+      });
+    }
+
+    if (!name) return setter('<h3> Hello Champ 👋, here you can play around with some Bouer features online! </h3>');
+
+    fetch(location.origin + "/components/examples/" + name + ".html", {
+      headers: { 'Content-Type': 'text/plain' }
+    }).then(function (response) {
+      if (!response.ok)
+        throw new Error(response.statusText);
+      return response.text();
+    }).then(setter)
+      .catch(function (err) {
+        editorView.classList.add('error');
+        console.error(err);
+      });
+  }
+
+  this.on('loaded', function () {
+    getExample(params.ex);
+  });
+
+  this.on('destroyed', function () {
+    // Removing the stored value
+    bouer.$wait.unset('playground-app');
+  });
+
+  this.export({
+    active: params.ex || '',
+    examples: [
+      {
+        name: 'hello-world',
+        text: 'Hello World',
+        desc: 'Displaying value from the js to html'
+      },
+      {
+        name: 'dynamic-inject',
+        text: 'Dynamic Inject',
+        desc: 'Dynamic content injection'
+      },
+      {
+        name: 'binding-input-text',
+        text: 'Binding • Text',
+        desc: 'Simple input type text binding'
+      },
+      {
+        name: 'binding-checkbox',
+        text: 'Binding • Checkbox',
+        desc: 'Binding input checkbox with boolean property'
+      },
+      {
+        name: 'binding-checkbox-list',
+        text: 'Binding • Checkbox List',
+        desc: 'Binding checkbox with list of primitives'
+      },
+      {
+        name: 'binding-checkbox-list-obj',
+        text: 'Binding • Checkbox List of Object',
+        desc: 'Binding checkbox with list of objects'
+      },
+      {
+        name: 'binding-radio',
+        text: 'Binding • Radio Button',
+        desc: 'Binding radio button with primitive'
+      },
+
+      {
+        name: 'binding-select',
+        text: 'Binding • Select',
+        desc: 'Binding select element primitive property'
+      },
+      {
+        name: 'binding-select-multi',
+        text: 'Binding • Select Multi',
+        desc: 'Binding select element with list of primitives'
+      },
+      {
+        name: 'directive-show-conditional',
+        text: 'Directive • Show',
+        desc: 'Toggling the visibility of an Element'
+      },
+      {
+        name: 'directive-if-else-conditional',
+        text: 'Directive • If-Else',
+        desc: 'Toggling the an Element from the DOM'
+      },
+
+      {
+        name: 'for-of-loops',
+        text: 'Directive • For-of',
+        desc: 'Looping a list of object'
+      },
+      {
+        name: 'for-in-loops',
+        text: 'Directive • For-in',
+        desc: 'Looping an Object Literal'
+      },
+
+      {
+        name: 'req-of-inline-request',
+        text: 'List Request',
+        desc: 'Requesting a list of data with directive'
+      },
+      {
+        name: 'req-as-inline-request',
+        text: 'Object Request',
+        desc: 'Requesting an object with directive'
+      },
+
+      {
+        name: 'form-to-object',
+        text: 'Form to Javascript Object',
+        desc: 'Transforming a form element to js Object Literal'
+      },
+
+      {
+        name: 'watch-property',
+        text: 'Watch Property',
+        desc: 'Watching a propety for future changes'
+      },
+      {
+        name: 'watch-scope',
+        text: 'Watch Scope',
+        desc: 'Watching a scope for any reactive prop. changes'
+      },
+    ],
+
+    loadExample: function (example, el) {
+      var editorView = component.el.querySelector('.editor-view');
+      var editor, url = location.href.split('?')[0] + '?ex=' + example.name;
+
+      // Cleaning the content
+      editorView.innerHTML = '<code-editor wait-data="playground-app" data="{ options: $data }"></code-editor>';
+      editor = editorView.children[0];
+
+      this.data.active = example.name;
+
+      // Removing the stored value
+      bouer.$wait.unset('playground-app');
+
+      // Compiling the added element
+      bouer.compile({ el: editor, data: this.data, context: this });
+
+      // Getting new content
+      getExample(example.name);
+
+      history.replaceState(example, example.text, url);
+
+      editorView.scrollTop = el.offsetTop - 20;
+    },
+  });
+</script>

@@ -39,7 +39,8 @@ i {
 
 :root {
   --bouer-yellow: #F0DB4F;
-  --bouer-blue: #3178c6;;
+  --bouer-blue: #3178c6;
+  ;
 
   --note-green: #3bbd418a;
   --note-yellow: #f0Db4f8a;
@@ -67,6 +68,7 @@ i {
   --bouer-black: #494a47;
 
   --color-text: #5a5a5a;
+  --color-text-weak: #7a7a7a;
   --color-border: #e2e2e2;
   --color-soft-border: #bbb;
   --color-bg-lighter: #fcfcfc;
@@ -330,11 +332,13 @@ nav>div .top-menu-handler .menu-btn-container {
   position: relative;
 }
 
+.active-item,
 .menu-container ul li .active-link {
   color: var(--color-active);
   transition: color .2s;
   text-shadow: 0px 0px 1px var(--color-shadow);
 }
+
 
 a.active-doc-menu,
 a.active-doc-menu * {
@@ -1080,12 +1084,12 @@ pre code::after,
 }
 
 /* For documentation menu */
-aside.side-menu-opened {
+.side-menu-opened {
   left: 0 !important;
 }
 
 /* For tutorial menu */
-aside.side-menu-closed {
+.side-menu-closed {
   left: -100% !important;
 }
 
@@ -1222,6 +1226,100 @@ ul.top-menu-opened {
   font-weight: bolder;
 }
 
+.playground {
+  flex-direction: row;
+}
+
+.playground .examples-view {
+  flex: 1;
+  min-width: 250px;
+  background-color: var(--color-doc-menu);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+}
+
+.playground .examples-view h3 {
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.playground .examples-view .examples-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.playground .examples-view .examples-container .item {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-shadow);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: var(--color-text);
+  cursor: pointer;
+  margin: 8px 0;
+}
+
+.playground .examples-view .examples-container .item:active {
+  background-color: var(--color-doc-menu);
+}
+
+.playground .examples-view .examples-container .item small {
+  font-size: 9pt;
+  color: var(--color-text-weak);
+}
+
+.playground .editor-view {
+  display: flex;
+  flex: 4;
+
+  background-image: url(../images/spinner.svg);
+  background-size: 55px;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.playground .editor-view::before {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: 'Loading the Editor...';
+}
+
+.playground .editor-view.error {
+  background-image: unset;
+}
+
+.playground .editor-view.error::before {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: 'Error loading the Example!';
+}
+
+.playground .editor-view.error::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -200px;
+  min-height: 50px;
+  max-height: 150px;
+  content: '( i ) [Error]: Something went wrong while loading the example, try to reload the page or select another example!';
+  background-color: #e93434;
+  color: var(--color-white-text);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  font-size: 11pt;
+  animation: slide-up .4s ease forwards;
+}
+
 /* Animations classes */
 .loading {
   position: fixed;
@@ -1237,6 +1335,14 @@ ul.top-menu-opened {
 .blink {
   animation: fade-it 1s infinite;
   -webkit-animation: fade-it 1s infinite;
+}
+
+@keyframes slide-up {
+  to { bottom: 0; }
+}
+
+@-webkit-keyframes progress-bar {
+  to { bottom: 0; }
 }
 
 @keyframes progress-bar {
@@ -1367,6 +1473,17 @@ ul.top-menu-opened {
     overflow-y: auto;
     height: 80vh;
   }
+
+  .examples-view {
+    position: absolute;
+    z-index: 100;
+    transition: left .4s;
+    left: -100%;
+    bottom: 0;
+    top: 50px;
+    min-width: 250px;
+    max-width: 335px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1418,7 +1535,8 @@ ul.top-menu-opened {
     left: -100%;
     bottom: 0;
     top: 50px;
-    width: 335px;
+    min-width: 250px;
+    max-width: 335px;
   }
 }
 
