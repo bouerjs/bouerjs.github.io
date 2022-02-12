@@ -981,7 +981,7 @@
       Reactive.prototype.notify = function () {
           var _this = this;
           // Running all the watches
-          forEach(this.watches, function (watch) { return watch.callback(_this.propertyValue, _this.propertyValueOld); });
+          forEach(this.watches, function (watch) { return watch.callback.call(_this.context, _this.propertyValue, _this.propertyValueOld); });
       };
       Reactive.prototype.onChange = function (callback, node) {
           var w = new Watch(this, callback, { node: node });
