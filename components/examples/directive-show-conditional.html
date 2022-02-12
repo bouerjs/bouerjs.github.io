@@ -1,0 +1,22 @@
+<div id="app">
+
+  <div class="input-field">
+    <label for="username">Username</label> <br>
+    <input id="username" placeholder="type your username" e-bind="value" /> <br>
+    <small style="color: red" e-show="!isValid">Field is required</small>
+  </div>
+
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      isValid: true,
+      value: ''
+    },
+    loaded: function () {
+      this.watch('value', function (newValue, oldValue) {
+        this.data.isValid = !(newValue.trim() === '');
+      });
+    }
+  });
+</script>

@@ -1237,7 +1237,6 @@ ul.top-menu-opened {
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
-  scroll-behavior: smooth;
 }
 
 .playground .examples-view h3 {
@@ -1249,6 +1248,7 @@ ul.top-menu-opened {
 .playground .examples-view .examples-container {
   flex: 1;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .playground .examples-view .examples-container .item {
@@ -1336,6 +1336,59 @@ ul.top-menu-opened {
   animation: fade-it 1s infinite;
   -webkit-animation: fade-it 1s infinite;
 }
+
+
+
+/* Examples css */
+
+ul.users {
+  list-style: none;
+}
+
+ul.users li {
+  display: flex;
+  margin: 6px 0;
+  padding: 4px 2px;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  max-width: 350px;
+}
+
+ul.users li .avatar {
+  /* Center de Content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* End Center de Content */
+  width: 80px;
+}
+
+ul.users li .avatar span {
+  width: 60px;
+  height: 60px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  background-color: #dfdfdf;
+}
+
+ul.users li .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+ul.users li .info .row {
+  flex: 1;
+}
+
+ul.users li .info .row span {
+  margin: auto 0;
+}
+
+/* End Examples css */
+
 
 @keyframes slide-up {
   to { bottom: 0; }

@@ -1,0 +1,54 @@
+<div id="app">
+
+  <p> Requesting Users from jsonplaceholder API </p>
+
+  <ul class="users">
+    <li e-req="user of users">
+      <div class="avatar">
+        <span e-skeleton e-style="background-image: url(https://i.pravatar.cc/200?img={{ user.id }});"></span>
+      </div>
+      <div class="info">
+        <div class="row"> <span e-skeleton> <b>Id:</b> {{ user.id }} </span> </div>
+        <div class="row"> <span e-skeleton> <b>Name:</b> {{ user.name }} </span> </div>
+        <div class="row"> <span e-skeleton> <b>Username: </b>{{ user.username }} </span> </div>
+      </div>
+    </li>
+  </ul>
+
+</div>
+<script>
+  var app = new Bouer('#app', {
+    middleware: function (configure, app) {
+      configure('req', function (onBind, onUpdate) {
+
+        onBind(function (context) {
+
+          // the type of the request: `of` or `as`
+          var type = context.detail.requestType;
+
+          // the path of the request: `users`
+          var path = context.detail.requestPath;
+
+          var baseURL = "https://jsonplaceholder.typicode.com/";
+
+          // Requesting data from the server
+          return fetch(baseURL + path, {
+            headers: { 'Content-Type': "application/json" }
+          }).then(function (response) {
+
+            if (!response.ok)
+              throw new Error(response.statusText);
+
+            return response.json();
+          }).then(function (json) {
+
+            // the response must be always into a object with `data` property
+            return { data: json };
+          }).catch(function (error) {
+            return error
+          });
+        });
+      });
+    }
+  });
+</script>

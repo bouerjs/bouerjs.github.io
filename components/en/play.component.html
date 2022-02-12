@@ -14,7 +14,7 @@
 
     <div class="examples-container nice-scroll">
 
-      <div class="item" e-for="exp of examples" on:click="loadExample(exp, event.target)">
+      <div class="item" e-for="exp of examples" on:click="loadExample(exp)">
         <p e-text="{{ exp.text }}" e-class="{ 'active-item' : exp.name == active }"> Example Name </p>
         <small e-text="{{ exp.desc }}">Example description</small>
       </div>
@@ -32,6 +32,7 @@
 
   function getExample(name) {
     var editorView = component.el.querySelector('.editor-view');
+    var examplesView = component.el.querySelector('.examples-view');
     editorView.classList.remove('error');
 
     function setter(content) {
@@ -44,6 +45,12 @@
     }
 
     if (!name) return setter('<h3> Hello Champ 👋, here you can play around with some Bouer features online! </h3>');
+
+    // Ajusting the selected example position
+    var examplesContainer = examplesView.querySelector('.examples-container');
+    var activeExample = examplesContainer.querySelector('.active-item');
+    if (activeExample)
+      examplesContainer.scrollTop = activeExample.offsetTop - 165;
 
     fetch(location.origin + "/components/examples/" + name + ".html", {
       headers: { 'Content-Type': 'text/plain' }
@@ -128,12 +135,12 @@
       },
 
       {
-        name: 'for-of-loops',
+        name: 'directive-for-of-loops',
         text: 'Directive • For-of',
         desc: 'Looping a list of object'
       },
       {
-        name: 'for-in-loops',
+        name: 'directive-for-in-loops',
         text: 'Directive • For-in',
         desc: 'Looping an Object Literal'
       },
@@ -167,7 +174,7 @@
       },
     ],
 
-    loadExample: function (example, el) {
+    loadExample: function (example) {
       var editorView = component.el.querySelector('.editor-view');
       var editor, url = location.href.split('?')[0] + '?ex=' + example.name;
 
@@ -187,8 +194,6 @@
       getExample(example.name);
 
       history.replaceState(example, example.text, url);
-
-      editorView.scrollTop = el.offsetTop - 20;
     },
   });
 </script>

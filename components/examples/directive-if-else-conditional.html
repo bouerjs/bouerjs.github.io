@@ -1,0 +1,22 @@
+<div id="app">
+
+  <input type="number" e-bind="binary" /> <br>
+
+  <p e-if="binary == 1">
+    {{ binary }} is on 🙂
+  </p>
+  <p e-else-if="binary == 0">
+    {{ binary }} is off 🙁
+  </p>
+  <p e-else>
+    {{ binary }} is not binary 🤨
+  </p>
+
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      binary: 1
+    }
+  });
+</script>

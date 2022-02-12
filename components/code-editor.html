@@ -181,10 +181,12 @@
       // Confifuring the instance functions
       this.console = {
         add: function (obj) {
-          messageContainer.innerHTML += '<p class="line fa ' + obj.type + '">' +
-            obj.message +
+          var type = (obj.type || 'fa-check-circle');
+          messageContainer.innerHTML += '<p class="line fa ' + type + '">' +
+            (obj.message || JSON.stringify(obj)) +
             '</p>';
-          setConsoleIcon(icons[obj.type]);
+
+          setConsoleIcon(icons[type]);
         },
         clear: function () {
           messageContainer.innerHTML = '';
