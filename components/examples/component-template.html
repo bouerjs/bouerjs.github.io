@@ -1,0 +1,87 @@
+<div id="app">
+  <div class="center">
+
+    <!-- Injecting the header -->
+    <app-header></app-header>
+
+    <!-- Register form -->
+    <div class="form">
+      <input ref type="text" name="name" placeholder="Name"> <br>
+      <input ref type="text" name="username" placeholder="Username"> <br>
+
+      <button on:click="add">Add User</button>
+    </div>
+
+    <hr>
+
+    <ul class="users">
+      <user-item data="$data" e-for="user of users"></user-item>
+    </ul>
+
+  </div>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      users: [
+        {
+          name: 'Afonso Matumona',
+          username: 'AfonsoMatElias'
+        },
+        {
+          name: 'Bouer',
+          username: 'bouerjs'
+        },
+      ],
+
+      // Methods
+      add: function () {
+        const obj = this.toJsObj('.form');
+
+        if (!obj.name || !obj.username)
+          return alert('Both of the fields are required.');
+
+        this.data.users.push(obj);
+
+        this.refs.name.value = ''
+        this.refs.username.value = ''
+      }
+    },
+    components: [
+      {
+        name: 'app-header',
+        template: this.tab('app-header')
+      },
+      {
+        name: 'user-item',
+        template: this.tab('user-item')
+      },
+      {
+        name: 'app-footer',
+        template: this.tab('app-footer')
+      }
+    ]
+  });
+</script>
+
+<!-- component:user-item -->
+<li>
+  <div class="avatar">
+    <span e-style="background-image: url(https://github.com/{{ user.username }}.png);"></span>
+  </div>
+  <div class="info">
+    <div class="row"> <span> <b>Name: </b> {{ user.name }} </span> </div>
+    <div class="row"> <span> <b>Username: </b>{{ user.username }} </span> </div>
+  </div>
+</li>
+
+<!-- component:app-header -->
+<header>
+  <h3>💻 | Github Users</h3>
+  <br>
+</header>
+
+<!-- component:app-footer -->
+<footer>
+  <small>Copyright © Bouer</small>
+</footer>

@@ -1,0 +1,42 @@
+<div id="app">
+  <form id="form" on:submit.prevent="onSubmit">
+    <input type="text" name="firstName" placeholder="First Name" /> <br>
+    <input type="text" name="lastName" placeholder="Last Name" /> <br>
+
+    <!-- Build an phones property as an array -->
+    <div e-build="phones" e-array>
+      <input type="text" name="code" placeholder="Country Code" /> <br>
+      <input type="text" name="text" placeholder="Number" /> <br>
+    </div>
+
+    <!-- Build an identification property as an object -->
+    <div e-build="identification">
+      <select name="type">
+        <option disabled> Identification Type </option>
+        <option> Id Card </option>
+        <option> Passport </option>
+      </select> <br>
+
+      <input type="text" name="code" placeholder="Identification Code" /> <br>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form> <br>
+
+  <textarea id="output" cols="15" rows="14"></textarea>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      message: 'Hello World 👋!',
+
+      onSubmit: function () {
+        var app = new Bouer('#app');
+        var formObj = app.toJsObj('#form');
+
+        var output = this.el.querySelector('#output');
+        output.textContent = JSON.stringify(formObj, null, 2);
+      }
+    }
+  });
+</script>

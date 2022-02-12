@@ -14,6 +14,7 @@
       value: ''
     },
     loaded: function () {
+      // Watching the changes of `value` property
       this.watch('value', function (newValue, oldValue) {
         this.data.isValid = !(newValue.trim() === '');
       });

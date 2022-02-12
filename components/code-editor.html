@@ -11,7 +11,7 @@
             </div>
 
             <!-- List of tabs -->
-            <div class="tab" title="Use editor.tab('{{ tab.name }}') to get the tab content"
+            <div class="tab" title="Use this.tab('{{ tab.name }}') to get the tab content"
               e-for="(tab,idx) of tabList" tab-id="{{ tab.id }}" on:click="selectTab(event, tab)">
               <label contenteditable tabindex="1" spellcheck="false" on:input="tab.name = event.target.textContent">
                 {{ tab.name || 'new-tab' }}
@@ -57,7 +57,8 @@
         </div>
 
         <!-- Editor Result Screen -->
-        <div class="screen">
+        <div class="screen-wrapper">
+          <div class="screen"></div>
         </div>
 
         <!-- Editor Console Screen -->
@@ -286,9 +287,10 @@
           resultScreen.innerHTML = div.innerHTML;
           eval(scriptContent.join('\n\n'));
         } catch (error) {
+          console.error(error);
           self.console.add({
             type: 'error',
-            message: error.toString()
+            message: error.message || error
           });
         }
       }
@@ -451,18 +453,33 @@
     min-height: 75px;
   }
 
+  .editor .editor-result .screen-wrapper {
+    flex: 1;
+    position: relative;
+  }
+
   .editor .editor-result .screen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
     background-color: var(--color-editor-result-screen);
     padding: 4px;
   }
 
   .editor .editor-result .screen input,
   .editor .editor-result .screen select,
+  .editor .editor-result .screen textarea,
   .editor .editor-result .screen button {
     border: 1px solid var(--color-border);
     padding: 2px;
     border-radius: 4px;
     margin: 4px 0;
+  }
+  .editor .editor-result .screen textarea {
+    resize: none;
   }
 
   .editor .editor-result .screen p {

@@ -329,14 +329,14 @@
           <pre><code lang="html">
           <div id="app8">
             <form id="user-form" on:submit.prevent="submit">
-              <input type="text" name="name" placeholder="Name">
-              <input type="text" name="username" placeholder="Username">
-              <input type="email" name="email" placeholder="Email">
+              <input type="text" name="name" placeholder="Name"> <br>
+              <input type="text" name="username" placeholder="Username"><br>
+              <input type="email" name="email" placeholder="Email"><br>
               <p>
                 <button type="submit">Generate</button>
               </p>
             </form>
-            <p id="output"></p>
+            <textarea id="output" cols="18" rows="5"></textarea>
           </div>
           </code></pre>
 
@@ -347,7 +347,7 @@
                 var formObj = this.toJsObj('#user-form');
                 var output = this.el.querySelector('#output');
 
-                output.innerText = JSON.stringify(formObj, null, 2);
+                output.textContent = JSON.stringify(formObj, null, 2);
               }
             }
           });

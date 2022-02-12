@@ -1,0 +1,76 @@
+<div id="app">
+  <div class="flex-container">
+
+    <div class="editor-tab-container">
+      <!-- Tab Controlls -->
+      <div class="tabs">
+        <span>
+          E-Mail
+        </span>
+
+        <b>|</b>
+
+        <span e-for="item of tabs" on:click="tab = item.tab" e-class="{ 'active': item.tab === tab }">
+          {{ item.text }}
+        </span>
+      </div>
+
+      <!-- Tab View -->
+      <div class="tab-view" e-put="tab"></div>
+    </div>
+  </div>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      tab: '',
+      tabs: [
+        {
+          tab: 'inbox',
+          text: 'Inbox'
+        },
+        {
+          tab: 'outbox',
+          text: 'Outbox'
+        },
+        {
+          tab: 'drafts',
+          text: 'Drafts'
+        },
+        {
+          tab: '',
+          text: 'Clear'
+        }
+      ]
+    },
+    components: [
+      {
+        name: 'inbox',
+        template: this.tab('inbox')
+      },
+      {
+        name: 'outbox',
+        template: this.tab('outbox')
+      },
+      {
+        name: 'drafts',
+        template: this.tab('drafts')
+      }
+    ]
+  });
+</script>
+
+<!-- component:inbox -->
+<div class="component">
+  <h2> Inbox </h2>
+</div>
+
+<!-- component:outbox -->
+<div class="component">
+  <h2> Outbox </h2>
+</div>
+
+<!-- component:drafts -->
+<div class="component">
+  <h2> Drafts </h2>
+</div>

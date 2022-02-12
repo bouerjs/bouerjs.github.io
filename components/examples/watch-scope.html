@@ -1,0 +1,30 @@
+<div id="app">
+  <label>Max Number</label> <br>
+  <input type="range" min="100" max="1000" e-bind="max"> <br>
+
+  <label>Min Number</label> <br>
+  <input type="range" min="10" max="99" e-bind="min"> <br>
+
+  <p> Max - Min = Result </p>
+  <p> {{ max }} - {{ min }} = {{ result }} </p>
+</div>
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      max: 100,
+      min: 10,
+      result: 0,
+    },
+
+    loaded: function () {
+      this.react(function () {
+        var max = this.data.max;
+        var min = this.data.min;
+
+        // Note that set the `result` property from the de source object
+        // to be able to react to the UI
+        this.data.result = max - min;
+      });
+    }
+  });
+</script>

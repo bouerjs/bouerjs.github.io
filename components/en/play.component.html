@@ -36,11 +36,26 @@
     editorView.classList.remove('error');
 
     function setter(content) {
+
+      var splitted = content.split(/<!-- component:[^>]* -->/g);
+      var mainContent = splitted.shift();
+      var componentsNames = content.match(/<!-- component:(.*?) -->/g);
+
+      var tabs = splitted.map(function (content, index) {
+        var name = componentsNames[index].match(/<!-- component:(.*?) -->/)[1];
+
+        return {
+          content: content.trim(),
+          name: name
+        }
+      });
+
       bouer.$wait.set('playground-app', {
         name: 'Playground',
-        content: content,
+        content: mainContent.trim(),
         type: 'expanded',
         resizable: 'y',
+        tabs: tabs
       });
     }
 
@@ -163,14 +178,21 @@
       },
 
       {
-        name: 'watch-property',
-        text: 'Watch Property',
-        desc: 'Watching a propety for future changes'
-      },
-      {
         name: 'watch-scope',
         text: 'Watch Scope',
         desc: 'Watching a scope for any reactive prop. changes'
+      },
+
+      {
+        name: 'component-template',
+        text: 'Component Template',
+        desc: 'Using components with `template` property'
+      },
+
+      {
+        name: 'component-template-tabs',
+        text: 'Dymanic Component Injection',
+        desc: 'Injecting component dynamically with `put` directive'
       },
     ],
 
