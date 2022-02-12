@@ -857,7 +857,19 @@
           var watches = [];
           ReactiveEvent.once('AfterGet', function (evt) {
               evt.onemit = function (reactive) {
-                  watches.push(reactive.onChange(function () { return watchable.call(_this.bouer, _this.bouer); }));
+                  // Do not watch the same property twice
+                  if (watches.find(function (w) { return w.property === reactive.propertyName &&
+                      w.reactive.propertySource === reactive.propertySource; }))
+                      return;
+                  // Execution handler
+                  var isExecuting = false;
+                  watches.push(reactive.onChange(function () {
+                      if (isExecuting)
+                          return;
+                      isExecuting = true;
+                      watchable.call(_this.bouer, _this.bouer);
+                      isExecuting = false;
+                  }));
               };
               watchable.call(_this.bouer, _this.bouer);
           });
@@ -914,7 +926,7 @@
           };
           _this.set = function (value) {
               _this.propertyValueOld = _this.propertyValue;
-              if (_this.propertyValueOld === value)
+              if (_this.propertyValueOld === value || (Number.isNaN(_this.propertyValueOld) && Number.isNaN(value)))
                   return;
               ReactiveEvent.emit('BeforeSet', _this);
               if (isObject(value) || Array.isArray(value)) {
@@ -2707,6 +2719,8 @@
                       mComponents[$name] = component;
                   return;
               }
+              if (!component.path)
+                  return Logger.error("Expected a valid value in `path` or `template` got invalid value at “" + $name + "” component.");
               var requestedEvent = _this.addComponentEventAndEmitGlobalEvent('requested', componentElement, component, _this.bouer);
               if (requestedEvent)
                   requestedEvent.emit();
