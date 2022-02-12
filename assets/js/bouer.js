@@ -2082,6 +2082,8 @@
           var rootElement = options.el;
           var context = options.context || this.bouer;
           var data = (options.data || this.bouer.data);
+          if (!rootElement)
+              return Logger.error("Invalid element provided to the compiler.");
           if (!this.analize(rootElement.outerHTML))
               return rootElement;
           var directive = new Directive(this.directives || {}, this, context);
@@ -2433,7 +2435,6 @@
       __extends(Component, _super);
       function Component(optionsOrPath) {
           var _this = _super.call(this) || this;
-          _this.prefetch = false;
           _this.isDestroyed = false;
           _this.children = [];
           _this.assets = [];
@@ -2480,10 +2481,10 @@
           var container = this.el.parentElement;
           if (container)
               container.removeChild(this.el);
+          this.emit('destroyed');
           // Destroying all the events attached to the this instance
           forEach(this.events, function (evt) { return _this.off(evt.eventName, evt.callback); });
           this.events = [];
-          this.emit('destroyed');
       };
       Component.prototype.params = function () {
           return new UriHandler().params(this.route);
@@ -2501,7 +2502,8 @@
               eventName: eventName,
               callback: callback,
               attachedNode: this.el,
-              context: context
+              context: context,
+              modifiers: { once: true, autodestroy: false },
           });
           this.events.push(evt);
           return evt;
@@ -2644,7 +2646,6 @@
           var _this = this;
           forEach(components, function (component) {
               var _a;
-              component.constructor.name;
               if (isNull(component.path) && isNull(component.template))
                   return Logger.warn("The component with name “" + component.name + "”" +
                       (component.route ? (" and route “" + component.route + "”") : "") +
@@ -2683,8 +2684,7 @@
                       return getContent(component.path);
                   return;
               }
-              var prefetch = (_a = _this.bouer.config.prefetch) !== null && _a !== void 0 ? _a : true;
-              if (!prefetch)
+              if (!(component.prefetch = (_a = _this.bouer.config.prefetch) !== null && _a !== void 0 ? _a : true))
                   return;
               return getContent(component.path);
           });
@@ -3276,9 +3276,10 @@
           if (!this.$events[eventName])
               return;
           this.$events[eventName] = where(this.$events[eventName], function (evt) {
-              if (attachedNode)
-                  return (evt.attachedNode === attachedNode);
-              return !(evt.eventName === eventName && callback == evt.callback);
+              var isEqual = (evt.eventName === eventName && callback == evt.callback);
+              if (attachedNode && (evt.attachedNode === attachedNode) && isEqual)
+                  return false;
+              return !isEqual;
           });
       };
       EventHandler.prototype.emit = function (options) {
@@ -3313,13 +3314,15 @@
           Task.run(function () {
               forEach(Object.keys(_this.$events), function (key) {
                   _this.$events[key] = where(_this.$events[key], function (event) {
+                      if ((event.modifiers || {}).autodestroy === false)
+                          return true;
                       if (!event.attachedNode)
                           return true;
                       if (event.attachedNode.isConnected)
                           return true;
                   });
               });
-          }, 1000);
+          });
       };
       return EventHandler;
   }(Base));
