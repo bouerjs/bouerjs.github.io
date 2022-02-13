@@ -913,6 +913,7 @@ pre code {
 
 pre code,
 .result {
+  overflow-y: hidden!important;
   overflow-x: auto;
   max-width: 740px;
   line-height: 18px;
