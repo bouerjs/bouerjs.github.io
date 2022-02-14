@@ -66,7 +66,8 @@
         <h4> <a id="tooling-use-build-tools-config">Configuring</a> </h4>
         <p>
           We are going to share the basic <a target="_blank" href="https://webpack.js.org/configuration/"
-            class="note mark">webpack.config.js</a> file with the structure:
+            class="note mark">webpack.config.js</a> file with the structure with the source project files in
+        <div class="note mark">src</div> folder:
         </p>
 
         <div e-skip>
@@ -172,7 +173,9 @@
           // .babelrc
 
           {
-            "presets": ["@babel/preset-env"]
+            "presets": [
+              "@babel/preset-env"
+            ]
           }
           </code></pre>
         </div>
@@ -223,6 +226,19 @@
             class="note mark">ts-loader</a> with the <a href="https://babeljs.io/docs/en/babel-preset-typescript"
             class="note mark">@babel/preset-typescript</a> and add it to the <i class="note mark">.babelrc</i> file.
         </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          // .babelrc
+
+          {
+            "presets": [
+              "@babel/preset-typescript",
+              "@babel/preset-env"
+            ]
+          }
+          </code></pre>
+        </div>
 
         <p>
           We also need to create <i class="note mark">.d.ts</i> file in order to be able to import static files like <i

@@ -57,7 +57,7 @@
   <div class="middle-content page-section-space">
     <div class="center-content">
       <p class="main-page-description">
-        What's <span class="note">Bouer.js</span>? It's <span class="note">Easy.js</span> v3.0.0 upgrade with
+        What's <span class="note mark">Bouer.js</span>? It's <span class="note">Easy.js</span> v3.0.0 upgrade with
         a new name, that extends for a javascript library for building user interfaces, and helps in the web
         applications development, providing a synchronous interaction between user interfaces and Javascript
         data. In some ways and directives, it is very similar to <span class="note">Vue.js</span> and
@@ -179,55 +179,55 @@
     bouer.$wait.set('component-app', {
       name: 'Component Based App',
       content:
-      '<div id="component-app">\n'+
-      '  <app-header><\/app-header>\n\n'+
-      '  <div class="content">\n'+
-      '    <p>Application Content<\/p>\n'+
-      '  <\/div>\n\n'+
-      '  <app-footer><\/app-footer>\n'+
-      '<\/div>\n\n'+
-      '<script>\n'+
-      '  var app = new Bouer("#component-app", {\n'+
-      '    components: [\n'+
-      '      {\n'+
-      '        name: "app-header",\n'+
-      '        template: this.tab("header")\n'+
-      '      },\n'+
-      '      {\n'+
-      '        name: "app-footer",\n'+
-      '        template: this.tab("footer")\n'+
-      '      },\n'+
-      '    ]\n'+
-      '  });\n'+
-      '<\/script>',
+        '<div id="component-app">\n' +
+        '  <app-header><\/app-header>\n\n' +
+        '  <div class="content">\n' +
+        '    <p>Application Content<\/p>\n' +
+        '  <\/div>\n\n' +
+        '  <app-footer><\/app-footer>\n' +
+        '<\/div>\n\n' +
+        '<script>\n' +
+        '  var app = new Bouer("#component-app", {\n' +
+        '    components: [\n' +
+        '      {\n' +
+        '        name: "app-header",\n' +
+        '        template: this.tab("header")\n' +
+        '      },\n' +
+        '      {\n' +
+        '        name: "app-footer",\n' +
+        '        template: this.tab("footer")\n' +
+        '      },\n' +
+        '    ]\n' +
+        '  });\n' +
+        '<\/script>',
 
       tabs: [
         {
           name: 'header',
           content:
-          '<header>\n'+
-          '  <span class="logo"><\/span> \n'+
-          '<\/header>\n\n'+
-          '<style scoped>\n'+
-          '  header {\n'+
-          '    display: flex;\n'+
-          '  }\n'+
-          '  .logo {\n'+
-          '    margin: auto;\n'+
-          '    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");\n'+
-          '    height: 60px;\n'+
-          '    background-repeat: no-repeat;\n'+
-          '    flex: 1;\n'+
-          '    background-size: contain;\n'+
-          '  }\n'+
-          '<\/style>'
+            '<header>\n' +
+            '  <span class="logo"><\/span> \n' +
+            '<\/header>\n\n' +
+            '<style scoped>\n' +
+            '  header {\n' +
+            '    display: flex;\n' +
+            '  }\n' +
+            '  .logo {\n' +
+            '    margin: auto;\n' +
+            '    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");\n' +
+            '    height: 60px;\n' +
+            '    background-repeat: no-repeat;\n' +
+            '    flex: 1;\n' +
+            '    background-size: contain;\n' +
+            '  }\n' +
+            '<\/style>'
         },
         {
           name: 'footer',
           content:
-          '<footer>\n'+
-          '  <small>Copyright © Bouer<\/small>\n'+
-          '<\/footer>'
+            '<footer>\n' +
+            '  <small>Copyright © Bouer<\/small>\n' +
+            '<\/footer>'
         }
       ]
     });

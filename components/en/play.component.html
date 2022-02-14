@@ -1,5 +1,5 @@
 <div class="page playground">
-  <div class="examples-view" e-class="{ 'side-menu-opened': docMenuOpened }">
+  <div class="left-view" e-class="{ 'side-menu-opened': docMenuOpened }">
 
     <!-- Menu icon -->
     <div class="side-menu-handler">
@@ -21,7 +21,7 @@
 
     </div>
   </div>
-  <div class="editor-view">
+  <div class="right-view">
     <code-editor wait-data="playground-app" data="{ options: $data }"></code-editor>
   </div>
 </div>
@@ -31,8 +31,8 @@
   var component = this;
 
   function getExample(name) {
-    var editorView = component.el.querySelector('.editor-view');
-    var examplesView = component.el.querySelector('.examples-view');
+    var editorView = component.el.querySelector('.right-view');
+    var examplesView = component.el.querySelector('.left-view');
     editorView.classList.remove('error');
 
     function setter(content) {
@@ -54,12 +54,12 @@
         name: 'Playground',
         content: mainContent.trim(),
         type: 'expanded',
-        resizable: 'y',
+        resizable: 'x',
         tabs: tabs
       });
     }
 
-    if (!name) return setter('<h3> Hello Champ 👋, here you can play around with some Bouer features online! </h3>');
+    if (!name) return setter('<h1>Hello World 👋!</h1>');
 
     // Ajusting the selected example position
     var examplesContainer = examplesView.querySelector('.examples-container');
@@ -197,7 +197,7 @@
     ],
 
     loadExample: function (example) {
-      var editorView = component.el.querySelector('.editor-view');
+      var editorView = component.el.querySelector('.right-view');
       var editor, url = location.href.split('?')[0] + '?ex=' + example.name;
 
       // Cleaning the content
