@@ -491,7 +491,7 @@ a.active-doc-menu * {
 .card {
   color: var(--color-text);
   width: 300px;
-  height: 190px;
+  height: 165px;
   margin: 10px 20px;
   border-radius: 4px;
   overflow: hidden;
@@ -512,6 +512,7 @@ a.active-doc-menu * {
 
 .card .body p {
   text-align: left;
+  font-size: 11pt;
 }
 
 /* Main Page Card setup */
@@ -534,6 +535,7 @@ a.active-doc-menu * {
 .main-page-description {
   margin: 0 20%;
   line-height: 30px;
+  font-size: 11.5pt;
 }
 
 .middle-content {
@@ -605,16 +607,16 @@ a.active-doc-menu * {
 
 .documentation .menu {
   position: relative;
-  width: 300px;
+  width: 340px;
   background-color: var(--color-doc-menu);
 }
 
 .documentation .menu .items {
   position: absolute;
   top: 0;
-  bottom: 30px;
   left: 0;
   right: 0;
+  bottom: 30px;
   overflow-y: auto;
   padding-top: 30px;
   padding-left: 25px;
@@ -913,7 +915,7 @@ pre code {
 
 pre code,
 .result {
-  overflow-y: hidden!important;
+  overflow-y: hidden !important;
   overflow-x: auto;
   max-width: 740px;
   line-height: 18px;
@@ -988,9 +990,9 @@ pre code::after,
   max-width: 546px;
   border-radius: 6px;
   background-color: var(--color-smooth-transparency);
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   position: relative;
-  border-left-width: 5px;
+  border-left-width: 3px;
 }
 
 .block-note>* {
@@ -1229,32 +1231,41 @@ ul.top-menu-opened {
   font-weight: bolder;
 }
 
+.tutorial,
 .playground {
   flex-direction: row;
 }
 
-.playground .examples-view {
+.tutorial .left-view,
+.playground .left-view {
   flex: 1;
-  min-width: 250px;
   background-color: var(--color-doc-menu);
-  padding: 40px 20px;
   display: flex;
   flex-direction: column;
 }
 
-.playground .examples-view h3 {
+.playground .left-view {
+  padding: 40px 20px;
+  min-width: 250px;
+}
+
+.tutorial .left-view {
+  min-width: 460px;
+}
+
+.playground .left-view h3 {
   height: 60px;
   display: flex;
   align-items: center;
 }
 
-.playground .examples-view .examples-container {
+.playground .left-view .examples-container {
   flex: 1;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
 
-.playground .examples-view .examples-container .item {
+.playground .left-view .examples-container .item {
   display: flex;
   flex-direction: column;
   background-color: var(--color-shadow);
@@ -1266,16 +1277,17 @@ ul.top-menu-opened {
   margin: 8px 0;
 }
 
-.playground .examples-view .examples-container .item:active {
+.playground .left-view .examples-container .item:active {
   background-color: var(--color-doc-menu);
 }
 
-.playground .examples-view .examples-container .item small {
+.playground .left-view .examples-container .item small {
   font-size: 9pt;
   color: var(--color-text-weak);
 }
 
-.playground .editor-view {
+.tutorial .right-view,
+.playground .right-view {
   flex: 4;
   background-image: url(../images/spinner.svg);
   background-size: 55px;
@@ -1285,7 +1297,7 @@ ul.top-menu-opened {
   display: flex;
 }
 
-.playground .editor-view::before {
+.playground .right-view::before {
   position: absolute;
   top: 58%;
   left: 50%;
@@ -1293,11 +1305,11 @@ ul.top-menu-opened {
   content: 'Loading the Editor...';
 }
 
-.playground .editor-view.error {
+.playground .right-view.error {
   background-image: unset;
 }
 
-.playground .editor-view.error::before {
+.playground .right-view.error::before {
   position: absolute;
   top: 58%;
   left: 50%;
@@ -1305,7 +1317,7 @@ ul.top-menu-opened {
   content: '😵 Error loading the Example!';
 }
 
-.playground .editor-view.error::after {
+.playground .right-view.error::after {
   position: absolute;
   left: 0;
   right: 0;
@@ -1320,23 +1332,6 @@ ul.top-menu-opened {
   padding: 0 40px;
   font-size: 11pt;
   animation: slide-up .4s ease forwards;
-}
-
-/* Animations classes */
-.loading {
-  position: fixed;
-  z-index: 180;
-  height: 4px;
-  width: 0%;
-  top: 0;
-  background-color: #3178c6;
-  animation: progress-bar 4s ease forwards,
-    fade-it 1.2s 4.5s ease infinite;
-}
-
-.blink {
-  animation: fade-it 1s infinite;
-  -webkit-animation: fade-it 1s infinite;
 }
 
 /* Examples css */
@@ -1436,13 +1431,98 @@ ul.users li .info .row span {
 
 /* End Examples css */
 
+.tutorial .left-view .header-content {
+  display: flex;
+  height: 50px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tutorial .left-view .header-content div {
+  flex: 1;
+}
+
+.tutorial .left-view .header-content .prev,
+.tutorial .left-view .header-content .next {
+  flex: unset;
+  width: 50px;
+  font-size: 16pt;
+  display: flex;
+}
+
+.tutorial .left-view .header-content .fa {
+  margin: auto;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  color: var(--color-text);
+  background-color: transparent;
+  transition: background-color .2s;
+  cursor: pointer;
+}
+
+.tutorial .left-view .header-content .menu-btn-container {
+  flex: unset;
+  display: flex;
+  margin-right: 8px;
+}
+
+.tutorial .left-view .header-content .menu-btn-container .menu-btn {
+  border: 2.5px solid var(--color-menu-text-color);
+}
+
+.tutorial .left-view .header-content .fa:hover {
+  background-color: var(--color-border);
+}
+
+.tutorial .left-view .header-content .dir {
+  display: flex;
+  padding: 0 5px;
+}
+
+.tutorial .left-view .header-content .dir * {
+  margin: auto 0;
+}
+
+.tutorial .left-view .body-content {
+  flex: 1;
+  position: relative;
+}
+
+.tutorial .left-view .body-content .content-to {
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  bottom: 5px;
+  right: 0;
+}
+
+/* Animations classes */
+.loading {
+  position: fixed;
+  z-index: 180;
+  height: 4px;
+  width: 0%;
+  top: 0;
+  background-color: #3178c6;
+  animation: progress-bar 4s ease forwards,
+    fade-it 1.2s 4.5s ease infinite;
+}
+
+.blink {
+  animation: fade-it 1s infinite;
+  -webkit-animation: fade-it 1s infinite;
+}
 
 @keyframes slide-up {
-  to { bottom: 0; }
+  to {
+    bottom: 0;
+  }
 }
 
 @-webkit-keyframes progress-bar {
-  to { bottom: 0; }
+  to {
+    bottom: 0;
+  }
 }
 
 @keyframes progress-bar {
@@ -1548,10 +1628,6 @@ ul.users li .info .row span {
     font-size: 16pt;
     margin-top: 5px;
   }
-
-  .card .body p {
-    font-size: 11pt;
-  }
 }
 
 @media (max-width: 700px) {
@@ -1574,7 +1650,7 @@ ul.users li .info .row span {
     height: 80vh;
   }
 
-  .examples-view {
+  .left-view {
     position: absolute;
     z-index: 100;
     transition: left .4s;
