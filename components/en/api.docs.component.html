@@ -1,0 +1,514 @@
+<div class="page documentation">
+  <aside class="menu" e-class="{ 'side-menu-opened': docMenuOpened }">
+    <!-- Menu icon -->
+    <div class="side-menu-handler">
+      <div class="menu-btn-container">
+        <div class="menu-btn" on:click="docMenuOpened = !docMenuOpened">
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <ul class="items nice-scroll">
+      <li><a :href="/docs/introduction.html#intro">
+          <h3> Introduction </h3>
+        </a>
+        <ul>
+          <li> <a :href="#intro-what"> What is Bouer? </a> </li>
+          <li> <a :href="#intro-quick-start"> Quick Start </a> </li>
+          <li> <a :href="#intro-handling-data-display"> Handling Data Display </a> </li>
+          <li> <a :href="#intro-handling-user-input"> Handling User Input </a> </li>
+          <li> <a :href="#intro-conditionals"> Using Conditionals </a> </li>
+          <li> <a :href="#intro-looping"> Looping an Array </a> </li>
+          <li> <a :href="#intro-request"> Requesting Data from a Server </a> </li>
+          <li> <a :href="#intro-form-obj-generation"> Object Generation </a> </li>
+          <li> <a :href="#intro-reusing-html-code"> Reusing HTML Code </a> </li>
+        </ul>
+      </li>
+
+    </ul>
+  </aside>
+
+  <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="intro"> Introduction </a> </h1>
+
+        <h3> <a id="intro-what"> What is Bouer.js? </a> </h3>
+        <p>
+          Bouer (pronounced <b>Bauer</b>, meaning <b>Builder</b>) is a javascript library for building user interfaces,
+          and helps in web applications development, providing a synchronous interaction between user interfaces and
+          Javascript data.
+        </p>
+
+        <p>
+          Bouer provides a simple way to interact with your HTML by using Reactive Properties, which are
+          properties that reacts to changes when they are modified without using <i class="note">Virtual DOM</i>.
+          Component-based applications is very easy to be introduced and simple to use, very good and simple to
+          build Single Page Application.
+        </p>
+
+        <p>
+          These documentations assume that you are already familiar with <a class="mark" title="Learn HTML"
+            target="_blank" href="https://developer.mozilla.org/docs/Learn/HTML/Introduction_to_HTML">HTML</a>,
+          <a class="mark" title="Learn Javascript" target="_blank"
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript">JavaScript</a>
+          and <a class="mark" title="Learn CSS" target="_blank"
+            href="https://developer.mozilla.org/docs/Learn/CSS/First_steps">CSS</a> (Optional).
+          We are going to show some examples the make your understanding easier.
+        </p>
+
+        <p>
+          This page contains detailed API reference documentation. It's intended to be a resource for people who already
+          have some familiarity with Bouer and know the full concepts of it.
+        </p>
+
+        <p>
+          But, you can <a :href="/tutorial.html" class="mark">Take the Tutorial</a> if you want to have a more
+          interactive
+          learning session.
+        </p>
+
+
+        <h2> Bouer Essentials </h2>
+
+        <h3> <a id="intro-quick-start"> Quick Start </a> </h3>
+        <p>
+          The fastest way to add <i class="note mark">Bouer</i> in a web page is by adding a
+          <span class="note code-style">&lt;<i class="mark">script</i>&gt;</span> via with <a
+            href="https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" target="_blank" class="mark"
+            rel="noopener noreferrer">CDN</a> as it follows:
+        </p>
+
+        <pre><code lang="html">
+          <script src="https://cdn.jsdelivr.net/gh/bouerjs@3.0.0/dist/bouer.js"></script>
+        </code></pre>
+
+        <p>
+          Feel free to follow along by creating a file like <i class="note mark">index.html</i> and test the examples
+          that
+          should be provided.
+        </p>
+
+        <p>
+          Take a look at all the ways to install Bouer on the <a :href="/docs/installation.html"
+            class="mark">Installation</a> page.
+        </p>
+
+        <h3> <a id="intro-handling-data-display"> Handling Data Display </a> </h3>
+        <p>
+          Showing data from JavaScript can be done using built-in <a :href="/docs/delimiters.html"
+            class="note mark">delimiters</a>, it opens a space that a JavaScript Snippet Code can be compiled.
+          We are going to recreate the <b class="mark">Hello World</b> example from the home page.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app1">
+            <h4> {{ greeting }} </h4>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app1 = new Bouer('#app1', {
+            data: {
+              greeting: 'Hello Word'
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <p>
+          Whenever we use the delimiter with a property in `data` Bouer instance links it with DOM Element, this we call
+          <i class="note mark">One Way Data Binding</i>.
+        </p>
+
+        <p e-skip>
+          We can use the delimiter directly in the attribute to achieve One Way Data Binding, like
+          <i class="note">title="<i class="mark">{{ title }}</i>"</i>, but to avoid compilation error we may use
+          <i class="note mark">e-</i> prefix.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app2">
+            <p e-title="{{ title }}">
+              Hover this phrase to see the title that was Bound from Bouer.
+            </p>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app2 = new Bouer('#app2', {
+            data: {
+              title: 'This is the bound title message ✌️😎'
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <h3> <a id="intro-handling-user-input"> Handling User Input </a> </h3>
+        <p>
+          Users can interact with your application using events, and to use events in Bouer is way simple.
+          From pure HTML event <i class="note mark">onclick=<i>"..."</i></i> just add <i class="note mark">:</i>
+          after <i class="note mark">on</i>, will be <i class="note mark">on<i>:</i>click=<i>"..."</i></i>.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app3">
+            <button on:click="show_alert">Click Me</button>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app3 = new Bouer('#app3', {
+            data: {
+              show_alert: function() {
+                alert('Hello From Bouer 😃');
+              }
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <p>
+          For Two Way Data Binding, Bouer provides the <i class="note mark">e-bind</i> directive, that links a
+          <i class="note">form input</i> to the <i class="note">app.data</i> in both ways.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app4">
+            <input type="text" e-bind="name" placeholder="Type your name">
+            <p> What's your name? {{ name }} </p>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app4 = new Bouer('#app4', {
+            data: {
+              name: ''
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <h3> <a id="intro-conditionals"> Using Conditionals </a> </h3>
+        <p>
+          Bouer provides <i class="note mark">e-if</i> and <i class="note mark">e-show</i> directives for
+          conditionals usage. where <i class="note mark">e-if</i> can be combined with
+          <i class="note mark">e-else-if</i> and e-else.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app5">
+            <button on:click="show_1st_phrase = !show_1st_phrase"> Toggle with e-if </button>
+            <button on:click="show_2nd_phrase = !show_2nd_phrase"> Toggle with e-show </button>
+
+            <p>
+              “<span e-if="show_1st_phrase">With great power</span> ...
+              <span e-if="show_2nd_phrase">Comes great responsibility.</span>”
+            </p>
+
+            <b> - Stan Lee </b>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app5 = new Bouer('#app5', {
+            data: {
+              show_1st_phrase: true,
+              show_2nd_phrase: true
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <p>
+          The <i class="note mark">e-if</i> directive removes completly the element from the DOM, in other hand
+          <i class="note mark">e-show</i> directive toggles the style
+          <i class="note">display: <i class="mark">none</i></i> to the element.
+        </p>
+
+        <h3> <a id="intro-looping"> Looping an Array </a> </h3>
+        <p>
+          We can loop an array and display each item using the <i class="note mark">e-for</i> directive.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app6">
+            <ol>
+              <li e-for="movie of movies">{{ movie.title }}</li>
+            </ol>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app6 = new Bouer('#app6', {
+            data: {
+              movies: [
+                { title: "Marvel's The Avengers (2012)" },
+                { title: "Avengers: Age of Ultron (2015)" },
+                { title: "Avengers: Infinity War (2018)" },
+                { title: "Avengers: Endgame (2019)" },
+              ]
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            The array is reactive, meaning that if you add a new item you
+            should see it appended to you list.
+          </p>
+        </div>
+
+        <h3> <a id="intro-request"> Requesting Data from a Server </a> </h3>
+        <p>
+          We can request and display data from a server by just using the <i class="note mark">e-req</i>
+          directive, which expects an expression very similar to <i class="note mark">e-for</i> directive.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app7">
+            <ol>
+              <li e-req="user of users">{{ user.name }}</li>
+            </ol>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app7 = new Bouer('#app7', {
+            middleware: function (configure, app) {
+              configure('req', function (onBind, onUpdate) {
+
+                onBind(function (context) {
+
+                  // the type of the request: `of` or `as`
+                  var type = context.detail.requestType;
+
+                  // the path of the request: `users`
+                  var path = context.detail.requestPath;
+
+                  var baseURL = "https://jsonplaceholder.typicode.com/";
+
+                  // Requesting data from the server
+                  return fetch(baseURL + path, {
+                    headers: { 'Content-Type': "application/json" }
+                  }).then(function (response) {
+
+                    if (!response.ok)
+                      throw new Error(response.statusText);
+
+                    return response.json();
+                  }).then(function (json) {
+
+                    // the response must be always into a object with `data` property
+                    return { data: json };
+                  }).catch(function (error) {
+                    return error
+                  });
+                });
+              });
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <p>
+          Note that we used <i class="note mark">middleware</i> to intercept the <i class="note mark">e-req</i>
+          directive request and set the <i class="note mark">return</i> value.
+        </p>
+
+        <div class="block-note info">
+          <p>
+            We use <i class="note">e-req=" ... <i class="mark">of</i> ... "</i> for <i class="mark">Array Response</i>
+            and <i class="note">e-req=" ... <i class="mark">as</i> ... "</i> for <i class="mark">Object Response</i>.
+          </p>
+        </div>
+
+        <h3> <a id="intro-form-obj-generation"> Form Object Generation </a> </h3>
+        <p>
+          We can generate a JavaScript Object from a HTML Snippet easily using the
+          <i class="note mark"><i>app.</i>toJsObj(...)</i>. Complex objects can be built just add
+          <i class="note mark">e-build=<i>"objectName"</i></i>, to force array build type we use
+          <i class="note mark">"e-array"</i>
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app8">
+            <form id="user-form" on:submit.prevent="submit">
+              <input type="text" name="name" placeholder="Name"> <br>
+              <input type="text" name="username" placeholder="Username"><br>
+              <input type="email" name="email" placeholder="Email"><br>
+              <p>
+                <button type="submit">Generate</button>
+              </p>
+            </form>
+            <textarea id="output" cols="18" rows="5"></textarea>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app8 = new Bouer('#app8', {
+            data: {
+              submit: function(evt) {
+                var formObj = this.toJsObj('#user-form');
+                var output = this.el.querySelector('#output');
+
+                output.textContent = JSON.stringify(formObj, null, 2);
+              }
+            }
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <h3> <a id="intro-reusing-html-code"> Reusing HTML Code </a> </h3>
+        <p>
+          We use <a :href="/docs/components.html" class="note mark">components</a> concept to reuse HTML
+          Code, because it’s an abstraction that allows us to build large-scale applications composed of
+          small and distributed parts.
+        </p>
+
+        <p>
+          In Bouer, components can be registered by <i class="note mark">Cloning</i> an Element or
+          <i class="note mark">Registering</i> to the Bouer Instance Options.
+        </p>
+
+        <p>
+          We clone an element by using <i class="note mark"><i>e-entry=</i>"component-name"</i>, below the
+          element we can import it as normal component.
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app9">
+            <!-- Registering -->
+            <div e-entry="logo">
+              <label> Logo </label>
+            </div>
+
+            <!-- Including -->
+            <logo></logo>
+
+            <!-- Including -->
+            <logo></logo>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app9 = new Bouer('#app9');
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <p>
+          Registering a new component is done in Bouer Instance Options at
+          <i class="note">{ <i class="mark">components</i> : [ { ... } ] }</i> property.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+          var app = new Bouer('app', {
+            components: [{
+                name: 'app-header',
+                path: '/app-header.html'
+              }]
+          });
+          </code></pre>
+        </div>
+
+        <p>
+          We also can HTML Snippet Code as a template:
+        </p>
+
+        <div e-skip execute>
+          <pre><code lang="html">
+          <div id="app10">
+            <ol>
+              <movie-item e-for="movie of movies" data="$data"></movie-item>
+            </ol>
+          </div>
+          </code></pre>
+
+          <pre><code lang="js">
+          var app10 = new Bouer('#app10', {
+            data: {
+              movies: [
+                { title: "Marvel's The Avengers (2012)" },
+                { title: "Avengers: Age of Ultron (2015)" },
+                { title: "Avengers: Infinity War (2018)" },
+                { title: "Avengers: Endgame (2019)" },
+              ]
+            },
+            components: [
+              {
+                name: 'movie-item',
+                template: `<li> {{ movie.title  }} </li>`
+              }
+            ]
+          });
+          </code></pre>
+
+          <div class="result"></div>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            We use <i class="note mark">data</i> directive to inject data into a component and
+            <i class="note mark">$data</i> to target the current scope.
+          </p>
+        </div>
+
+        <p>
+          All the attributes defined on component element all transfered to the root element of the component,
+          this is why we inject the current data in the component to be able to find the `movies` property.
+        </p>
+
+        <p>
+          We’ve introduced the basic features of Bouer.js, the rest of this docs will cover every advanced features
+          with much details. Click on <i class="note mark">Installation</i> to continue reading.
+        </p>
+      </section>
+
+      <section class="navigator">
+        <div class="middle">
+          <small>
+            Help us improve this documentation on github!
+            <a href="https://github.com/bouerjs/bouerjs.github.io/blob/main/components/en/docs/introduction.html"
+              title="Take me to Github">Edit this on Github</a>
+          </small>
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/installation.html">
+            <span>Installation</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>
