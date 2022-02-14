@@ -148,6 +148,14 @@
           }
         }
       }
-    })
+    }),
+    loaded: function () {
+      // Redirecting...
+      let path = localStorage.getItem('path');
+      if (path) {
+        localStorage.removeItem('path');
+        this.$routing.navigate(path);
+      }
+    }
   });
 })();
