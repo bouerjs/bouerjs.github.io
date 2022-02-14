@@ -271,6 +271,11 @@
           $lastActive = $current;
           // Setting the last Passed one void if necessary
           lastPassed = current;
+
+          if (location.href === $current.href)
+            return;
+
+          history.replaceState({}, location.href, $current.href)
         }
       })();
     }).then(function (executable) {
