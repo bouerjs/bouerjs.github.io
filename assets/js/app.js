@@ -37,7 +37,7 @@
       // Properties
       selectedLang: lang,
       translations: languages,
-      darkMode: (localStorage.$dark || false).toString(),
+      darkMode: (localStorage.$dark || false).toString() === 'true',
 
       isLoading: false,
       menuOpened: false,
@@ -60,7 +60,74 @@
       }
       // Methods
     },
+    components: BouerComponents({
+      lang: lang,
+      loadedEvent: function (evt) {
+        var el = evt.target;
+        var isDocPageType = location.href.includes('/docs/') || location.href.includes('/cli/')
 
+        var anchorsWithId = [].slice.call(el.querySelectorAll('a[id]'));
+        for (let i = 0; i < anchorsWithId.length; i++) {
+          var anchor = anchorsWithId[i];
+          anchor.href = location.href.split('#')[0].split('?')[0] + '#' + anchor.id;
+
+          anchor.onclick = function (evt) {
+            evt.preventDefault();
+            history.replaceState({}, '', this.href);
+          }
+        }
+
+        if (isDocPageType) {
+          // Anchors modifier
+          var anchors = [].slice.call(el.querySelectorAll('h1>a'));
+          for (let i = 0; i < anchors.length; i++)
+            anchors[i].innerHTML += '<i class="fa fa-link"></i>';
+        }
+
+        // Code Highlight
+        var codes = [].slice.call(el.querySelectorAll('code'));
+        for (let i = 0; i < codes.length; i++) {
+          var code = codes[i];
+          var codeText = code.innerHTML;
+          var lang = code.getAttribute('lang');
+          var highlightedCode = Prism.highlight(codeText, Prism.languages[lang], lang);
+          code.innerHTML = highlightedCode;
+
+          Promise.resolve(code.querySelectorAll('.attr-value'))
+            .then(function (attrValues) {
+              for (const item of attrValues) {
+                if (item.innerText == '=""')
+                  item.parentNode.removeChild(item);
+              }
+            });
+        }
+
+        var executables = [].slice.call(el.querySelectorAll('[execute]'));
+        for (let i = 0; i < executables.length; i++) {
+          var executable = executables[i];
+          var _codes = executable.querySelectorAll('code');
+          var result = executable.querySelector('.result');
+          var _html = _codes[0];
+          var _js = _codes[1];
+
+          result.innerHTML = _html.innerText;
+          eval(_js.innerText);
+        }
+
+        if (isDocPageType) {
+          // marking the active link
+          var navDoc = document.querySelector('a.nav-doc');
+          if (navDoc && !navDoc.classList.contains('active-link'))
+            navDoc.classList.add('active-link');
+
+          if (location.hash) {
+            var view = this.el.querySelector('.documentation .view');
+            var anchor = view.querySelector(location.hash);
+            view.scrollTop = anchor.getBoundingClientRect().top - 60;
+          }
+        }
+      }
+    }),
     beforeLoad: function () {
       // Is loading something
       var pagesLoading = 0;
@@ -92,63 +159,6 @@
         decreasePageLoaded();
       });
     },
-    components: BouerComponents({
-      lang: lang,
-      loadedEvent: function (evt) {
-        var el = evt.target;
-
-        var anchorsWithId = [].slice.call(el.querySelectorAll('a[id]'));
-        for (let i = 0; i < anchorsWithId.length; i++) {
-          var anchor = anchorsWithId[i];
-          anchor.href = location.href.split('#')[0].split('?')[0] + '#' + anchor.id;
-
-          anchor.onclick = function (evt) {
-            evt.preventDefault();
-            history.replaceState({}, '', this.href);
-          }
-        }
-
-        // Anchors modifier
-        var anchors = [].slice.call(el.querySelectorAll('h1>a'));
-        for (let i = 0; i < anchors.length; i++)
-          anchors[i].innerHTML += '<i class="fa fa-link"></i>';
-
-        // Code Highlight
-        var codes = [].slice.call(el.querySelectorAll('code'));
-        for (let i = 0; i < codes.length; i++) {
-          var code = codes[i];
-          var codeText = code.innerHTML;
-          var lang = code.getAttribute('lang');
-          var highlightedCode = Prism.highlight(codeText, Prism.languages[lang], lang);
-          code.innerHTML = highlightedCode;
-        }
-
-        var executables = [].slice.call(el.querySelectorAll('[execute]'));
-        for (let i = 0; i < executables.length; i++) {
-          var executable = executables[i];
-          var _codes = executable.querySelectorAll('code');
-          var result = executable.querySelector('.result');
-          var _html = _codes[0];
-          var _js = _codes[1];
-
-          result.innerHTML = _html.innerText;
-          eval(_js.innerText);
-        }
-
-        if (location.href.includes('/docs/')) {
-          // marking the active link
-          var navDoc = document.querySelector('a.nav-doc');
-          if (navDoc && !navDoc.classList.contains('active-link'))
-            navDoc.classList.add('active-link');
-
-          if (location.hash) {
-            var view = this.el.querySelector('.documentation .view');
-            var anchor = view.querySelector(location.hash);
-            view.scrollTop = anchor.getBoundingClientRect().top - 60;
-          }
-        }
-      }
-    }),
     loaded: function () {
       // Redirecting...
       let path = localStorage.getItem('path');
@@ -156,6 +166,13 @@
         localStorage.removeItem('path');
         this.$routing.navigate(path);
       }
+
+      // this.data.themeIco = 'fa-sun-o';
+      // this.data.themeIco = 'fa-moon-o';
+
+      this.watch('darkMode', function (v) {
+        themeHandler(v);
+      });
     }
   });
 })();
