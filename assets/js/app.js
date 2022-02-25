@@ -167,9 +167,6 @@
         this.$routing.navigate(path);
       }
 
-      // this.data.themeIco = 'fa-sun-o';
-      // this.data.themeIco = 'fa-moon-o';
-
       this.watch('darkMode', function (v) {
         themeHandler(v);
       });
