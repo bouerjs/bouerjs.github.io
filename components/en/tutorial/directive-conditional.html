@@ -1,0 +1,54 @@
+<tutorial-wrapper data="$mixin({ ex: 'directive-if-else-conditional' }, $root)">
+  <section class="section">
+    <p>
+      We use <i class="note mark">e-if</i> for conditional rendering, the element will be rendered only if the value
+      of expression is <i class="note mark">truthy</i>. If the expression value changes to a
+      <i class="note mark">falsy</i> value, it will be removed from the DOM.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <element e-if="expression"> Content </element>
+      </code></pre>
+    </div>
+
+    <p>
+      We can also use <i class="note mark">e-else-if</i> and/or <i class="note mark">e-else</i> to switch elements
+      according to the value expression.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <element e-if="expression"> Content </element>
+    <element e-else> Content </element>
+      </code></pre>
+    </div>
+
+    <p>
+      The conditional chain (<b>CC</b>) of elements must be one after the other, <i class="mark">e-if</i> <i
+        class="code-style note">-></i> <i class="mark">e-else-if</i> <i class="code-style note">-></i>
+      <i class="mark">e-else</i>, if another element is between them, the CC won't work.
+    </p>
+
+    <div e-skip>
+      <pre class="dont"><code lang="html">
+    <element e-if="expression"> Content One </element>
+    <p> Message </p>
+    <element e-else> Content Two </element>
+      </code></pre>
+    </div>
+
+    <p>
+      We also have a similar aproach, <i class="note mark">e-show</i>, but it does not remove element element from the
+      DOM, it just apply <i class="code-style note mark">display:<i>none</i></i> to the element.
+      <a target="_blank" href="https://bouerjs.github.io/play.html?ex=directive-show-conditional" class="mark">View
+        example in Playground</a>.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <element e-show="expression"> Content </element>
+      </code></pre>
+    </div>
+  </section>
+</tutorial-wrapper>

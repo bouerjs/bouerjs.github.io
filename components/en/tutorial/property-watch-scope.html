@@ -1,0 +1,35 @@
+<tutorial-wrapper data="$mixin({ ex: 'property-watch-scope' }, $root)">
+  <section class="section">
+    <p>
+      If we want to watch many properties at the same time, we use the
+      <i class="code-style note mark">app.react(<i>/* ... */</i>)</i> method.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    app.react(function() {
+      /* ... */
+    })
+      </code></pre>
+    </div>
+
+    <p>
+      It reacts to changes of any property inside the scope, whenever a property changes it recalls the scope.
+    </p>
+
+    <p>
+      Like the <i class="note mark code-style">watch</i> method, we use the <i class="note mark">destroy</i> method
+      inside of the returned object to unwatch all the properties that are being watched:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var react = app.react(<i>/* ... */</i>);
+
+    // destroying the watch processes
+    react.destroy();
+      </code></pre>
+    </div>
+
+  </section>
+</tutorial-wrapper>

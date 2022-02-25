@@ -1,0 +1,20 @@
+<div id="app">
+  <label>Autoclear input</label> <br>
+  <input e-bind="value" title="Will be cleared on length 10"> <br>
+  <p> {{ value }} </p>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      value: '',
+    },
+
+    loaded: function () {
+      this.watch('value', function (v) {
+        if (v.length === 10)
+          this.data.value = '';
+      });
+    }
+  });
+</script>

@@ -1,0 +1,60 @@
+<tutorial-wrapper data="$mixin({ ex: 'component-lifecycle' }, $root)">
+  <section class="section">
+    <p>
+      Every component has a lifecycle that starts when it is created and ends when it's destroyed. There are a handful
+      of functions that allow you to run code at certain moments during that lifecycle.
+    </p>
+
+    <p>
+      We already faced some of them, like <i class="code-style note mark">loaded</i> and <i
+        class="code-style note mark">destroyed</i>.
+    </p>
+
+    <p>
+      In the component <i class="note code-style">&lt;<i class="mark">script</i>&gt;</i>, there are two ways to trigger
+      the Hooks:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    this.on('mounted', function (evt) {
+      /* ... */
+    });
+
+    this.on('loaded', function (evt) {
+      /* ... */
+    });
+
+    this.on('destroyed', function (evt) {
+      /* ... */
+    });
+      </code></pre>
+    </div>
+
+    <p>
+      Or,
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    this.mounted = function (evt) {
+      /* ... */
+    };
+
+    this.loaded = function (evt) {
+      /* ... */
+    };
+
+    this.destroyed = function (evt) {
+      /* ... */
+    };
+      </code></pre>
+    </div>
+
+    <p>
+      For further information about Lifecycle Hooks and Component Registration, check the documentation: <a
+        target="_blank" href="https://bouerjs.github.io/docs/components.html#component-registering"
+        class="mark">Registering Component</a>.
+    </p>
+  </section>
+</tutorial-wrapper>

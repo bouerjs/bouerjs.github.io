@@ -1,0 +1,53 @@
+<tutorial-wrapper data="$mixin({ ex: 'binding-input-text' }, $root)">
+  <section class="section">
+    <h3> Bindings (Data Rendering) </h3>
+
+    <p>
+      The previous chapter we rendered data as a simple <i class="note">One Way Data Binding</i>, but we can also render
+      as <i class="note">Two Way Data Binding</i>.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <p e-text="{{ name }}"> Image Name </p>
+    <img {src} e-alt="{{ description }}">
+      </code></pre>
+    </div>
+
+    <p>
+      We can define <i class="note">Two Way Data Binding</i> is a way to link an <i class="note">Element</i> to a
+      <i class="note">Property</i>, listening to changes in in both sides.
+    </p>
+
+    <p>
+      In <i class="note mark">Bouer</i> we can achieve Two Way Data Binding using the directive
+      <i class="note mark">e-bind:<i>attribute</i>="<i>property</i>"</i>. By default it binds the main attribute of
+      the element, in case of <i class="note">input[type="<i>text</i>"]</i> it binds <span class="note">value</span>
+      attribute and in <i class="note">input[type="<i>checkbox</i>"]</i> it binds the <i class="note mark">checked</i>
+      attribute, so we can define it like this <span class="note mark">e-bind="<i>property</i>"</span>.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <input type="text" e-bind:attribute="property">
+      </code></pre>
+    </div>
+
+    <p>
+      By the default the binding model is the <i class="note mark">value</i> attribute, to be able to define a model
+      for the binding we use the <i class="code-style note mark">:value="<i>{ /* ... */ }</i>"</i> attribute.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <input e-bind="users" :value="{ name: 'Afonso' }" >
+      </code></pre>
+    </div>
+
+    <p>
+      We also can bind a list of items easily, controlling addition and removal in very simple way. <a target="_blank"
+        href="https://bouerjs.github.io/docs/bindings.html#binding-two-way" class="mark">More details</a> of <i
+        class="note mark">Bindings</i>.
+    </p>
+  </section>
+</tutorial-wrapper>

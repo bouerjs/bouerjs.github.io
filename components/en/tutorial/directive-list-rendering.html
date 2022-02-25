@@ -1,0 +1,64 @@
+<tutorial-wrapper data="$mixin({ ex: 'directive-for-of-loops' }, $root)">
+  <section class="section">
+    <p>
+      We use <i class="note mark">e-for</i> to render a list of elements based on an array:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <ul>
+      <li e-for="var of list">
+        <!-- Body -->
+      </li>
+    </ul>
+      </code></pre>
+    </div>
+
+    <p>
+      We can also use the index of each element rendered by using a second variable:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <ul>
+      <li e-for="(var, index) of list">
+        <!-- Body -->
+      </li>
+    </ul>
+      </code></pre>
+    </div>
+
+    <p>
+      To be able to update the list, <i class="note">Bouer</i> links with the main methods of an array, making them
+      reactive.
+    </p>
+
+    <p>
+      Adding an item to the list can be like this:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    app.data.list.push(<i>/* ... */</i>);
+      </code></pre>
+    </div>
+
+    <p>
+      We can use <i class="code-style note mark">.splice(...)</i> or <i class="code-style note mark">.filter(...)</i> to
+      remove items:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    app.data.list.splice(index, qty);
+      </code></pre>
+    </div>
+
+    <p>
+      We can also use filters like <i class="code-style note mark"><i>|</i> where: </i> or <i
+        class="code-style note mark"><i>|</i> order:</i> to mutate the list before it's rendered. <a
+        href="https://bouerjs.github.io/docs/directives.html#directive-e-for" target="_blank" class="mark">More
+        details</a> of <i class="note mark">e-for</i>.
+    </p>
+  </section>
+</tutorial-wrapper>

@@ -1,0 +1,85 @@
+<tutorial-wrapper data="$mixin({ ex: 'property' }, $root)">
+  <section class="section">
+    <p>
+      In <i class="note mark">Bouer</i> all the properties and methods are defined in <i
+        class="code-style note mark"><i>options.</i>data</i>
+      and <i class="code-style note mark"><i>options.</i>globalData</i>.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('selector', {
+      data: { /* ... */ },
+      globalData: { /* ... */ }
+    })
+      </code></pre>
+    </div>
+
+    <p>
+      The <i class="note">data</i> properties are only visible in the first scope, meaning that if we create a new scope
+      we won't be able to access the data properties.
+    </p>
+
+    <p>
+      Unlike <i class="note">data</i>, <i class="note">globalData</i> has different behavior, all the properties stays
+      visible independent of the scope.
+    </p>
+
+    <p>
+      One of the simple usecase can be:
+    </p>
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('#app', {
+      globalData: {
+        user: {
+          name: 'AfonsoMatElias',
+          profile: 'Admin'
+        }
+      }
+    });
+      </code></pre>
+    </div>
+
+    <p>
+      We create a new scope by setting the <i class="note mark">data</i> directive to the element that we want to be
+      compiled with the new scope:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <element data="{ /* ... */ }"> Content </element>
+      </code></pre>
+    </div>
+
+    <div class="block-note info">
+      <p>
+        Inside of <i class="note mark">data</i> expression we are able to access the current scope with <i
+          class="code-style note mark">$data</i> variable, and <i class="code-style note mark">$root</i> variable to
+        access the application instance data.
+      </p>
+    </div>
+
+    <p>
+      To be able to add properties to the application instance we use:
+      <i class="code-style note">app.set(<i class="mark">{ /* ... */ }</i>)</i>.
+    </p>
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('selector', {
+      loaded: function () {
+
+        this.set({ /* ... */ });
+
+      }
+    });
+      </code></pre>
+    </div>
+
+    <p>
+      Using the <i class="note mark">data</i> directive we can create a certain scope and name it to the able to
+      retrieve it on the code. <a target="_blank" href="https://bouerjs.github.io/docs/directives.html#directive-data"
+        class="mark">More details</a> of <i class="note mark">data</i>.
+    </p>
+  </section>
+</tutorial-wrapper>

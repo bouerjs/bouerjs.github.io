@@ -1,0 +1,74 @@
+<div id="app">
+  <form class="center">
+
+    <input-field --s data="{ label: 'First Name', name: 'firstName', value: '' }">
+      <input e-bind="value" type="text" e-name="{{ name }}" />
+    </input-field>
+
+    <input-field --s data="{ label: 'Last Name', name: 'lastName', value: '' }">
+      <input e-bind="value" type="text" e-name="{{ name }}" />
+    </input-field>
+
+  </form>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    components: [
+      {
+        name: 'input-field',
+        template: $this.tab('input-field')
+      }
+    ]
+  });
+</script>
+
+<!-- component:input-field -->
+<div class="input-field">
+  <label>
+    {{ label }}
+    <span e-show="isEmpty">
+      | <small e-text="{{ required }}"></small>
+    </span>
+  </label>
+  <slot default></slot>
+</div>
+
+<script>
+  var watch;
+
+  this.on('loaded', (evt) => {
+    watch = this.bouer.watch('value', (v) => {
+      this.data.isEmpty = (v === '');
+    }, this.data);
+  });
+
+  this.on('destroyed', () => {
+    if (watch) watch.destroy();
+  });
+
+  this.export({
+    isEmpty: false,
+    required: 'The Field "'+ this.data.label +'" is Required'
+  });
+</script>
+
+<style scoped>
+  small {
+    color: red;
+  }
+  .input-field {
+    margin: 4px 0;
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    border: 1px solid #dcdcdc;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .input-field input {
+    background-color: #ececec;
+    padding: 4px 3px;
+    margin-top: 3px;
+  }
+</style>

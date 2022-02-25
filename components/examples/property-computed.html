@@ -1,0 +1,37 @@
+<div id="app">
+  <input type="text" e-bind="firstName" /> <br>
+  <input type="text" e-bind="lastName" /> <br>
+  <input type="text" e-bind="fullName" /> <br>
+  <h4> {{ fullName }} </h4>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      firstName: 'John',
+      lastName: 'Doe',
+
+      // Computed
+      fullName: function $computed() {
+        var app = this;
+        return {
+          get: function () {
+            // joining the first and last name
+            return [app.data.firstName || '', app.data.lastName || ''].join(' ').trim()
+          },
+          set: function (v) {
+            var value = v || '';
+            var splitted = value.split(' ');
+
+            if (splitted.length == 1)
+              return app.data.firstName = v;
+
+            // getting the first and last name
+            app.data.firstName = splitted[0];
+            app.data.lastName = splitted[splitted.length - 1] || '';
+          }
+        }
+      }
+    }
+  });
+</script>

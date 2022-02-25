@@ -1,0 +1,39 @@
+<tutorial-wrapper data="$mixin({ ex: 'property-computed' }, $root)">
+  <section class="section">
+    <p>
+      We can define a property that is computed from other properties, to achieve that we use a function with <i
+        class="code note mark">$computed</i>:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    // Descripted `get` and `set`
+    data: {
+      property: function $computed() {
+        return {
+          get(): any,
+          set(value: any): void,
+        }
+      }
+    }
+      </code></pre>
+    </div>
+
+    <p>
+      Or, we can use the computed property with the inferred <i class="note mark">get</i>:
+    </p>
+    <div e-skip>
+      <pre><code lang="js">
+    // Inferred `get`
+    function $computed() {
+      return value;
+    }
+      </code></pre>
+    </div>
+
+    <p>
+      Fortunately, all the property used inside of the <i class="code-style note mark">$computed</i> function listened, meaning
+      that the computed property should be always updated.
+    </p>
+  </section>
+</tutorial-wrapper>

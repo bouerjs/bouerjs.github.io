@@ -1,0 +1,24 @@
+<div id="app">
+  <button on:click="plusOne"> Plus One </button>
+  <button on:click="minusOne"> Minus One </button>
+  <button on:click="reset"> Reset </button>
+
+  <p>Counter: {{ count }}</p>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      count: 0,
+      plusOne: function () {
+        this.data.count += 1;
+      },
+      minusOne: function () {
+        this.data.count += 1;
+      },
+      reset: function () {
+        this.data.count = 0;
+      }
+    }
+  });
+</script>

@@ -1,0 +1,42 @@
+<tutorial-wrapper data="$mixin({ ex: 'property-watch' }, $root)">
+  <section class="section">
+    <p>
+      Using the <i class="code-style note mark">app.watch(<i>/* ... */</i>)</i>, we are able to watch for changes of a
+      property:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    app.watch('property', function(newValue, oldValue) {
+      /* ... */
+    })
+      </code></pre>
+    </div>
+
+    <p>
+      By the default it targets the main application data, to target a specific one it needs to be defined as follow:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    app.watch('property', function(newValue, oldValue) {
+      /* ... */
+    }, targetObject)
+      </code></pre>
+    </div>
+
+    <p>
+      To be able unwatch a property, we use the <i class="note mark">destroy</i> method inside of the returned object of
+      <i class="note mark">watch</i> method:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var watch = app.watch(<i>/* ... */</i>);
+
+    // destroying the watch process
+    watch.destroy();
+      </code></pre>
+    </div>
+  </section>
+</tutorial-wrapper>

@@ -1,0 +1,36 @@
+<tutorial-wrapper data="$mixin({ ex: 'component-template-tabs' }, $root)">
+  <section class="section">
+    <p>
+      If we want to dynamically inject component into a certain element we use the <i class="note mark">e-put</i>
+      directive with the name of the component:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div e-put="componentName"></div>
+      </code></pre>
+    </div>
+
+    <p>
+      Note that there is not a delimiter in the directive expression, <i class="note mark">Bouer</i> infers that the
+      expression provided is a data property.
+    </p>
+
+    <p>
+      It's very usefull for tab element type, because it inject the component having the name provided:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div class="tab-container" e-put="currentTab"></div>
+      </code></pre>
+    </div>
+
+    <div class="block-note warn">
+      <p>
+        All the element inside the element having the <i class="note mark">e-put</i> directive will be cleared whenever
+        the put value changes.
+      </p>
+    </div>
+  </section>
+</tutorial-wrapper>

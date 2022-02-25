@@ -1,0 +1,42 @@
+<tutorial-wrapper data="$mixin({ ex: 'directive-wait-data' }, $root)">
+  <section class="section">
+    <p>
+      Directives are basically attributes that changes some element behavior, and in Bouer there are some directive that
+      we can use to achieve specific behaviors... We are going to list and explain some of them.
+    </p>
+
+    <h4>Waiting for Data</h4>
+
+    <p>
+      Using the <i class="note mark">wait-data</i> directive we are able to hold elements compilation untill we provide
+      data to them.
+    </p>
+
+    <p> Telling to the compiler to wait </p>
+    <div e-skip>
+      <pre><code lang="html">
+    <element wait-data="data-key"> Content </element>
+      </code></pre>
+    </div>
+
+    <p> Providing the data that should be used to compile the element </p>
+    <div e-skip>
+      <pre><code lang="js">
+    app.$wait.set('data-key', { /* ... */ });
+      </code></pre>
+    </div>
+
+    <p>
+      In the illustrated example, there is a nice covered background with a bit of wave on it, this is called
+      <i class="note">skeleton</i> and it's can be a achieved by defining <i class="note mark">e-skeleton</i> directive
+      in the element that we wan't to have this nice effect. For further information check
+      <a href="https://bouerjs.github.io/docs/directives.html#directive-e-skeleton" target="_blank"
+        class="mark">Skeleton Details</a>.
+    </p>
+
+    <p>
+      There are others directives like <i class="note mark">e-if</i> or <i class="note mark">e-for</i> that we are going
+      to see in upcoming chapters.
+    </p>
+  </section>
+</tutorial-wrapper>

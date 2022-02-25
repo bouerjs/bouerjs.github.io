@@ -1,0 +1,238 @@
+<div class="page tutorial">
+  <div class="left-view" e-class="{ 'side-menu-opened': tutorialMenuOpened }">
+    <div class="header-content">
+      <!-- Navegation -->
+      <div class="prev">
+        <a e-if="topicPrev.section" :href="/tutorial/{{ topicPrev.section }}.html" e-title="{{ topicPrev.name }}"
+          class="center-icon fa fa-angle-left"></a>
+        <i e-else class="center-icon fa fa-angle-left"></i>
+      </div>
+      <div class="menu-btn-container">
+        <div class="menu-btn" on:click="chaptersClosed = !chaptersClosed">
+          <span></span>
+        </div>
+      </div>
+      <div class="dir">
+        <h5 class="current-menu" e-text="{{ topic.name }}"> Topic </h5>
+      </div>
+      <div class="next">
+        <a e-if="topicNext.section" :href="/tutorial/{{ topicNext.section }}.html" e-title="{{ topicNext.name }}"
+          class="center-icon fa fa-angle-right"></a>
+        <i e-else class="center-icon fa fa-angle-right"></i>
+      </div>
+    </div>
+
+    <div class="body-content">
+      <div class="menu hide-it" e-class="{ 'hide-it': chaptersClosed }">
+        <ul class="items nice-scroll">
+          <li e-for="t of topics">
+            <a :href="/tutorial/{{ t.section }}.html" e-class="{ 'active-item': t.name === topic.name }">
+              {{ t.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="view content-to nice-scroll">
+        <!-- content -->
+        <slot default></slot>
+
+        <div class="navigator">
+          <div class="middle">
+            <small>
+              <a href="https://github.com/bouerjs/bouerjs.github.io/blob/main/components/en/tutorial/{{ topic.section }}.html"
+                title="Take me to Github">Edit this on Github</a>
+            </small>
+          </div>
+          <div e-show="topicNext.section" class="right">
+            <a class="next" :href="/tutorial/{{ topicNext.section }}.html">
+              <span>Next</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-content">
+      <button on:click="this.bouer.emit('tutorial-btn-pressed')">Editor</button>
+    </div>
+  </div>
+  <div class="right-view">
+    <editor wait-data="tutorial-app" data="{ options: $data, isTutorial: true }"></editor>
+  </div>
+</div>
+<script>
+  var bouer = this.bouer;
+  var component = this;
+  var tutorialBtnEvent;
+
+  function getExample(name) {
+    var editorView = component.el.querySelector('.right-view');
+    var examplesView = component.el.querySelector('.left-view');
+    editorView.classList.remove('error');
+
+    function setter(content) {
+      var splitted = content.split(/<!-- component:[^>]* -->/g);
+      var mainContent = splitted.shift();
+      var componentsNames = content.match(/<!-- component:(.*?) -->/g);
+      var tabs = splitted.map(function (content, index) {
+        var name = componentsNames[index].match(/<!-- component:(.*?) -->/)[1];
+
+        return {
+          content: content.trim(),
+          name: name
+        }
+      });
+
+      bouer.$wait.set('tutorial-app', {
+        name: 'Playground',
+        content: mainContent.trim(),
+        type: 'expanded',
+        resizable: 'y',
+        tabs: tabs
+      }, true);
+    }
+
+    if (!name) return setter('<h3> Hello Champ 👋! </h3>');
+
+    // // Ajusting the selected example position
+    // var examplesContainer = examplesView.querySelector('.examples-container');
+    // var activeExample = examplesContainer.querySelector('.active-item');
+    // if (activeExample)
+    //   examplesContainer.scrollTop = activeExample.offsetTop - 165;
+
+    fetch(location.origin + "/components/examples/" + name + ".html", {
+      headers: { 'Content-Type': 'text/plain' }
+    }).then(function (response) {
+      if (!response.ok)
+        throw new Error(response.statusText);
+      return response.text();
+    }).then(setter)
+      .catch(function (err) {
+        editorView.classList.add('error');
+        console.error(err);
+      });
+  }
+
+  this.on('loaded', function () {
+    var splitted = location.href.split('/');
+    var section = (splitted[splitted.length - 1]).replace('.html', '');
+
+    var topic = this.data.topics.find(function (x) {
+      return x.section == section;
+    });
+
+    if (!topic) return;
+
+    var index = this.data.topics.indexOf(topic);
+
+    this.data.topic = topic;
+    this.data.topicNext = this.data.topics[index + 1] || {};
+    this.data.topicPrev = this.data.topics[index - 1] || {};
+
+    getExample(this.data.ex);
+
+    var _ = setTimeout(() => {
+      bouer.$routing.markActiveAnchor(document.querySelector('.nav-tutorial'));
+      clearTimeout(_);
+    }, 500);
+
+    tutorialBtnEvent = this.bouer.on('tutorial-btn-pressed', function () {
+      component.data.tutorialMenuOpened = !component.data.tutorialMenuOpened;
+    });
+  });
+
+  this.on('destroyed', function () {
+    if (tutorialBtnEvent)
+      this.bouer.off(tutorialBtnEvent.eventName, tutorialBtnEvent.callback);
+  })
+
+  this.export({
+    active: this.data.ex || '',
+    chaptersClosed: true,
+    tutorialMenuOpened: false,
+
+    topic: {},
+    topicPrev: {},
+    topicNext: {},
+    topics: [
+      {
+        name: 'Introduction',
+        section: 'introduction',
+      },
+      {
+        name: 'Data Rendering',
+        section: 'data-rendering',
+      },
+      {
+        name: 'Bindings',
+        section: 'bindings',
+      },
+      {
+        name: 'Event Listeners',
+        section: 'events',
+      },
+      {
+        name: 'Waiting Data • Directives',
+        section: 'directive-wait-data',
+      },
+      {
+        name: 'Conditional Rendering • Directives',
+        section: 'directive-conditional',
+      },
+      {
+        name: 'List Rendering • Directives',
+        section: 'directive-list-rendering',
+      },
+      {
+        name: 'External Request • Directives',
+        section: 'directive-request',
+      },
+      {
+        name: 'Property',
+        section: 'property',
+      },
+      {
+        name: 'Computed Property',
+        section: 'property-computed',
+      },
+      {
+        name: 'Property Watch',
+        section: 'property-watch',
+      },
+      {
+        name: 'Scope Watch',
+        section: 'property-watch-scope',
+      },
+      {
+        name: 'Form to JS Object Conversion',
+        section: 'form-obj-conversion',
+      },
+      {
+        name: 'Components',
+        section: 'components',
+      },
+      {
+        name: 'Lifecycle • Components',
+        section: 'components-lifecycle',
+      },
+      {
+        name: 'Data Injection • Components',
+        section: 'components-data',
+      },
+      {
+        name: 'Dynamic Injection • Components',
+        section: 'components-dynamic-injection',
+      },
+      {
+        name: 'Slots • Components',
+        section: 'components-slots',
+      },
+      {
+        name: 'Congratulations',
+        section: 'congrats',
+      },
+    ],
+  });
+</script>

@@ -1,0 +1,51 @@
+<div id="app">
+  <h2>Lifecycle Hooks</h2>
+  <my-component></my-component>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    components: [
+      {
+        name: 'my-component',
+        template: $this.tab('my-component'),
+        data: {
+          created: '',
+          beforeMount: '',
+          mounted: '',
+          beforeLoad: '',
+          loaded: ''
+        },
+        created: function () {
+          this.data.created = getDateTime();
+        },
+        mounted: function () {
+          this.data.mounted = getDateTime();
+        },
+        loaded: function () {
+          this.data.loaded = getDateTime();
+        }
+      }
+    ]
+  });
+
+  function getDateTime() {
+    return new Date().toJSON().split('T').map(function (v, i) {
+      if (i == 1) return v.substring(0, v.length - 1);
+      return v;
+    }).join(' ');
+  }
+</script>
+
+<!-- component:my-component -->
+<div>
+  <p>
+    <b>Created at</b> : {{ created }}
+  </p>
+  <p>
+    <b>Mounted at</b> : {{ mounted }}
+  </p>
+  <p>
+    <b>Loaded at</b> : {{ loaded }}
+  </p>
+</div>

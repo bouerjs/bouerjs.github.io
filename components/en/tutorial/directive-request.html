@@ -1,0 +1,72 @@
+<tutorial-wrapper data="$mixin({ ex: 'req-of-inline-request' }, $root)">
+  <section class="section">
+    <p>
+      We can use a directive to make web request using <i class="note mark">e-for</i> directive with a simples syntax:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <ul>
+      <li e-req="var of path">
+        <!-- Body -->
+      </li>
+    </ul>
+      </code></pre>
+    </div>
+
+    <p>
+      Notice that the syntax is very similar to <i class="note mark">e-for</i>, meaning that we can also user filters as
+      <i class="note mark">e-for</i> does.
+    </p>
+
+    <p>
+      When we are using <i class="note mark">e-req</i>, we need to configure it with <i class="note mark">middleware</i>
+      to be able to make external requests, the middleware configuration has the following syntax:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('selector', {
+      middleware: function (configure, app) {
+        // Configuring the interceptions of the `request`
+        configure('req', function (onBind, onUpdate) {
+
+          onBind(function (context) {
+            // TODO: Your after bind logic code here...
+            // Always `return` an object with `data` property
+            // return { data: [] | {}, ... };
+          });
+
+          onUpdate(function (context) {
+            // TODO: Your update logic code here...
+            // Always `return` an object with `data` property
+            // return { data: [] | {}, ... };
+          });
+
+        });
+      }
+    });
+      </code></pre>
+    </div>
+
+
+    <p>
+      Using <i class="note mark">e-req</i> with <i class="note mark">of</i> request type, we tell Bouer to expect a list
+      of items. If we want to request an object we need to use <i class="note mark">as</i> request type, so we tell
+      Bouer that we expect an object.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div e-req="var as path">
+      <!-- Body -->
+    </div>
+      </code></pre>
+    </div>
+
+    <p>
+      For further information about <i class="note mark">e-req</i>, check the documentation on <a target="_blank"
+        href="https://bouerjs.github.io/docs/directives.html#directive-e-req" class="mark">Directive e-req</a>.
+    </p>
+  </section>
+</tutorial-wrapper>

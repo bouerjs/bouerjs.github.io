@@ -1,0 +1,38 @@
+<div id="app">
+
+  <button on:click="load">Load</button>
+  <div e-skeleton="loading" wait-data="image-data">
+    <img {src} {title} e-alt="{{ title }}">
+  </div>
+
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      load: function () {
+
+        // Providing waited data
+        this.$wait.set('image-data', {
+          src: "/assets/images/moonwalk.gif",
+          title: 'Moonwalk Skeleton'
+        });
+
+        // Clearing the skeleton
+        this.$skeleton.clear('loading');
+      }
+    }
+  });
+</script>
+
+<style>
+  #app button {
+    width: 190px;
+  }
+
+  #app div,
+  #app div img {
+    width: 190px;
+    height: 180px;
+  }
+</style>

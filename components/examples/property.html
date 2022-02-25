@@ -1,0 +1,30 @@
+<div id="app">
+  <div data="$data">
+    <p>Name: <b e-text="{{ user.name }}"></b> </p>
+    <p>Profile: <b e-text="{{ user.profile }}"></b> </p>
+    <p e-text="{{ code }}"> Code </p>
+  </div>
+
+  <button on:click="change"> New Code </button>
+</div>
+
+<script>
+  var app = new Bouer('#app', {
+    data: {
+      code: 'C-001122',
+      change: function () {
+        this.data.code = 'C-' + Math.floor(Math.random() * 999999);
+      }
+    },
+    globalData: {
+      user: {
+        name: 'AfonsoMatElias',
+        profile: 'Admin',
+        company: {
+          name: 'AME',
+          contact: 'help@ame.com'
+        }
+      }
+    }
+  });
+</script>

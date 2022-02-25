@@ -1,0 +1,40 @@
+<tutorial-wrapper data="$mixin({ ex: 'component-template' }, $root)">
+  <section class="section">
+    <p>
+      We are able to inject data to a component using the <i class="note mark">data</i> directive:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <component data="{ /* ... */ }"></component>
+      </code></pre>
+    </div>
+
+    <p>
+      All the attributes or directives defined in the component element (except data and keep-alive) are transfered to
+      the root element of the component... The classes are append to the root element class attribute.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <component data="$data" class="my-class"></component>
+      </code></pre>
+    </div>
+
+    <p>
+      In the example above we are injecting the <i class="note mark">current scope</i> data and transfering
+      <i class="note mark">my-class</i> class to the root element.
+    </p>
+
+    <p>
+      When we want to combine a component with <i class="note mark">e-for</i> directive, we need to inject the current
+      scope to the component because the <i class="note mark">e-for</i> directive will be transfered.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <item data="$data" e-for="item of items"></item>
+      </code></pre>
+    </div>
+  </section>
+</tutorial-wrapper>

@@ -1,0 +1,51 @@
+<tutorial-wrapper data="$mixin({ ex: 'events' }, $root)">
+  <section class="section">
+    <h3> Event Listeners </h3>
+
+    <p>
+      We are able to listen to DOM events using the <i class="note mark code-style">on<i>:</i></i> directive:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <button on:eventname="expression"> Button </button>
+      </code></pre>
+    </div>
+
+    <p>
+      It's very simple and easy to remember because it similar to the navite DOM Events, like onclick or onkeyup, we
+      just need to add two colons after `on` (<i class="note mark code-style">on:click</i>) and that's Bouer Event
+      Listener.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <button on:click="count++"> {{ count }} </button>
+      </code></pre>
+    </div>
+
+    <h4> Modifiers </h4>
+    <p>
+      We can add modifiers on the event by chaining <i class="note mark code-style">.modifier</i> after the event name.
+      <a href="https://bouerjs.github.io/docs/events.html#events-modifiers" class="mark" target="_blank">Click here</a>
+      to
+      see all the available modifiers.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <button on:click.once="count++"> {{ count }} </button>
+      </code></pre>
+    </div>
+
+    <p>
+      When we provide a function in the expression it is automatically executed and passed the CustomEvent object as the
+      first argument.
+    </p>
+
+    <p>
+      We can create your own Event and dispatch as normal event easily. <a target="_blank" class="note mark"
+        href="https://bouerjs.github.io/docs/events.html#events-bouer" class="mark">More details</a> of <i>Events</i>.
+    </p>
+  </section>
+</tutorial-wrapper>

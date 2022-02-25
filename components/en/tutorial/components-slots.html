@@ -1,0 +1,85 @@
+<tutorial-wrapper data="$mixin({ ex: 'component-template-slots' }, $root)">
+  <section class="section">
+    <p>
+      If we want to pass down children from the component to the component body we use <i class="note code-style">&lt;<i
+          class="mark">slot</i>&gt;</i>:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <component>
+      <!-- ... -->
+    </component>
+      </code></pre>
+    </div>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div>
+      <!-- ... -->
+      <slot default></slot>
+      <!-- ... -->
+    </div>
+      </code></pre>
+    </div>
+
+    <p>
+      We use <i class="note mark">default</i> on the slot tell <i class="note mark">Bouer</i> to grab all the elements
+      in the component children and replace with it.
+    </p>
+
+    <p>
+      If we want to target a elements to certain slot we use <i class="note code-style">&lt;<i class="mark">slot
+          <i>name</i>="target"</i>&gt;</i>:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div>
+      <!-- ... -->
+      <slot name="content"></slot>
+      <!-- ... -->
+    </div>
+      </code></pre>
+    </div>
+
+    <p>
+      And use <i class="note mark">slot</i> attribute in the child of the component:
+    </p>
+    <div e-skip>
+      <pre><code lang="html">
+    <component>
+      <div slot="content">
+        <!-- ... -->
+      </div>
+    </component>
+      </code></pre>
+    </div>
+
+    <p>
+      In case of child full replace instead of using the like a div element, use <i class="note code-style">&lt;<i
+          class="mark">slot <i>slot</i>="target"</i>&gt;</i>:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <component>
+      <slot slot="content">
+        <!-- ... -->
+      </slot>
+    </component>
+      </code></pre>
+    </div>
+
+    <p>
+      Get indepth about components at <a href="https://bouerjs.github.io/docs/components.html#components" class="mark"
+        target="_blank">Component Documentation</a>.
+    </p>
+
+    <p>
+      With components, we can easily use <i class="note mark">Routing</i> in <i class="note mark">Bouer</i>, for further
+      information about routing check: <a target="_blank" href="https://bouerjs.github.io/docs/routing.html#routing"
+        class="mark">Routing Documentation</a>.
+    </p>
+  </section>
+</tutorial-wrapper>

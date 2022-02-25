@@ -1,0 +1,84 @@
+<tutorial-wrapper data="$mixin({ ex: 'hello-world' }, $root)">
+  <section class="section">
+    <h3> Data Rendering </h3>
+    <p>
+      The template it self just render static content as normal HTML, to be able to create a Bouer App and render some
+      data, we neeed to create a new instance of Bouer providing the application selector as the first parameter and
+      add in <i class="note mark"><i>options.</i>data</i> all the properties we want to be
+      rendered.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('selector', {
+      property: DataType
+    });
+      </code></pre>
+    </div>
+
+    <p>
+      We can also add data properties using the <i class="code-style note mark">app.set(<i>{ /* ... */ }</i>)</i>
+      method, allowing us to set it before or after the app is fully loaded.
+    </p>
+
+    <p e-skip>
+      Using delimiters like <i class="code-style  note mark">{{ <i>expression</i> }}</i> we are able to render
+      javascript code, but it needs to be be an expression that returns value.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <h1> {{ expression }} </h1>
+      </code></pre>
+    </div>
+
+    <p>
+      But we can also render <i class="note">Element</i> text content using <i class="note mark">e-text</i> directive,
+      this wait it seems a little bit cleaner.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <h1 e-text="{{ expression }}"> Message </h1>
+      </code></pre>
+    </div>
+
+    <h4> Dynamic Attributes </h4>
+    <p e-skip>
+      If we don't want to render data this way, exposing the delimiter in the actual element attribute, we can still
+      use the directive <span class="code-style note mark">e-<i>attribute</i>="{{ expression }}"</span>, it creates the
+      attribute after being compiled.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <h1 e-title="{{ expression }}"> Title </h1>
+      </code></pre>
+    </div>
+
+    <p>
+      For toggleable attribute creation (if it does not exists), we just define ao Object Literal the expression
+      without delimiters <span class="code-style note mark">e-<i>attribute</i>="{ 'value-to-toggle' : condition
+        }"</span>. If attribute value is empty the attribute is automatically removed.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <a e-class="{ 'active' : isActive }">User</a>
+      </code></pre>
+    </div>
+
+    <h4> Shorthand Attributes </h4>
+    <p e-skip>
+      Sometimes we fall into properties that have the same name with the attribute like
+      <i class="code-style note mark">title="{{ <i>title</i> }}"</i>, in this case we can use the shorthand attribute
+      definition.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <h1 {title}> Title </h1>
+      </code></pre>
+    </div>
+  </section>
+</tutorial-wrapper>

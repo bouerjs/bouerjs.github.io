@@ -1,0 +1,78 @@
+<tutorial-wrapper data="$mixin({ ex: 'form-to-object' }, $root)">
+  <section class="section">
+    <p>
+      Given a form element, we can easily convert from a <i class="note mark">form</i> to an <i class="note mark">object
+        literal</i> using <i class="code-style note mark">app.toJsObj(<i>/* ... */</i>)</i> method:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <form id="post-form">
+      <input type="text" name="name">
+      <input type="number" name="age">
+    </form>
+      </code></pre>
+    </div>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var formObj = app.toJsObj('#post-form');
+      </code></pre>
+    </div>
+
+    <p>
+      We are able to build an object with children by adding the <i class="note mark">e-build</i> annotation to the
+      element that contains the child properties:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <form id="post-form">
+      <input type="text" name="name">
+      <input type="number" name="age">
+
+      <div e-build="company">
+        <input type="text" name="name">
+        <input type="email" name="email">
+      </div>
+    </form>
+      </code></pre>
+    </div>
+
+    <p>
+      In case of explicit array build type we use the <i class="note mark">e-array</i> annotation on the element we want
+      to be interpreted as array:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <form id="post-form">
+      <!-- ... -->
+      <div e-build="contacts" e-array>
+        <select name="type"></select>
+        <input type="text" name="contact">
+      </div>
+    </form>
+      </code></pre>
+    </div>
+
+    <div class="block-note info">
+      <p>
+        The element conversion is not limited only to <i class="note mark">form</i> element, we can use a <i
+          class="note mark">div</i> element.
+      </p>
+    </div>
+
+    <p>
+      By default, Bouer targets all the elements having the <i class="note mark">name</i> attribute and try to get the
+      value in <i class="note mark">value</i> attribute.
+    </p>
+
+    <p>
+      We can change the target element attribute or add multiple targets for <i class="note mark">names</i> and <i
+        class="note mark">values</i> for the conversion process. For further info check: <a target="_blank"
+        href="https://bouerjs.github.io/docs/methods.html#method-tojsObj" class="mark">toJsObj</a> in <i
+        class="note mark">Methods</i>.
+    </p>
+  </section>
+</tutorial-wrapper>

@@ -1,0 +1,105 @@
+<tutorial-wrapper data="$mixin({ ex: 'component-template-basic' }, $root)">
+  <section class="section">
+    <p>
+      We use components to reuse snippets of html code, in <i class="note mark">Bouer</i> components are built with <i
+        class="note mark">.html</i> file and registered in <i class="note mark">options.<i>components</i></i>:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    var app = new Bouer('selector', {
+      components: [
+        { /* ... */ }
+      ]
+    })
+      </code></pre>
+    </div>
+
+    <p>
+      We use the <i class="note mark">component.<i>template</i></i> property to define the component <i
+        class="note mark">html raw</i> and <i class="note mark">component.<i>path</i></i> to specify where the component
+      template is:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    components: [
+      {
+        name: 'user-form',
+        template: `
+          <form on:submit="/* ... */">
+            <!-- ... -->
+          </form>`
+      }
+    ]
+      </code></pre>
+    </div>
+
+    <div e-skip>
+      <pre><code lang="js">
+    components: [
+      {
+        name: 'user-form',
+        path: '/components/user-form.html'
+      }
+    ]
+      </code></pre>
+    </div>
+
+    <p>
+      To include the component to the DOM we use the name provided in the registration process, reuse the example above
+      it should be:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <user-form></user-form>
+      </code></pre>
+    </div>
+
+    <h3> Composition </h3>
+    <p>
+      In <i class="note mark">Bouer</i> components are composed by a <i class="note mark">root</i> element,
+      <i class="note mark">scripts</i>, and <i class="note mark">styles</i>.
+    </p>
+
+    <div e-skip>
+      <pre><code lang="html">
+    <div>
+      <!-- ... -->
+    </div>
+
+    <script>
+      /* ... */
+    </script>
+
+    <style scoped>
+      /* ... */
+    </style>
+      </code></pre>
+    </div>
+
+    <p>
+      To be able to export data from the component script to the component element we use
+      <i class="code-style note mark">this.export(<i>/* ... */</i>)</i> method:
+    </p>
+
+    <div e-skip>
+      <pre><code lang="js">
+    this.export({
+      /* ... */
+    });
+      </code></pre>
+    </div>
+
+    <p>
+      By the default, component <i class="note mark">styles</i> are global, to be able to restrict it to the component
+      we use the <i class="note mark">scoped</i> attribute.
+    </p>
+
+    <p>
+      On the following example, we are going to use the <i class="note mark">template</i> property, and the
+      <i class="code-style note mark">$this.tab(<i>/* ... */</i>)</i> method to the able to get the tab editor content.
+    </p>
+  </section>
+</tutorial-wrapper>
