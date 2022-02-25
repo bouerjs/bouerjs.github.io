@@ -1,0 +1,836 @@
+<div class="editor-wrapper">
+  <div class="editor" e-class="{ 'show-result' : showResult }">
+    <div class="main">
+      <div class="editor-aside editor-html">
+        <!-- Top Editor Bar -->
+        <div class="top">
+          <div class="tab-container">
+            <div class="tab active" tab-id="main" on:click="selectTab(event)">
+              <i class="fa fa-globe" title="The Main Code" onclick="this.parentNode.click()"></i>
+              <label e-title="{{ name }}" onclick="this.parentNode.click()"> Bouer Editor </label>
+            </div>
+
+            <!-- List of tabs -->
+            <div class="tab" title="Use $this.tab('{{ tab.name }}') to get the tab content" e-for="(tab,idx) of tabList"
+              tab-id="{{ tab.id }}" on:click="selectTab(event, tab)">
+              <label contenteditable tabindex="1" spellcheck="false" on:input="tab.name = event.target.textContent">
+                {{ tab.name || 'new-tab' }}
+              </label>
+              <i class="center-icon fa fa-close" on:click="remTab(idx, event.target.parentNode)"></i>
+            </div>
+          </div>
+
+          <span class="add-tab">
+            <i class="center-icon fa fa-plus" on:click="addTab"></i>
+          </span>
+        </div>
+
+        <!-- Screens -->
+        <div class="screens">
+          <div class="screen editor-screen" e-skip screen-tab-id="main">
+            <div class="screen-view"></div>
+          </div>
+
+          <!-- List of screens -->
+          <div class="screen editor-screen hide-it" screen-tab-id="{{ tab.id }}" find-me="{{ tab.name }}"
+            e-for="tab of tabList" on:add="configNewTab(event.target, tab)">
+            <div class="screen-view" tabindex="-1"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="extra-area">
+          <span class="info">
+            <span>
+              <span class="fa fa-info-circle"></span>
+              <span class="text"> 'Ctrl/CMD + Enter' to compile your code </span>
+            </span>
+          </span>
+        </div>
+      </div>
+      <span class="resizable"></span>
+      <div class="editor-aside editor-result" e-skip>
+
+        <!-- Top Editor Bar -->
+        <div class="top result-container">
+          <label> Output </label>
+        </div>
+
+        <!-- Editor Result Screen -->
+        <div class="screen-wrapper">
+          <div class="screen">
+            <iframe frameBorder="0"
+              style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 100%;height: 100%;"></iframe>
+          </div>
+        </div>
+
+        <!-- Editor Console Screen -->
+        <div class="extra-area nice-scroll">
+          <span class="info console">
+            <span>
+              <i class="fa fa-check-circle"></i>
+              <span class="text"> Console </span>
+            </span>
+          </span>
+          <span class="message"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editor Extra -->
+    <div class="extra">
+      <div class="alternator">
+        <button class="hide-it" e-class="{ 'hide-it' : typeof isTutorial === 'undefined' }"
+          on:click="this.bouer.emit('tutorial-btn-pressed')">Tutorial</button>
+        <button on:click="showResult = false" e-class="{ 'active-side' : !showResult }">Code</button>
+        <button on:click="runCodeShowResult" e-class="{ 'active-side' : showResult }">Output</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var mEditor = null;
+  var component = this;
+  var bouer = this.bouer;
+  var MOBILE_SIZE = 645;
+  var tabConfig = {};
+  var editorBaseConfig = function (value) {
+    return {
+      value: value || '',
+      mode: "htmlmixed",
+      scrollbarStyle: 'simple',
+      autoCloseBrackets: true,
+      autoCloseTags: true,
+      matchtags: true,
+      tabSize: 2,
+      indentUnit: 2,
+      smartIndent: true,
+
+      lineNumbers: true,
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    }
+  };
+  var resizeCallback;
+
+  this.on('mounted', function (evt) {
+    var element = evt.target;
+    var editor = element.children[0];
+    var $classes = editor.classList;
+    var resultScreen = element.querySelector('.editor-result .screen').children[0];
+
+    var exec = bouer.lazy(function (width) {
+      var has = $classes.contains('mobile');
+      if (MOBILE_SIZE >= width) {
+        if (!has) $classes.add('mobile');
+      } else {
+        if (has) $classes.remove('mobile');
+      }
+    }, 200);
+
+    (resizeCallback = function (evt) {
+      exec(element.clientWidth);
+    })(element.clientWidth);
+
+    window.addEventListener('resize', resizeCallback, false);
+  });
+
+  this.on('loaded', function (evt) {
+    var element = evt.target;
+
+    // Editor config
+    function Editor(selector, options) {
+      var codeEditor = (selector instanceof Element) ? selector :
+        element.querySelector(selector);
+
+      if (!codeEditor) {
+        return console.error('[Editor]: Editor element not found!');
+      }
+
+      var self = this;
+      tabConfig.activeTab = codeEditor.querySelector('div[tab-id="main"]');
+      var codeScreen = tabConfig.activeScreen = codeEditor.querySelector('div[screen-tab-id="main"]');
+      var resultScreen = codeEditor.querySelector('.editor-result .screen').children[0];
+
+      // Configuring the instance var
+      this.el = codeEditor;
+      this.result = resultScreen;
+      this.content = '';
+      options = options || {};
+
+      for (var key in options)
+        this[key] = options[key];
+
+      // vars
+      var consoleSection = this.el.querySelector('.console');
+      var consoleIcon = consoleSection.querySelector('.fa');
+      var consoleSection = consoleSection.parentNode;
+      var messageContainer = consoleSection.querySelector('.message');
+      var icons = {
+        warn: 'fa-warning',
+        fine: 'fa-check-circle',
+        error: 'fa-times-circle'
+      }
+
+      this.tab = (function (name) {
+        var screen = codeEditor.querySelector('div[find-me="' + name + '"]');
+
+        if (!screen) {
+          this.console.add({
+            type: 'warn',
+            message: 'The tab `' + name + '` was not found.'
+          });
+          return '';
+        }
+
+        return screen.editor.getValue();
+      }).bind(this)
+
+      // Confifuring the instance functions
+      this.console = {
+        add: function (obj) {
+          var type = (obj.type || 'fa-check-circle');
+          messageContainer.innerHTML += '<p class="line fa ' + type + '">' +
+            (obj.message || JSON.stringify(obj)) +
+            '</p>';
+
+          setConsoleIcon(icons[type]);
+        },
+        clear: function () {
+          messageContainer.innerHTML = '';
+          setConsoleIcon(icons.fine);
+        }
+      };
+
+      if (this.type) {
+        var editorPanel = codeEditor.children[0];
+        editorPanel.classList.add(this.type);
+        if (self.resizable)
+          editorPanel.classList.add(self.resizable);
+      }
+
+      if (self.resizable) {
+        var resizable = self.el.querySelector('.resizable');
+        resizable.style.cursor = ((self.resizable == 'y') ? 'n' : 'e') + '-resize';
+
+        function dragElement(element, first, second, dir) {
+          var md; // remember mouse down info
+          element.onmousedown = onMouseDown;
+
+          function onMouseDown(e) {
+            md = {
+              e: e,
+              offsetLeft: element.offsetLeft,
+              offsetTop: element.offsetTop,
+              firstWidth: first.offsetWidth,
+              secondWidth: second.offsetWidth,
+              firstHeight: first.offsetHeight - 2,
+              secondHeight: second.offsetHeight - 2
+            };
+            document.onmousemove = onMouseMove;
+            document.onmouseup = function () {
+              document.onmouseup = document.onmousemove = null;
+            }
+          }
+
+          function onMouseMove(e) {
+            var delta = {
+              x: e.clientX - md.e.x,
+              y: e.clientY - md.e.y
+            };
+
+            // prevent negative-sized elements
+            delta.y = Math.min(Math.max(delta.y, -md.firstHeight), md.secondHeight);
+            delta.x = Math.min(Math.max(delta.x, -md.firstHeight), md.secondHeight);
+
+            switch (dir) {
+              case 'y':
+                element.style.height = '2px';
+                element.style.top = md.offsetTop + delta.y + "px";
+                first.style.height = (md.firstHeight + delta.y) + "px";
+                second.style.height = (md.secondHeight - delta.y) + "px";
+                element.style.flex = first.style.flex = second.style.flex = 'unset';
+                break;
+              case 'x':
+                element.style.width = '2px';
+                element.style.top = md.offsetTop + delta.x + "px";
+                first.style.width = (md.firstWidth + delta.x) + "px";
+                second.style.width = (md.secondWidth - delta.x) + "px";
+
+                element.style.flex = first.style.flex = second.style.flex = 'unset';
+                break;
+            }
+          }
+        }
+
+        dragElement(resizable,
+          self.el.querySelector('.editor-aside.editor-html'),
+          self.el.querySelector('.editor-aside.editor-result'), self.resizable);
+      }
+
+      consoleSection.onclick = function (evt) {
+        var $class = 'open-extra',
+          fun = 'add';
+        fun = consoleSection.classList.contains($class) ? 'remove' : 'add';
+        consoleSection.classList[fun]($class);
+      }
+
+      this.editor = CodeMirror(codeScreen.children[0], editorBaseConfig(self.content));
+
+      this.editor.setOption("extraKeys", {
+        'Ctrl-Enter': function (cm) {
+          self.runCode()
+        },
+        'Cmd-Enter': function (cm) {
+          self.runCode()
+        }
+      });
+
+      // Configuring the output
+      var contentWindow = resultScreen.contentWindow;
+      if (contentWindow) {
+        var $$refs = {
+          log: contentWindow.console.log.bind(contentWindow.console),
+          warn: contentWindow.console.warn.bind(contentWindow.console),
+          error: contentWindow.console.error.bind(contentWindow.console)
+        };
+
+        for (var key in $$refs) {
+          contentWindow.console[key] = function (input, value) {
+            console.log.apply(null, [].slice.call(arguments));
+            self.console.add({
+              type: 'error',
+              message: [input.message || input, value || ''].join(' ')
+            });
+          }
+        }
+
+        contentWindow.$this = self;
+      } else {
+        return console.error("Error Starting the Editor");
+      }
+
+      // functions
+      function runCode() {
+        // Clear the console
+        setConsoleIcon(icons.fine);
+        self.console.clear();
+
+        // Execute your code...
+        function createTemplate(content) {
+          return '<html lang="en"><head><meta charset="UTF-8"><title>' + (self.name || 'Live') + ' • Editor<\/title>' +
+            '<script src="' + document.baseURI + 'assets/js/bouer.js"><\/script>' +
+            '<style> * { margin: 0; font-family: "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "M PLUS 1",' +
+            ' "Trebuchet MS", "Droid Sans","Helvetica Neue", sans-serif; } body { padding: 2px 4px; }' +
+            'input, button { border: 1px solid lightgray; border-radius: 3px; margin: 1px; } button { padding: 3px 10px; } </style>' +
+            '<\/head><body>' + (content || '') + '<\/body>' +
+            '<\/html>';
+        }
+
+        var content = createTemplate(self.editor.getValue());
+
+        try {
+          // Filling the screen
+          var idoc = contentWindow.document;
+          idoc.open();
+          idoc.write(content);
+          idoc.close();
+        } catch (error) {
+          console.error(error);
+          self.console.add({
+            type: 'error',
+            message: error.message || error
+          });
+        }
+      }
+
+      function setConsoleIcon(name) {
+        var keys = Object.keys(icons);
+        for (let i = 0; i < keys.length; i++)
+          consoleIcon.classList.remove(icons[keys[i]]);
+        consoleIcon.classList.add(name);
+      }
+
+      self.runCode = runCode;
+      return self;
+    }
+
+    // Editor initialization
+    mEditor = new Editor(element, this.data.options || {});
+
+    // Add the tabs if exists
+    if (Array.isArray(mEditor.tabs)) {
+      this.data.tabList = mEditor.tabs.map(function (tab, i) {
+        return {
+          id: component.data.tab_id++,
+          content: tab.content,
+          name: tab.name || 'new-tab'
+        }
+      });
+    }
+
+    mEditor.runCode();
+  });
+
+  this.on('destroyed', function () {
+    window.removeEventListener('resize', resizeCallback, false);
+  });
+
+  this.export({
+    showResult: false,
+    isTutorialAvailable: false,
+    tab_id: 1,
+    name: (this.data.options || {}).name || this.name,
+    tabList: [],
+    addTab: function () {
+      this.data.tabList.push({ id: this.data.tab_id++, name: 'new-tab' });
+    },
+    remTab: function (index, removedTab) {
+      if (tabConfig.activeTab === removedTab)
+        this.el.querySelector('[tab-id="main"]').click();
+
+      this.data.tabList.splice(index, 1);
+    },
+    runCodeShowResult: function () {
+      if (mEditor) {
+        component.data.showResult = true;
+        mEditor.runCode();
+      }
+    },
+    selectTab: function (evt) {
+      // Getting the scope data and the clicked element
+      var tabElement = evt.target;
+      // If the is the same ignore
+      if (tabConfig.activeTab === tabElement) return;
+      // Finding the screen
+      var id = tabElement.getAttribute('tab-id');
+      if (!id) return;
+
+      var screen = tabElement.parentNode.parentNode.parentNode;
+      // If the screen was not found means that the it was removed
+      if (!screen) return;
+      screen = screen.querySelector('div[screen-tab-id="' + id + '"]');
+
+      // Hiding the current screen
+      tabConfig.activeScreen.classList.add('hide-it');
+      // Unmarking the current tab
+      tabConfig.activeTab.classList.remove('active');
+      // Showing the other screen
+      screen.classList.remove('hide-it');
+      // Marking the clicked one
+      tabElement.classList.add('active');
+
+      // Storing the last position
+      tabConfig.activeScreen = screen;
+      tabConfig.activeTab = tabElement;
+
+      if (screen.editor) screen.editor.refresh();
+    },
+    configNewTab: function (tab, data) {
+      tab.editor = CodeMirror(tab.children[0], editorBaseConfig(data.content));
+      tab.editor.setOption("extraKeys", {
+        'Ctrl-Enter': function (cm) {
+          if (mEditor) mEditor.runCode()
+        },
+        'Cmd-Enter': function (cm) {
+          if (mEditor) mEditor.runCode()
+        }
+      });
+    }
+  });
+</script>
+
+<style scoped>
+  /* Editor style */
+  .editor-wrapper {
+    flex: 1;
+    display: flex;
+  }
+
+  .editor {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    height: 420px;
+    border-radius: 6px;
+    background-color: var(--color-bg-lighter);
+    border: 1px solid var(--color-editor-border);
+    position: relative;
+  }
+
+  .editor-aside .extra-area .text,
+  .editor-aside .extra-area .message *,
+  .editor .screen-view * {
+    font-family: "Fira Mono", Consolas, 'Courier New', Courier, monospace;
+  }
+
+  .editor .main {
+    display: flex;
+    flex-flow: row;
+    flex: 1;
+  }
+
+  .editor .editor-html {
+    flex: 2;
+    border: 1px solid var(--color-editor-border);
+    min-height: 75px;
+  }
+
+  .editor .editor-html .screen-view {
+    flex: 1;
+    padding: 4px;
+    position: relative;
+  }
+
+  .editor .editor-html .screen-view * {
+    font-size: 10pt;
+  }
+
+  .editor .editor-html .screen-view .CodeMirror {
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
+
+  .editor .editor-result {
+    border: 1px solid var(--color-editor-border);
+    flex: 1.5;
+    font-size: 11pt;
+    min-height: 75px;
+  }
+
+  .editor .editor-result .screen-wrapper {
+    flex: 1;
+    position: relative;
+  }
+
+  .editor .editor-result .screen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: var(--color-editor-result-screen);
+    padding: 4px;
+  }
+
+  .editor .editor-result .screen input,
+  .editor .editor-result .screen select,
+  .editor .editor-result .screen textarea,
+  .editor .editor-result .screen button {
+    border: 1px solid var(--color-border);
+    padding: 2px;
+    border-radius: 4px;
+    margin: 4px 0;
+  }
+
+  .editor .editor-result .screen textarea {
+    resize: none;
+  }
+
+  .editor .editor-result .screen p {
+    margin: 4px 0;
+  }
+
+  .editor-aside {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .editor-aside .screens {
+    display: flex;
+    flex: 1;
+  }
+
+  .editor-aside .screen {
+    flex: 1;
+    overflow-y: auto;
+    outline: none;
+  }
+
+  .editor-aside .editor-screen {
+    display: flex;
+    position: relative;
+  }
+
+  .editor-aside .editor-screen>div:nth-child(1) {
+    background-color: var(--color-editor-screen);
+  }
+
+  .editor-aside .top {
+    height: 40px;
+    font-size: 10pt;
+    color: var(--color-text);
+    position: relative;
+  }
+
+  .editor-aside .top .fa {
+    padding: 0 8px;
+  }
+
+  .editor-aside .top label {
+    font-size: 9pt;
+  }
+
+  .editor-aside .tab-container,
+  .editor-aside .add-tab {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    padding: 0 4px;
+  }
+
+  .editor-aside .add-tab {
+    left: auto;
+    right: 0px;
+    width: 30px;
+  }
+
+  .editor-aside .add-tab .fa {
+    background-color: var(--color-editor-screen);
+    transition: background-color .2s;
+    border-radius: 3px;
+    font-size: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .editor-aside .add-tab .fa:active {
+    background-color: var(--color-smooth-transparency);
+  }
+
+  .editor-aside .tab-container {
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .editor-aside .tab-container::-webkit-scrollbar {
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
+  }
+
+  .editor-aside .tab-container .tab {
+    background-color: var(--color-smooth-transparency);
+    height: 32px;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    border-radius: 3px;
+    margin-right: 2px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .editor-aside .tab-container .tab.active:before {
+    content: '';
+    height: 26px;
+    position: absolute;
+    left: 4px;
+    width: 4px;
+    background-color: var(--color-blue);
+    border-radius: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .editor-aside .tab-container .tab label[contenteditable] {
+    margin: 0 3px;
+    padding: 1px 2px;
+    border-radius: 2px;
+    cursor: text;
+  }
+
+  .editor-aside .tab-container .tab label[contenteditable]:focus {
+    background-color: var(--color-bg-lighter);
+  }
+
+  .editor-aside .tab-container .tab .fa-close {
+    position: absolute;
+    right: 4px;
+    font-size: 9pt;
+    background-color: var(--color-border);
+    border-radius: 15px;
+    color: var(--color-text);
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    transition: color .2s;
+  }
+
+  .editor-aside .tab-container .tab .fa-close:hover {
+    color: var(--color-red);
+  }
+
+  .editor-aside .top.result-container {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    background-color: var(--color-bg);
+  }
+
+  .editor-result .screen {
+    position: relative;
+  }
+
+  .editor-aside .extra-area {
+    height: 40px;
+    background-color: var(--color-editor-border);
+    font-size: 10pt;
+    color: var(--color-text);
+    transition: height .2s;
+    overflow: hidden;
+  }
+
+  .editor .open-extra {
+    height: 120px;
+    overflow-y: auto;
+  }
+
+  .editor .extra-area .info {
+    padding: 0 10px;
+    display: block;
+    height: 40px;
+  }
+
+  .editor .extra-area .info {
+    position: relative;
+  }
+
+  .editor .extra-area .info>span {
+    top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
+  }
+
+  .editor .extra-area .info>span .fa {
+    margin: 0 10px;
+  }
+
+  .editor .extra-area .console {
+    cursor: pointer;
+  }
+
+  .editor .console .fa-check-circle {
+    color: var(--color-green) !important;
+  }
+
+  .editor .console .fa-times-circle {
+    color: var(--color-red) !important;
+  }
+
+  .editor .console .fa-warning {
+    color: var(--color-yellow) !important;
+  }
+
+  .editor .extra-area .message {
+    display: block;
+    padding: 5px;
+    word-wrap: anywhere;
+  }
+
+  .editor .extra-area .message .line {
+    margin: 4px 0;
+    display: block;
+  }
+
+  .editor .extra-area .message .error {
+    color: var(--color-red);
+  }
+
+  .editor .extra-area .message .warn {
+    color: var(--color-yellow);
+  }
+
+  .resizable {
+    flex: 0.01;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: var(--color-border);
+  }
+
+  /* Editor */
+  /* Mobile type */
+  .editor.mobile>.main>span,
+  .editor.mobile .editor-result {
+    display: none;
+  }
+
+  .editor.mobile .editor-aside {
+    flex: 1 !important;
+  }
+
+  .editor.mobile .editor-html .extra-area {
+    display: none;
+  }
+
+  .alternator {
+    display: none;
+  }
+
+  .editor.mobile .alternator {
+    text-align: center;
+    display: block;
+  }
+
+  .editor.mobile .alternator>button {
+    height: 28px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    margin: 5px 8px;
+    border-radius: 5px;
+    color: var(--color-text);
+    max-width: 115px;
+    width: 110px;
+  }
+
+  .editor.mobile.show-result .editor-result {
+    display: flex;
+  }
+
+  .editor.mobile.show-result .editor-html {
+    display: none;
+  }
+
+  .editor.expanded {
+    height: auto;
+  }
+
+  .editor.expanded.y .main {
+    flex-direction: column;
+  }
+
+  .editor.expanded.x .main {
+    flex-direction: row;
+  }
+
+  .active-side {
+    border-color: var(--note-green) !important;
+  }
+
+  /* CodeMirror */
+  .CodeMirror {
+    background-color: transparent !important;
+    height: auto;
+    margin: 0;
+  }
+
+  /* End CodeMirror */
+</style>
