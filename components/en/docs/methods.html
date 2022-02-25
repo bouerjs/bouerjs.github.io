@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -10,7 +10,7 @@
 
         <h3><a id="method-set">set</a></h3>
         <p>
-          It is used to set properties in the data scope. It sintax is
+          It is used to set properties in the data scope. It syntax is
           <span class="note">app.set(object: <i class="mark">object</i>, targetObject?: <i
               class="mark">object</i>)</span>.
         </p>
@@ -24,16 +24,16 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              firstName: 'Maria',
-            }
-          });
+    var app = new Bouer('#app', {
+      data: {
+        firstName: 'Maria',
+      }
+    });
 
-          app.set({
-            lastName: 'Matumona',
-            country: 'Angola'
-          });
+    app.set({
+      lastName: 'Matumona',
+      country: 'Angola'
+    });
           </code></pre>
         </div>
 
@@ -58,11 +58,11 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app');
+    var app = new Bouer('#app');
 
-          app.on('eventName', function(evt) {
-            // TODO: your code here...
-          });
+    app.on('eventName', function(evt) {
+      // TODO: your code here...
+    });
           </code></pre>
         </div>
 
@@ -84,13 +84,13 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app');
+    var app = new Bouer('#app');
 
-          var event = app.on('eventName', function(data) {
-            // Todo: your code here...
-          });
+    var event = app.on('eventName', function(data) {
+      // Todo: your code here...
+    });
 
-          app.off('eventName', event.callback);
+    app.off('eventName', event.callback);
           </code></pre>
         </div>
 
@@ -114,37 +114,37 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div id="app">
-            <p on:change_p_text="changeParagraphText"></p>
-          </div>
-              </code></pre>
+    <div id="app">
+      <p on:change_p_text="changeParagraphText"></p>
+    </div>
+          </code></pre>
 
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              changeParagraphText: function(evt) {
-                evt.target.innerText = 'Hello!';
-              }
-            }
-          });
+    var app = new Bouer('#app', {
+      data: {
+        changeParagraphText: function(evt) {
+          evt.target.innerText = 'Hello!';
+        }
+      }
+    });
 
-          var event = app.on('change_p_text', function(data) {
-            alert('paragraph value was changed');
-          });
+    var event = app.on('change_p_text', function(data) {
+      alert('paragraph value was changed');
+    });
 
-          app.emit('change_p_text');
+    app.emit('change_p_text');
           </code></pre>
         </div>
 
         <b>CustomEventInit structure: </b>
         <div e-skip>
           <pre><code lang="js">
-          CustomEventInit {
-            bubbles?: boolean;
-            cancelable?: boolean;
-            composed?: boolean;
-            detail?: object;
-          }
+    CustomEventInit {
+      bubbles?: boolean;
+      cancelable?: boolean;
+      composed?: boolean;
+      detail?: object;
+    }
           </code></pre>
         </div>
 
@@ -168,7 +168,7 @@
         <ul>
           <li> <a id="method-tojsobj_build" class="note mark">
               e-build </a> &ndash; allows you to build one object within another. The syntax
-            is <span class="note mark">e-build="<i>path</i>"</span>. The path always need to
+            is <span class="code-style note mark">e-build="<i>path</i>"</span>. The path always need to
             be complete, from the base object untill the property it needs to create. When you
             need to create an object inside of an array you don't need to put the property and
             the index (property[0]) of the array, just property name, by the default it maps all
@@ -191,7 +191,7 @@
             of the element to be generated or the element it self. </li>
           <li> <span class="note mark">options</span> &ndash; options that indicates
             attributes it needs to look and from this ones which attributes it needs to get the
-            value. It sintax is <i class="note">{ names: <i class="mark">'[attribute1],[attribute2]'</i>,
+            value. It syntax is <i class="note">{ names: <i class="mark">'[attribute1],[attribute2]'</i>,
               values: <i class="mark">'[attribute1],[attribute2]'</i> }</i>. The order really matters, it takes
             what it finds first. The default value is <span class="note">{ names: <i class="mark">'[name]'</i>,
               values: <i class="mark">'[value]'</i> }</span>. </li>
@@ -203,32 +203,32 @@
           <div e-skip>
 
             <pre><code lang="html">
-          <form id="form">
-            <input type="text" name="firstName" placeholder="First Name" />
-            <input type="text" name="lastName" placeholder="Last Name" />
+    <form id="form">
+      <input type="text" name="firstName" placeholder="First Name" />
+      <input type="text" name="lastName" placeholder="Last Name" />
 
-            <!-- Build an phones property as an array -->
-            <div e-build="phones" e-array>
-              <input type="text" name="code" placeholder="Country Code" />
-              <input type="text" name="text" placeholder="Number" />
-            </div>
+      <!-- Build an phones property as an array -->
+      <div e-build="phones" e-array>
+        <input type="text" name="code" placeholder="Country Code" />
+        <input type="text" name="text" placeholder="Number" />
+      </div>
 
-            <!-- Build an identification property as an object -->
-            <div e-build="identification">
-              <select name="type">
-                <option disabled> Identification Type </option>
-                <option> Id Card </option>
-                <option> Passport </option>
-              </select>
+      <!-- Build an identification property as an object -->
+      <div e-build="identification">
+        <select name="type">
+          <option disabled> Identification Type </option>
+          <option> Id Card </option>
+          <option> Passport </option>
+        </select>
 
-              <input type="text" name="code" placeholder="Identification Code" />
-            </div>
-          </form>
+        <input type="text" name="code" placeholder="Identification Code" />
+      </div>
+    </form>
             </code></pre>
 
             <pre><code lang="js">
-          var app = new Bouer('#app');
-          var formObj = app.toJsObj('#form');
+    var app = new Bouer('#app');
+    var formObj = app.toJsObj('#form');
             </code></pre>
           </div>
         </div>
@@ -242,7 +242,7 @@
 
         <h3><a id="method-watch">watch</a></h3>
         <p>
-          It is used to watch changes in specific property in the data scope. It sintax is
+          It is used to watch changes in specific property in the data scope. It syntax is
           <span class="note">app.watch(propertyName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
             targetObject?: <i class="mark">object</i>)</span>.
         </p>
@@ -262,52 +262,52 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              firstName: 'Neves',
-              lastName: 'Manuel'
-            }
-          });
+    var app = new Bouer('#app', {
+      data: {
+        firstName: 'Neves',
+        lastName: 'Manuel'
+      }
+    });
 
-          var watch = app.watch('firstName', function(newValue, oldValue) {
-            // Todo: your code here...
-          });
+    var watch = app.watch('firstName', function(newValue, oldValue) {
+      // Todo: your code here...
+    });
 
-          watch.destroy();
+    watch.destroy();
           </code></pre>
         </div>
 
         <h3><a id="method-react">react</a></h3>
         <p>
-          It is used to watch all reactive properties in the provided scope. It sintax is
+          It is used to watch all reactive properties in the provided scope. It syntax is
           <span class="note">app.react(watchableScope: <i class="mark">Function</i>)</span>.
         </p>
 
         <ul>
-          <li> <span class="note mark">watchableScope</span> &ndash; the function that should be called when the any
-            reactive property change. </li>
-          <li> <span class="note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
+          <li> <span class="code-style note mark">watchableScope</span> &ndash; the function that should be called when
+            the any reactive property change. </li>
+          <li> <span class="code-style note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
             and the method to destroy watches at once.
           </li>
         </ul>
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              result: 0,
-              value1: 1,
-              value2: 1
-            }
-          });
+    var app = new Bouer('#app', {
+      data: {
+        result: 0,
+        value1: 1,
+        value2: 1
+      }
+    });
 
-          // If any of the reactive property changes the callback should be called
-          var watches = app.react(function() {
-            var src = this.data;
-            src.result = src.value1 + src.value2;
-          });
+    // If any of the reactive property changes the callback should be called
+    var watches = app.react(function() {
+      var src = this.data;
+      src.result = src.value1 + src.value2;
+    });
 
-          watches.destroy();
+    watches.destroy();
           </code></pre>
         </div>
 
@@ -318,20 +318,21 @@
         </p>
 
         <ul>
-          <li> <span class="note mark">{ Element } options.el</span> &ndash; the element to be compiled. </li>
-          <li> <span class="note mark">{ Object } config.data?</span> &ndash; the data that should be injected
-            in the element compilation.</li>
-          <li> <span class="note mark">{ Object } config.context?</span> &ndash; the context object of the
+          <li> <span class="code-style note mark">{ Element } options.el</span> &ndash; the element to be compiled.
+          </li>
+          <li> <span class="code-style note mark">{ Object } config.data?</span> &ndash; the data that should be
+            injected in the element compilation.</li>
+          <li> <span class="code-style note mark">{ Object } config.context?</span> &ndash; the context object of the
             this compilation process, what can be <i class="mark">Bouer</i> or <i class="mark">Component</i>.
           </li>
-          <li> <span class="note mark">{ Function } config.onDone?</span> &ndash; the function that is called
+          <li> <span class="code-style note mark">{ Function } config.onDone?</span> &ndash; the function that is called
             when the element compilation is completed.</li>
         </ul>
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app');
-          var elCompiled = app.compile({ el: element });
+    var app = new Bouer('#app');
+    var elCompiled = app.compile({ el: element });
           </code></pre>
         </div>
 

@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -35,11 +35,9 @@
         </p>
 
         <p>
-          But, you can <a :href="/tutorial.html" class="mark">Take the Tutorial</a> if you want to have a more
-          interactive
-          learning session.
+          But, you can <a :href="/tutorial/introduction.html" class="mark">Take the Tutorial</a> if you want to have a
+          more interactive learning session.
         </p>
-
 
         <h2> Bouer Essentials </h2>
 
@@ -52,7 +50,7 @@
         </p>
 
         <pre><code lang="html">
-          <script src="https://cdn.jsdelivr.net/gh/bouerjs@3.0.0/dist/bouer.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bouerjs@3.0.0/dist/bouer.js"></script>
         </code></pre>
 
         <p>
@@ -75,17 +73,17 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app1">
-            <h4> {{ greeting }} </h4>
-          </div>
+    <div id="app1">
+      <h4> {{ greeting }} </h4>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app1 = new Bouer('#app1', {
-            data: {
-              greeting: 'Hello Word'
-            }
-          });
+    var app1 = new Bouer('#app1', {
+      data: {
+        greeting: 'Hello Word'
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -104,19 +102,19 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app2">
-            <p e-title="{{ title }}">
-              Hover this phrase to see the title that was Bound from Bouer.
-            </p>
-          </div>
+    <div id="app2">
+      <p e-title="{{ title }}">
+        Hover this phrase to see the title that was Bound from Bouer.
+      </p>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app2 = new Bouer('#app2', {
-            data: {
-              title: 'This is the bound title message ✌️😎'
-            }
-          });
+    var app2 = new Bouer('#app2', {
+      data: {
+        title: 'This is the bound title message ✌️😎'
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -131,19 +129,19 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app3">
-            <button on:click="show_alert">Click Me</button>
-          </div>
+    <div id="app3">
+      <button on:click="show_alert">Click Me</button>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app3 = new Bouer('#app3', {
-            data: {
-              show_alert: function() {
-                alert('Hello From Bouer 😃');
-              }
-            }
-          });
+    var app3 = new Bouer('#app3', {
+      data: {
+        show_alert: function() {
+          alert('Hello From Bouer 😃');
+        }
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -156,18 +154,18 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app4">
-            <input type="text" e-bind="name" placeholder="Type your name">
-            <p> What's your name? {{ name }} </p>
-          </div>
+    <div id="app4">
+      <input type="text" e-bind="name" placeholder="Type your name">
+      <p> What's your name? {{ name }} </p>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app4 = new Bouer('#app4', {
-            data: {
-              name: ''
-            }
-          });
+    var app4 = new Bouer('#app4', {
+      data: {
+        name: ''
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -182,26 +180,26 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app5">
-            <button on:click="show_1st_phrase = !show_1st_phrase"> Toggle with e-if </button>
-            <button on:click="show_2nd_phrase = !show_2nd_phrase"> Toggle with e-show </button>
+    <div id="app5">
+      <button on:click="show_1st_phrase = !show_1st_phrase"> Toggle with e-if </button>
+      <button on:click="show_2nd_phrase = !show_2nd_phrase"> Toggle with e-show </button>
 
-            <p>
-              “<span e-if="show_1st_phrase">With great power</span> ...
-              <span e-if="show_2nd_phrase">Comes great responsibility.</span>”
-            </p>
+      <p>
+        “<span e-if="show_1st_phrase">With great power</span> ...
+        <span e-if="show_2nd_phrase">Comes great responsibility.</span>”
+      </p>
 
-            <b> - Stan Lee </b>
-          </div>
+      <b> - Stan Lee </b>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app5 = new Bouer('#app5', {
-            data: {
-              show_1st_phrase: true,
-              show_2nd_phrase: true
-            }
-          });
+    var app5 = new Bouer('#app5', {
+      data: {
+        show_1st_phrase: true,
+        show_2nd_phrase: true
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -220,24 +218,24 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app6">
-            <ol>
-              <li e-for="movie of movies">{{ movie.title }}</li>
-            </ol>
-          </div>
+    <div id="app6">
+      <ol>
+        <li e-for="movie of movies">{{ movie.title }}</li>
+      </ol>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app6 = new Bouer('#app6', {
-            data: {
-              movies: [
-                { title: "Marvel's The Avengers (2012)" },
-                { title: "Avengers: Age of Ultron (2015)" },
-                { title: "Avengers: Infinity War (2018)" },
-                { title: "Avengers: Endgame (2019)" },
-              ]
-            }
-          });
+    var app6 = new Bouer('#app6', {
+      data: {
+        movies: [
+          { title: "Marvel's The Avengers (2012)" },
+          { title: "Avengers: Age of Ultron (2015)" },
+          { title: "Avengers: Infinity War (2018)" },
+          { title: "Avengers: Endgame (2019)" },
+        ]
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -258,48 +256,48 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app7">
-            <ol>
-              <li e-req="user of users">{{ user.name }}</li>
-            </ol>
-          </div>
+    <div id="app7">
+      <ol>
+        <li e-req="user of users">{{ user.name }}</li>
+      </ol>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app7 = new Bouer('#app7', {
-            middleware: function (configure, app) {
-              configure('req', function (onBind, onUpdate) {
+    var app7 = new Bouer('#app7', {
+      middleware: function (configure, app) {
+        configure('req', function (onBind, onUpdate) {
 
-                onBind(function (context) {
+          onBind(function (context) {
 
-                  // the type of the request: `of` or `as`
-                  var type = context.detail.requestType;
+            // the type of the request: `of` or `as`
+            var type = context.detail.requestType;
 
-                  // the path of the request: `users`
-                  var path = context.detail.requestPath;
+            // the path of the request: `users`
+            var path = context.detail.requestPath;
 
-                  var baseURL = "https://jsonplaceholder.typicode.com/";
+            var baseURL = "https://jsonplaceholder.typicode.com/";
 
-                  // Requesting data from the server
-                  return fetch(baseURL + path, {
-                    headers: { 'Content-Type': "application/json" }
-                  }).then(function (response) {
+            // Requesting data from the server
+            return fetch(baseURL + path, {
+              headers: { 'Content-Type': "application/json" }
+            }).then(function (response) {
 
-                    if (!response.ok)
-                      throw new Error(response.statusText);
+              if (!response.ok)
+                throw new Error(response.statusText);
 
-                    return response.json();
-                  }).then(function (json) {
+              return response.json();
+            }).then(function (json) {
 
-                    // the response must be always into a object with `data` property
-                    return { data: json };
-                  }).catch(function (error) {
-                    return error
-                  });
-                });
-              });
-            }
+              // the response must be always into a object with `data` property
+              return { data: json };
+            }).catch(function (error) {
+              return error
+            });
           });
+        });
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -320,37 +318,37 @@
         <h3> <a id="intro-form-obj-generation"> Form Object Generation </a> </h3>
         <p>
           We can generate a JavaScript Object from a HTML Snippet easily using the
-          <i class="note mark"><i>app.</i>toJsObj(...)</i>. Complex objects can be built just add
-          <i class="note mark">e-build=<i>"objectName"</i></i>, to force array build type we use
-          <i class="note mark">"e-array"</i>
+          <i class="code-style note mark"><i>app.</i>toJsObj(...)</i>. Complex objects can be built just add
+          <i class="code-style note mark">e-build=<i>"objectName"</i></i>, to force array build type we use
+          <i class="code-style note mark">"e-array"</i>
         </p>
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app8">
-            <form id="user-form" on:submit.prevent="submit">
-              <input type="text" name="name" placeholder="Name"> <br>
-              <input type="text" name="username" placeholder="Username"><br>
-              <input type="email" name="email" placeholder="Email"><br>
-              <p>
-                <button type="submit">Generate</button>
-              </p>
-            </form>
-            <textarea id="output" cols="18" rows="5"></textarea>
-          </div>
+    <div id="app8">
+      <form id="user-form" on:submit.prevent="submit">
+        <input type="text" name="name" placeholder="Name"> <br>
+        <input type="text" name="username" placeholder="Username"><br>
+        <input type="email" name="email" placeholder="Email"><br>
+        <p>
+          <button type="submit">Generate</button>
+        </p>
+      </form>
+      <textarea id="output" cols="18" rows="5"></textarea>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app8 = new Bouer('#app8', {
-            data: {
-              submit: function(evt) {
-                var formObj = this.toJsObj('#user-form');
-                var output = this.el.querySelector('#output');
+    var app8 = new Bouer('#app8', {
+      data: {
+        submit: function(evt) {
+          var formObj = this.toJsObj('#user-form');
+          var output = this.el.querySelector('#output');
 
-                output.textContent = JSON.stringify(formObj, null, 2);
-              }
-            }
-          });
+          output.textContent = JSON.stringify(formObj, null, 2);
+        }
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -375,22 +373,22 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app9">
-            <!-- Registering -->
-            <div e-entry="logo">
-              <label> Logo </label>
-            </div>
+    <div id="app9">
+      <!-- Registering -->
+      <div e-entry="logo">
+        <label> Logo </label>
+      </div>
 
-            <!-- Including -->
-            <logo></logo>
+      <!-- Including -->
+      <logo></logo>
 
-            <!-- Including -->
-            <logo></logo>
-          </div>
+      <!-- Including -->
+      <logo></logo>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app9 = new Bouer('#app9');
+    var app9 = new Bouer('#app9');
           </code></pre>
 
           <div class="result"></div>
@@ -398,17 +396,17 @@
 
         <p>
           Registering a new component is done in Bouer Instance Options at
-          <i class="note">{ <i class="mark">components</i> : [ { ... } ] }</i> property.
+          <i class="note">{ <i class="mark">components</i> : [ { /* ... */ } ] }</i> property.
         </p>
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('app', {
-            components: [{
-                name: 'app-header',
-                path: '/app-header.html'
-              }]
-          });
+    var app = new Bouer('app', {
+      components: [{
+          name: 'app-header',
+          path: '/app-header.html'
+        }]
+    });
           </code></pre>
         </div>
 
@@ -418,30 +416,30 @@
 
         <div e-skip execute>
           <pre><code lang="html">
-          <div id="app10">
-            <ol>
-              <movie-item e-for="movie of movies" data="$data"></movie-item>
-            </ol>
-          </div>
+    <div id="app10">
+      <ol>
+        <movie-item e-for="movie of movies" data="$data"></movie-item>
+      </ol>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app10 = new Bouer('#app10', {
-            data: {
-              movies: [
-                { title: "Marvel's The Avengers (2012)" },
-                { title: "Avengers: Age of Ultron (2015)" },
-                { title: "Avengers: Infinity War (2018)" },
-                { title: "Avengers: Endgame (2019)" },
-              ]
-            },
-            components: [
-              {
-                name: 'movie-item',
-                template: `<li> {{ movie.title  }} </li>`
-              }
-            ]
-          });
+    var app10 = new Bouer('#app10', {
+      data: {
+        movies: [
+          { title: "Marvel's The Avengers (2012)" },
+          { title: "Avengers: Age of Ultron (2015)" },
+          { title: "Avengers: Infinity War (2018)" },
+          { title: "Avengers: Endgame (2019)" },
+        ]
+      },
+      components: [
+        {
+          name: 'movie-item',
+          template: `<li> {{ movie.title  }} </li>`
+        }
+      ]
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -450,7 +448,7 @@
         <div class="block-note info">
           <p>
             We use <i class="note mark">data</i> directive to inject data into a component and
-            <i class="note mark">$data</i> to target the current scope.
+            <i class="code-style note mark">$data</i> to target the current scope.
           </p>
         </div>
 

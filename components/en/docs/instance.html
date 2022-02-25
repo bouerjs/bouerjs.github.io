@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -12,8 +12,8 @@
         </p>
 
         <pre><code lang="js">
-          var app = new Bouer(element, options);
-          </code></pre>
+    var app = new Bouer(element, options);
+        </code></pre>
 
         <h3> <a id="instance-el"> Element </a> </h3>
         <p>
@@ -38,65 +38,65 @@
         </p>
 
         <pre><code lang="js">
-          var app = new Bouer('selector', {
-            /** The data of the application, havig the properties and methods */
-            data: object,
+    var app = new Bouer('selector', {
+      /** The data of the application, havig the properties and methods */
+      data: object,
 
-            /** The data that cross scopes (New Scope or Components Scope)   */
-            globalData: object,
+      /** The data that cross scopes (New Scope or Components Scope)   */
+      globalData: object,
 
-            /** The configuration of the instance */
-            config: IBouerConfig {
-              /** Allow to use hash (#) on page navigation, by default is `true` */
-              usehash?: boolean;
+      /** The configuration of the instance */
+      config: IBouerConfig {
+        /** Allow to use hash (#) on page navigation, by default is `true` */
+        usehash?: boolean;
 
-              /** Allow to keep the data modified during the component lifecycle */
-              activeClassName?: string;
+        /** Allow to keep the data modified during the component lifecycle */
+        activeClassName?: string;
 
-              /** Allow to prefetch the component content, by default is `true` */
-              prefetch?: boolean;
+        /** Allow to prefetch the component content, by default is `true` */
+        prefetch?: boolean;
 
-              /** Defines the default color of the skeleton */
-              skeleton?: { background: string, wave: string }
-            },
+        /** Defines the default color of the skeleton */
+        skeleton?: { background: string, wave: string }
+      },
 
-            /** The components of the application */
-            components: Component[],
+      /** The components of the application */
+      components: Component[],
 
-            /** The custom directives for the application */
-            directives: { [key: string]: Directive },
+      /** The custom directives for the application */
+      directives: { [key: string]: Directive },
 
-            /** The dependencies of the instance */
-            deps: { [key: string]: object | Function },
+      /** The dependencies of the instance */
+      deps: { [key: string]: object | Function },
 
-            /** Appends delimiters to the instance */
-            delimiters: IDelimiter[],
+      /** Appends delimiters to the instance */
+      delimiters: IDelimiter[],
 
-            /** Middlewares that should be used in the application */
-            middleware(configure: (
-                /** Directive to intercept */
-                directive: string,
-                /** Actions to intercept */
-                actions(
-                  onBind(configure(context: IMiddleware): Promise): void,
-                  onUpdate(configure(context: IMiddleware): Promise): void
-                ): void
-              ): void,
-              app: Bouer
-            ): void,
+      /** Middlewares that should be used in the application */
+      middleware(configure: (
+          /** Directive to intercept */
+          directive: string,
+          /** Actions to intercept */
+          actions(
+            onBind(configure(context: IMiddleware): Promise): void,
+            onUpdate(configure(context: IMiddleware): Promise): void
+          ): void
+        ): void,
+        app: Bouer
+      ): void,
 
-            /** The hook that should be called before the component is loaded */
-            beforeLoad(event: CustomEvent) { },
+      /** The hook that should be called before the component is loaded */
+      beforeLoad(event: CustomEvent) { },
 
-            /** The hook that should be called after the component is loaded (Compiled) */
-            loaded(event: CustomEvent) { },
+      /** The hook that should be called after the component is loaded (Compiled) */
+      loaded(event: CustomEvent) { },
 
-            /** The hook that should be called before the component is destroyed */
-            beforeDestroy(event: CustomEvent) { },
+      /** The hook that should be called before the component is destroyed */
+      beforeDestroy(event: CustomEvent) { },
 
-            /** The hook that should be called after the component is destroyed */
-            destroyed(event: CustomEvent) { },
-          });
+      /** The hook that should be called after the component is destroyed */
+      destroyed(event: CustomEvent) { },
+    });
           </code></pre>
 
         <h3> <a id="prop-data">Data & GlobalData</a> </h3>
@@ -105,7 +105,7 @@
         <p>
           As already mentioned, the data property allows you to set the data that the application should have
           when it starts, however there is a way to add data while it is already running with the
-          <span class="note">app.set(<i class="mark">{ ... }</i>)</span> method (We'll talk about that in the
+          <span class="note">app.set(<i class="mark">{ /* ... */ }</i>)</span> method (We'll talk about that in the
           <a :href="/docs/methods.html" class="mark">methods</a> section).
           <br>
           The properties set on <span class="note mark">data</span> are reactive, this means that they react to
@@ -120,33 +120,34 @@
         <div e-skip>
 
           <pre><code lang="html">
-          <div id="app1">
-            <h4> {{ message }} </h4>
-          </div>
-            </code></pre>
+    <div id="app1">
+      <h4> {{ message }} </h4>
+    </div>
+          </code></pre>
 
           <pre><code lang="js">
-          var app1 = new Bouer('#app1', {
-            data: {
-              message: 'Hello World!'
-            }
-          });
+    var app1 = new Bouer('#app1', {
+      data: {
+        message: 'Hello World!'
+      }
+    });
 
-          app1.set({ version: '3.0.0' });
+    app1.set({ version: '3.0.0' });
           </code></pre>
 
         </div>
 
         <p>
-          Is in data property where the <i class="note mark">functions</i> need to be defined too, and
-          they do not respect <i class="note mark">scopes</i> (we'll talk about this later), they can be
+          Is in data property where the <i class="note mark">methods</i> need to be defined too, and
+          they do not respect <i class="note mark">scopes</i> (we'll talk about it later), they can be
           accessed even if a scope is created.
         </p>
 
         <h4> <a id="prop-data-computed-property">Computed Property</a> </h4>
         <p>
           Computed property is used to add some logic to the process of getting or setting a property. to be able to
-          defined a computed property we use to set a function with the name <i class="note mark">$computed</i>.
+          defined a computed property we use to set a function with the name <i
+            class="code-style note mark">$computed</i>.
         </p>
 
         <p>
@@ -155,19 +156,19 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // Inferred `get`
-          function $computed() {
-            return value;
-          }
+    // Inferred `get`
+    function $computed() {
+      return value;
+    }
           </code></pre>
           <pre><code lang="js">
-          // Descripted `get` and `set`
-          function $computed() {
-            return {
-              get(): any,
-              set(value: any): void,
-            }
-          }
+    // Descripted `get` and `set`
+    function $computed() {
+      return {
+        get(): any,
+        set(value: any): void,
+      }
+    }
           </code></pre>
         </div>
 
@@ -180,38 +181,41 @@
         <div e-skip execute>
 
           <pre><code lang="html">
-          <div id="app2">
-            <input type="text" e-bind="fullName" />
-            <h4> {{ fullName }} </h4>
-          </div>
+    <div id="app2">
+      <input type="text" e-bind="fullName" />
+      <h4> {{ fullName }} </h4>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app2 = new Bouer('#app2', {
-            data: {
-              firstName: 'Afonso',
-              lastName: 'Matumona',
+    var app2 = new Bouer('#app2', {
+      data: {
+        firstName: 'Afonso',
+        lastName: 'Matumona',
 
-              // Computed
-              fullName: function $computed(){
-                var app = this;
-                return {
-                  get: function(){
-                    // joining the first and last name
-                    return [app.data.firstName || '', app.data.lastName || ''].join(' ')
-                  },
-                  set: function(v) {
-                    var value = v || '';
-                    var splitted = value.split(' ');
+        // Computed
+        fullName: function $computed() {
+          var app = this;
+          return {
+            get: function () {
+              // joining the first and last name
+              return [app.data.firstName || '', app.data.lastName || ''].join(' ').trim()
+            },
+            set: function (v) {
+              var value = v || '';
+              var splitted = value.split(' ');
 
-                    // getting the first and last name
-                    app.data.firstName = splitted[0];
-                    app.data.lastName = splitted[splitted.length - 1] || '';
-                  }
-                }
-              }
+              if (splitted.length == 1)
+                return app.data.firstName = v;
+
+              // getting the first and last name
+              app.data.firstName = splitted[0];
+              app.data.lastName = splitted[splitted.length - 1] || '';
             }
-          });
+          }
+        }
+      }
+    });
           </code></pre>
 
           <div class="result"></div>
@@ -222,18 +226,18 @@
         <p>
           This property allow to add dependencies in the current instance... All the dependencies can be accessed at
           <span class="note">app.deps</span> object, which are defined providing a
-          <i class="note">[key: <i class="mark">string</i>]</i> and The dependency object.
-          <i class="note mark">{ 'my-dependency': {...} }</i>
+          <i class="code-style note">[key: <i class="mark">string</i>]</i> and The dependency object.
+          <i class="code-style note mark">{ 'my-dependency': {...} }</i>
         </p>
 
         <pre><code lang="js">
-        var app = new Bouer('#app', {
-          deps: {
-            'html-parser': HTMLParser
-          }
-        });
+    var app = new Bouer('#app', {
+      deps: {
+        'html-parser': HTMLParser
+      }
+    });
 
-        var parser = app.deps['html-parser'];
+    var parser = app.deps['html-parser'];
         </code></pre>
 
         <div class="block-note info">
@@ -252,33 +256,34 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-              middleware: function (configure, app) {
+    var app = new Bouer('#app', {
+      middleware: function (configure, app) {
 
-                // Configure function is used to configure the interceptions
-                configure('e-title', function (onBind, onUpdate) {
+        // Configuring middleware interceptions
+        configure('e-title', function (onBind, onUpdate) {
 
-                  // Interceptors:
-                  // Argument - bind: a function configure a behavior after bound
-                  // Argument - update: a function configure a behavior after update
+          // Interceptors:
+          // Argument - onBind: a function configure a behavior after bound
+          // Argument - onUpdate: a function configure a behavior after update
 
-                  onBind(function (context, next) {
-                    // TODO: Your after bind logic code here...
-                  });
-
-                  onUpdate(function (context, next) {
-                    // TODO: Your update logic code here...
-                  });
-
-                });
-              }
+          onBind(function (context, next) {
+            // TODO: Your after bind logic code here...
           });
+
+          onUpdate(function (context, next) {
+            // TODO: Your update logic code here...
+          });
+
+        });
+      }
+    });
           </code></pre>
         </div>
 
         <p>
           Note that the <i class="note">Interceptors</i> callback function has two arguments, which are the
-          <i class="note mark"><i>context:</i> object</i> and <i class="note mark"><i>next():</i> Function</i>
+          <i class="note mark"><i>context:</i> object</i> and <i class="code-style  note mark"><i>next():</i>
+            Function</i>
         </p>
 
         <b> <i class="note mark"><i>context:</i> object</i> </b>
@@ -290,22 +295,22 @@
 
         <div e-skip>
           <pre><code lang="js">
-          {
-            binder: {
-              node: Node,
-              data: object,
-              nodeName: string,
-              nodeValue: string,
-              fields: Delimiters[],
-              parent: Element,
-              value: string
-            },
-            detail: object
-          }
+    {
+      binder: {
+        node: Node,
+        data: object,
+        nodeName: string,
+        nodeValue: string,
+        fields: Delimiters[],
+        parent: Element,
+        value: string
+      },
+      detail: object
+    }
           </code></pre>
         </div>
 
-        <b> <i class="note mark"><i>next():</i> Function</i> </b>
+        <b> <i class="code-style note mark"><i>next():</i> Function</i> </b>
         <p>
           This function is used to get the <i class="note">next</i> Interceptor of that directive when using
           multiple configuration. we strongly advise using the <i class="note mark">return</i>.

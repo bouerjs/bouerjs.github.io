@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -19,31 +19,19 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div id="app">
-            <h4> {{ value }} </h4>
-
-            <div data="scope1">
-                <h4> {{ value }} </h4>
-            </div>
-          </div>
-          </code></pre>
-
-          <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              value: 'Value from main scope',
-              scope1: {
-                value: 'Value from Scope 1'
-              }
-            }
-          });
+    <div id="app">
+      <!-- Main Scope -->
+      <div data="{ /* ... */ }">
+        <!-- New Scope -->
+      </div>
+    </div>
           </code></pre>
         </div>
 
         <p>
           We can also create an identifier for the data to be able to retrieve the data scope.
           To be able to achieve that we need to define as follows
-          <span class="note">data:<i class="mark">[scope-key]</i>="{ ... }"</span>. <br>
+          <span class="note">data:<i class="mark">[scope-key]</i>="{ /* ... */ }"</span>. <br>
           To retrieve the data we use the method
           <span class="note">app.$data.get(<i class="mark">'scope-key'</i>)</span>.
         </p>
@@ -51,26 +39,16 @@
         <div e-skip>
 
           <pre><code lang="html">
-          <div id="app">
-            <h4> {{ value }} </h4>
-
-            <div data:[scope-1]="scope1">
-              <h4> {{ value }} </h4>
-            </div>
-          </div>
+    <div id="app">
+      <!-- Main Scope -->
+      <div data:[item-scope]="{ /* ... */ }">
+        <!-- Item Scope -->
+      </div>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              value: 'Value from main scope',
-              scope1: {
-                value: 'Value from Scope 1'
-              }
-            }
-          });
-
-          var scope1 = app.$data.get('scope-1');
+    var scope1 = app.$data.get('item-scope');
           </code></pre>
         </div>
 
@@ -82,17 +60,16 @@
 
         <b> Getting the Current Scope </b>
         <p>
-          To be able to get the current scope we use <i class="note mark">$data</i>, it's a `variable`
+          To be able to get the current scope we use <i class="code-style note mark">$data</i>, it's a `variable`
           that keeps the current scope in the expression of <i class="note mark">data</i> directive.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-          <h4> {{ value }} </h4>
-
-          <div data="$data">
-            <h4> {{ value }} </h4>
-          </div>
+    <!-- Main Scope -->
+    <div data="$data">
+      <!-- New Scope with Parent Scope data -->
+    </div>
           </code></pre>
         </div>
 
@@ -103,29 +80,69 @@
           </p>
         </div>
 
-        <h3> <a id="directive-wait-data"> wait-data </a> </h3>
+        <b> Getting the Main Scope with a variable </b>
         <p>
-          Allows the element where it is defined to be skipped in the compilation, waiting for it's
-          data to be provided. It's defined as follows:
-          <span class="note mark">wait-data="data-key"</span>. In order to make the element data available,
-          we use the <span class="note">app.$wait.set(<i class="mark">'data-key', {...}</i>)</span> method.
+          To be able to get the main scope we use <i class="code-style note mark">$root</i>, it's a `variable`
+          that keeps the main scope in the expression of <i class="note mark">data</i> directive.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-          <h4 wait-data="waiting"> {{ message }} </h4>
+    <!-- Main Scope -->
+    <div data="$root">
+      <!-- New Scope with Main Scope data -->
+    </div>
+          </code></pre>
+        </div>
+
+        <b> Mixing objects </b>
+        <p>
+          To be able to mix objects we use <i class="code-style note mark">$mixin</i>, it's a `function`
+          that adds properties other arguments (objects) to the first one.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+    <h4> {{ value }} </h4>
+
+    <div data="$mixin({ isVisible: false }, $root)">
+      <h4 e-if="isVisible"> {{ value }} </h4>
+    </div>
+          </code></pre>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            All the object provided to the <i class="code-style note mark">$mixin</i> they are not auto transformed to a
+            reative
+            ones.
+          </p>
+        </div>
+
+        <h3> <a id="directive-wait-data"> wait-data </a> </h3>
+        <p>
+          Allows the element where it is defined to be skipped in the compilation, waiting for it's
+          data to be provided. It's defined as follows:
+          <span class="code-style note mark">wait-data="data-key"</span>. In order to make the element data available,
+          we use the <span class="code-style note">app.$wait.set(<i class="mark">'data-key', {...}, once?</i>)</span>
+          method.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+    <h4 wait-data="waiting"> {{ message }} </h4>
           </code></pre>
 
           <pre><code lang="js">
-          app.$wait.set('waiting', { message: 'Hello 😀' });
+    app.$wait.set('waiting', { message: 'Hello 😀' });
           </code></pre>
         </div>
 
         <div class="block-note info">
           <p>
-            The data passed it the expose method for wait-data, automatically become reactive,
-            then it is no longer necessary to use the <span class="note mark">reactive</span>
-            method in this directive.
+            The data passed it the expose method for wait-data, automatically become reactive, then it is no longer
+            necessary to use the <span class="note mark">reactive</span> method in this directive.
+            We use <i class="note mark">once<i>?</i></i> when the wait data is retrieved it is automatically removed.
           </p>
         </div>
 
@@ -148,11 +165,11 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <h4 wait-data="waiting" e-text="{{ message }}">...</h4>
+    <h4 wait-data="waiting" e-text="{{ message }}">...</h4>
           </code></pre>
 
           <pre><code lang="js">
-          app.$wait.set('waiting', { message: 'Hello 😀' });
+    app.$wait.set('waiting', { message: 'Hello 😀' });
           </code></pre>
         </div>
 
@@ -169,11 +186,11 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <h4 wait-data="waiting" e-skeleton>{{ message }}</h4>
+    <h4 wait-data="waiting" e-skeleton>{{ message }}</h4>
           </code></pre>
 
           <pre><code lang="js">
-          app.$wait.set('waiting', { message: 'Hello 😀' });
+    app.$wait.set('waiting', { message: 'Hello 😀' });
           </code></pre>
         </div>
 
@@ -185,8 +202,8 @@
 
         <p>
           There are two ways to use it, <span class="note mark">e-skeleton</span> and <span
-            class="note mark">e-skeleton="some-id"</span>. Without an identifier, the skeleton is removed after the
-          element has been compiled. With an identifier, the skeleton(s) must be removed manually using
+            class="code-style note mark">e-skeleton="some-id"</span>. Without an identifier, the skeleton is removed
+          after the element has been compiled. With an identifier, the skeleton(s) must be removed manually using
           <span class="note">app.skeleton.clear([some-id])</span> extension method or simply remove the
           `e-skeleton` attribute from the elements.
         </p>
@@ -194,41 +211,41 @@
         <div e-skip>
 
           <pre><code lang="html">
-          <div id="app">
-            <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
+    <div id="app">
+      <h4 e-skeleton="skeleton1"> {{ message }}! </h4>
 
-            <button on:click="removeSkeleton" > Remove Skeleton</button>
-          </div>
+      <button on:click="removeSkeleton" > Remove Skeleton</button>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            data: {
-              /* Properties */
-              message: 'Hello',
+    var app = new Bouer('#app', {
+      data: {
+        /* Properties */
+        message: 'Hello',
 
-              /* Methods */
-              removeSkeleton: function () {
-                this.$skeleton.clear('skeleton1');
-              }
-            }
-          });
+        /* Methods */
+        removeSkeleton: function () {
+          this.$skeleton.clear('skeleton1');
+        }
+      }
+    });
           </code></pre>
         </div>
 
         <p>
-          To set the skeleton colors we use, app.skeleton.set({ ... }) method, it expects an object having this
-          structure
-          <span class="note">{ background: <i class="mark">'color'</i>, wave: <i class="mark">'color'</i> }</span>.
+          To set the skeleton colors we use, app.skeleton.set({ /* ... */ }) method, it expects an object having this
+          structure <span class="note">{ background: <i class="mark">'color'</i>, wave: <i class="mark">'color'</i>
+            }</span>.
         </p>
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app');
-          app.skeleton.set({
-            background: '#444546',
-            wave: '#747576'
-          });
+    var app = new Bouer('#app');
+    app.skeleton.set({
+      background: '#444546',
+      wave: '#747576'
+    });
           </code></pre>
         </div>
 
@@ -236,16 +253,16 @@
         <p>
           It is a short name of <span class="note">e-definer</span>, it allows to dynamically
           set properties (Reactives) in the current scope. It's syntax is
-          <span class="note mark">e-def="{...}"</span>, it expects
+          <span class="code-style note mark">e-def="{...}"</span>, it expects
           <a href="https://www.dyn-web.com/tutorials/object-literal/" class="mark">Object
             Literal</a>.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-          <div e-def="{ dynamicProperty: 'I was created dynamically' }">
-            {{ dynamicProperty }}!
-          </div>
+    <div e-def="{ dynamicProperty: 'I was created dynamically' }">
+      {{ dynamicProperty }}!
+    </div>
           </code></pre>
         </div>
 
@@ -267,27 +284,27 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip execute>
             <pre><code lang="html">
-          <div id="app1">
-            <input type="number" e-bind="binary" /> <br>
+    <div id="app1">
+      <input type="number" e-bind="binary" /> <br>
 
-            <p e-if="binary == 1">
-                {{ binary }} is on 🙂
-            </p>
-            <p e-else-if="binary == 0">
-                {{ binary }} is off 🙁
-            </p>
-            <p e-else>
-                {{ binary }} is not binary 🤨
-            </p>
-          </div>
-            </code></pre>
+      <p e-if="binary == 1">
+          {{ binary }} is on 🙂
+      </p>
+      <p e-else-if="binary == 0">
+          {{ binary }} is off 🙁
+      </p>
+      <p e-else>
+          {{ binary }} is not binary 🤨
+      </p>
+    </div>
+          </code></pre>
 
             <pre><code lang="js">
-          var app1 = new Bouer('#app1', {
-            data: {
-              binary: 1
-            }
-          });
+    var app1 = new Bouer('#app1', {
+      data: {
+        binary: 1
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -296,20 +313,19 @@
 
         <h3> <a id="directive-e-show"> e-show </a> </h3>
         <p>
-          The <span class="note">e-show</span> directive is very similar to the
-          <span class="mark">Vue.js</span> <span class="note">v-show</span> directive... It is
-          used to conditionally show an block (element), it toggles CSS
-          <span class="note mark">display:none</span> property.
+          The <i class="note">e-show</i> directive is very similar to the <i class="mark">Vue.js</i> <i
+            class="note">v-show</i> directive... It is used to conditionally show an block (element), it toggles CSS
+          <i class="code-style note mark">display:<i>none</i></i> property.
           The block should be visible if the directive expression returns a truthy value.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-          <div class="input-field">
-            <label for="name-in">Name</label>
-            <input type="text" id="name-in" name="Name">
-            <span e-show="!isValid">Name is required*</span>
-          </div>
+    <div class="input-field">
+      <label for="name-in">Name</label>
+      <input type="text" id="name-in" name="Name">
+      <span e-show="!isValid">Name is required*</span>
+    </div>
           </code></pre>
         </div>
 
@@ -317,7 +333,7 @@
         <p>
           The <span class="note">e-for</span> directive is very similar to the
           <span class="mark">Vue.js</span> <span class="note">v-for</span> directive...
-          It is used to render a list of items based an array.
+          It is used to render a list of elements based an array.
         </p>
 
         <p>
@@ -330,30 +346,30 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app2">
-            <h4> Array</h4>
-            <ul>
-                <li e-for="fruit of fruits"> {{ fruit }} </li>
-            </ul>
+    <div id="app2">
+      <h4> Array</h4>
+      <ul>
+          <li e-for="fruit of fruits"> {{ fruit }} </li>
+      </ul>
 
-            <h4> Object</h4>
-            <ul>
-                <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
-            </ul>
-          </div>
+      <h4> Object</h4>
+      <ul>
+          <li e-for="(key, value) in person"> {{ key }}: {{ value }}  </li>
+      </ul>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app2 = new Bouer('#app2', {
-            data: {
-              fruits: [ 'Bananas', 'Mango' ],
-              person: {
-                firstName: 'Afonso',
-                lastName: 'Matumona',
-                country: 'Angola',
-              }
-            }
-          });
+    var app2 = new Bouer('#app2', {
+      data: {
+        fruits: [ 'Bananas', 'Mango' ],
+        person: {
+          firstName: 'Afonso',
+          lastName: 'Matumona',
+          country: 'Angola',
+        }
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -387,13 +403,13 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <input type="text" e-def="{ search: '' }" e-bind="search" />
+    <input type="text" e-def="{ search: '' }" e-bind="search" />
 
-          <ul>
-            <li e-for="food of foods | where:search">
-              {{ food.name }}
-            </li>
-          </ul>
+    <ul>
+      <li e-for="food of foods | where:search">
+        {{ food.name }}
+      </li>
+    </ul>
           </code></pre>
         </div>
 
@@ -406,11 +422,11 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <ul>
-            <li e-for="food of foods | order:asc:name">
-              {{ food.name }}
-            </li>
-          </ul>
+    <ul>
+      <li e-for="food of foods | order:asc:name">
+        {{ food.name }}
+      </li>
+    </ul>
           </code></pre>
         </div>
 
@@ -423,10 +439,10 @@
 
         <h3> Array Change Detection</h3>
         <p>
-          Bouer links with the main methods of an array, making them become reactive, the methods
-          are: <span class="note mark"> push() </span>, <span class="note mark"> pop() </span>,
-          <span class="note mark"> unshift() </span>, <span class="note mark"> shift() </span>,
-          <span class="note mark"> splice() </span>.
+          Bouer links with the main methods of an array, making them reactive, the methods
+          are: <span class="code-style note mark"> push() </span>, <span class="code-style note mark"> pop() </span>,
+          <span class="code-style note mark"> unshift() </span>, <span class="code-style note mark"> shift() </span>,
+          <span class="code-style note mark"> splice() </span>.
         </p>
 
         <div class="block-note info">
@@ -452,36 +468,35 @@
         </p>
 
         <p>
-          The sintax for simply attribute creation is <span class="note mark">e-<i>attribute</i>="expression"</span>.
+          The syntax for simply attribute creation is <span class="note mark">e-<i>attribute</i>="expression"</span>.
           In this case the expression must contain delimiter, otherwise it should not be compiled.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-            <img e-src="{{ url }}" />
+    <img e-src="{{ url }}" />
           </code></pre>
         </div>
 
         <p>
-          The sintax for attribute creation (if it does not exists) with toggleable value is
+          The syntax for attribute creation (if it does not exists) with toggleable value is
           <span class="note mark">e-<i>attribute</i>="{ 'value-to-toggle' : condition }"</span>.
           <br>
           <span class="note attr-border">Do not use delimiters in the expression</span>.
         </p>
 
         <p>
-          The attribute it selt is automatically toggleable too, meaning that after the value being removed if the
-          attribute
-          value is empty it should be automatically removed as well. Example:
+          The attribute it self is automatically toggleable too, meaning that after the value being removed if the
+          attribute value is empty it should be automatically removed as well. Example:
           <span class="note mark">e-<i>disabled</i>="{ 'true': isBlocked }"</span>.
         </p>
 
         <div e-skip>
           <pre><code lang="html">
-          <button e-class="{ 'active' : isActive }"
-                  on:click="isActive = !isActive">
-            Click Me
-          </button>
+    <button e-class="{ 'active' : isActive }"
+            on:click="isActive = !isActive">
+      Click Me
+    </button>
           </code></pre>
         </div>
 
@@ -492,9 +507,9 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div e-skip>
-            <!-- element ignored -->
-          </div>
+    <div e-skip>
+      <!-- element won't be compiled -->
+    </div>
           </code></pre>
         </div>
 
@@ -520,13 +535,13 @@
         <div e-skip>
           <pre><code lang="html">
           <div id="app">
-            <input type="text" ref="username">
+    <input type="text" ref="username">
           </div>
           </code></pre>
 
           <pre><code lang="js">
-          var app = new Bouer('#app');
-          var userNameInput = app.refs.username;
+    var app = new Bouer('#app');
+    var userNameInput = app.refs.username;
           </code></pre>
         </div>
 
@@ -539,10 +554,10 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div class="users" e-req="user of users">
-            <label>Name: {{ user.name }}</label>
-            <label>Username: {{ user.username }}</label>
-          </div>
+    <div class="users" e-req="user of users">
+      <label>Name: {{ user.name }}</label>
+      <label>Username: {{ user.username }}</label>
+    </div>
           </code></pre>
         </div>
 
@@ -572,7 +587,8 @@
         <b>Request Path</b>
 
         <ul>
-          <li> <span class="note">request path &ndash; represents the path where the value should be retrieved. </li>
+          <li> <span class="note">request path </span> &ndash; represents the path where the value should be retrieved.
+          </li>
         </ul>
 
         <h3> <a id="directive-e-req-init"> Initialization </a> </h3>
@@ -583,42 +599,42 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-              middleware: function (configure, app) {
+    var app = new Bouer('#app', {
+      middleware: function (configure, app) {
 
-                // 'req' Interceptor is used for request interception
-                configure('req', function (onBind, onUpdate) {
+        // 'req' Interceptor is used for request interception
+        configure('req', function (onBind, onUpdate) {
 
-                  onBind(function (context) {
-                    var path = context.detail.requestPath;
-                    var baseURL = "https://jsonplaceholder.typicode.com/";
+          onBind(function (context) {
+            var path = context.detail.requestPath;
+            var baseURL = "https://jsonplaceholder.typicode.com/";
 
-                    var fetchPromise = fetch(baseURL + path, {
-                      headers: {
-                        'Content-Type': "application/json"
-                      }
-                    }).then(function (response) {
-
-                      if (!response.ok)
-                        throw new Error(response.statusText);
-
-                      return response.json();
-                    }).then(function (json) {
-
-                      // the response must be always into a object with `data` property
-                      return { data: json };
-
-                    }).catch(function (error) {
-                      return error
-                    });
-
-                    return fetchPromise;
-                  });
-
-                });
-
+            var fetchPromise = fetch(baseURL + path, {
+              headers: {
+                'Content-Type': "application/json"
               }
+            }).then(function (response) {
+
+              if (!response.ok)
+                throw new Error(response.statusText);
+
+              return response.json();
+            }).then(function (json) {
+
+              // the response must be always into a object with `data` property
+              return { data: json };
+
+            }).catch(function (error) {
+              return error
+            });
+
+            return fetchPromise;
           });
+
+        });
+
+      }
+    });
           </code></pre>
         </div>
 
@@ -631,20 +647,20 @@
         <h3> <a id="directive-e-req-w-where"> e-req with `where` </a> </h3>
         <div e-skip>
           <pre><code lang="html">
-          <div class="users" e-req="user of users | where:search:name ">
-            <label>Name: {{ user.name }}</label>
-            <label>Username: {{ user.username }}</label>
-          </div>
+    <div class="users" e-req="user of users | where:search:name ">
+      <label>Name: {{ user.name }}</label>
+      <label>Username: {{ user.username }}</label>
+    </div>
           </code></pre>
         </div>
 
         <h3> <a id="directive-e-req-w-order"> e-req with `order` </a> </h3>
         <div e-skip>
           <pre><code lang="html">
-          <div class="users" e-req="user of users | order:asc:name ">
-            <label>Name: {{ user.name }}</label>
-            <label>Username: {{ user.username }}</label>
-          </div>
+    <div class="users" e-req="user of users | order:asc:name ">
+      <label>Name: {{ user.name }}</label>
+      <label>Username: {{ user.username }}</label>
+    </div>
           </code></pre>
         </div>
       </section>

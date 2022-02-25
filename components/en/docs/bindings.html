@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -15,24 +15,24 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app1">
-            <input type="text" value="{{ value }}" />
-            <h4> {{ value }} </h4>
-          </div>
+    <div id="app1">
+      <input type="text" value="{{ value }}" />
+      <h4> {{ value }} </h4>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app1 = new Bouer('#app1', {
-            data: {
-              value: 'Type something!'
-            },
-            loaded: function(evt) {
-              var self = this;
-              evt.target.querySelector('input').onkeyup = function(evt) {
-                self.data.value = evt.target.value;
-              }
-            }
-          });
+    var app1 = new Bouer('#app1', {
+      data: {
+        value: 'Type something!'
+      },
+      loaded: function(evt) {
+        var self = this;
+        evt.target.querySelector('input').onkeyup = function(evt) {
+          self.data.value = evt.target.value;
+        }
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -48,10 +48,22 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div id="app">
-            <input type="text" e-value="{{ value }}" />
-            <h4> {{ value }} </h4>
-          </div>
+    <div id="app">
+      <input type="text" e-value="{{ value }}" />
+      <h4> {{ value }} </h4>
+    </div>
+          </code></pre>
+        </div>
+
+        <h4> Shorthand Attributes </h4>
+        <p e-skip>
+          If the property has the same name with the attribute like <i class="note mark">title="{{ <i>title</i> }}"</i>,
+          we are able to use shorthand attribute definition.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+    <h1 {title}> Title </h1>
           </code></pre>
         </div>
 
@@ -70,19 +82,19 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app2">
-            <input type="text" e-bind:value="value" /> <br>
-            <input type="text" e-bind="value" />
-            <h4> {{ value }} </h4>
-          </div>
+    <div id="app2">
+      <input type="text" e-bind:value="value" /> <br>
+      <input type="text" e-bind="value" />
+      <h4> {{ value }} </h4>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app2 = new Bouer('#app2', {
-            data: {
-              value: 'Type something!'
-            }
-          });
+    var app2 = new Bouer('#app2', {
+      data: {
+        value: 'Type something!'
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -99,19 +111,19 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip execute>
             <pre><code lang="html">
-          <div id="app2-1">
-            <p> Typed Content: </p>
-            <p style="white-space: pre-line;"> {{ value }} </p>
-            <textarea e-bind="value" placeholder="Type Something..."></textarea>
-          </div>
+    <div id="app2-1">
+      <p> Typed Content: </p>
+      <p style="white-space: pre-line;"> {{ value }} </p>
+      <textarea e-bind="value" placeholder="Type Something..."></textarea>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app2_1 = new Bouer('#app2-1', {
-            data: {
-              value: ''
-            }
-          });
+    var app2_1 = new Bouer('#app2-1', {
+      data: {
+        value: ''
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -128,18 +140,18 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app3">
-            <input type="checkbox" e-bind="isVisible" />
-            <b e-show="isVisible"> Click on the checkbox, I'll disappear 😃! </b>
-          </div>
+    <div id="app3">
+      <input type="checkbox" e-bind="isVisible" />
+      <b e-show="isVisible"> Click on the checkbox, I'll disappear 😃! </b>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app3 = new Bouer('#app3', {
-            data: {
-              isVisible: true
-            }
-          });
+    var app3 = new Bouer('#app3', {
+      data: {
+        isVisible: true
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -153,21 +165,21 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip execute>
             <pre><code lang="html">
-          <div id="app3-1">
-            <input type="checkbox" e-bind="movies" value="Iron Man"> Iron Man <br>
-            <input type="checkbox" e-bind="movies" value="Super-Man"> Super-Man <br>
-            <input type="checkbox" e-bind="movies" value="Batman"> Batman <br>
+    <div id="app3-1">
+      <input type="checkbox" e-bind="movies" value="Iron Man"> Iron Man <br>
+      <input type="checkbox" e-bind="movies" value="Super-Man"> Super-Man <br>
+      <input type="checkbox" e-bind="movies" value="Batman"> Batman <br>
 
-            <p> Selected Movies: {{ movies }}</p>
-          </div>
+      <p> Selected Movies: {{ movies }}</p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app3_1 = new Bouer('#app3-1', {
-            data: {
-              movies: []
-            }
-          });
+    var app3_1 = new Bouer('#app3-1', {
+      data: {
+        movies: []
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -181,21 +193,21 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip execute>
             <pre><code lang="html">
-          <div id="app3-2">
-            <input type="checkbox" e-bind="movies" :value="{ title: 'Iron Man' }"> Iron Man <br>
-            <input type="checkbox" e-bind="movies" :value="{ title: 'Super-Man' }"> Super-Man <br>
-            <input type="checkbox" e-bind="movies" :value="{ title: 'Batman' }"> Batman <br>
+    <div id="app3-2">
+      <input type="checkbox" e-bind="movies" :value="{ title: 'Iron Man' }"> Iron Man <br>
+      <input type="checkbox" e-bind="movies" :value="{ title: 'Super-Man' }"> Super-Man <br>
+      <input type="checkbox" e-bind="movies" :value="{ title: 'Batman' }"> Batman <br>
 
-            <p> Selected Movies: {{ movies }}</p>
-          </div>
+      <p> Selected Movies: {{ movies }}</p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app3_2 = new Bouer('#app3-2', {
-            data: {
-              movies: []
-            }
-          });
+    var app3_2 = new Bouer('#app3-2', {
+      data: {
+        movies: []
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -212,20 +224,20 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip execute>
             <pre><code lang="html">
-          <div id="app4">
-            <input type="radio" e-bind="selected" name="gender" value="Male 👦"> Male
-            <input type="radio" e-bind="selected" name="gender" value="Female 👧"> Female
+    <div id="app4">
+      <input type="radio" e-bind="selected" name="gender" value="Male 👦"> Male
+      <input type="radio" e-bind="selected" name="gender" value="Female 👧"> Female
 
-            <p> Selected Gender: {{ selected }}</p>
-          </div>
+      <p> Selected Gender: {{ selected }}</p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app4 = new Bouer('#app4', {
-            data: {
-              selected: ''
-            }
-          });
+    var app4 = new Bouer('#app4', {
+      data: {
+        selected: ''
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -242,23 +254,23 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app5">
-            <select e-bind="selected">
-              <option value="Banana">Banana</option>
-              <option value="Strawberry">Strawberry</option>
-              <option value="Mango">Mango</option>
-            </select>
+    <div id="app5">
+      <select e-bind="selected">
+        <option value="Banana">Banana</option>
+        <option value="Strawberry">Strawberry</option>
+        <option value="Mango">Mango</option>
+      </select>
 
-            <p> Selected Fruit: {{ selected }}</p>
-          </div>
+      <p> Selected Fruit: {{ selected }}</p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app5 = new Bouer('#app5', {
-            data: {
-              selected: ''
-            }
-          });
+    var app5 = new Bouer('#app5', {
+      data: {
+        selected: ''
+      }
+    });
             </code></pre>
 
             <div class="result"></div>
@@ -276,23 +288,23 @@
           <div e-skip execute>
 
             <pre><code lang="html">
-          <div id="app5-1">
-            <select multiple e-bind="selected">
-              <option value="Banana">Banana</option>
-              <option value="Strawberry">Strawberry</option>
-              <option value="Mango">Mango</option>
-            </select>
+    <div id="app5-1">
+      <select multiple e-bind="selected">
+        <option value="Banana">Banana</option>
+        <option value="Strawberry">Strawberry</option>
+        <option value="Mango">Mango</option>
+      </select>
 
-            <p> Selected Fruit: {{ selected }}</p>
-          </div>
+      <p> Selected Fruit: {{ selected }}</p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-          var app5_1 = new Bouer('#app5-1', {
-            data: {
-              selected: []
-            }
-          });
+    var app5_1 = new Bouer('#app5-1', {
+      data: {
+        selected: []
+      }
+    });
             </code></pre>
 
             <div class="result"></div>

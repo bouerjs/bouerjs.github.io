@@ -25,18 +25,22 @@
 
   <textarea id="output" cols="15" rows="14"></textarea>
 </div>
+
 <script>
   var app = new Bouer('#app', {
     data: {
-      message: 'Hello World 👋!',
-
       onSubmit: function () {
-        var app = new Bouer('#app');
-        var formObj = app.toJsObj('#form');
-
+        var formObj = this.toJsObj('#form');
         var output = this.el.querySelector('#output');
+
         output.textContent = JSON.stringify(formObj, null, 2);
       }
     }
   });
 </script>
+
+<style scoped>
+  [e-build]{
+    margin: 8px 0;
+  }
+</style>

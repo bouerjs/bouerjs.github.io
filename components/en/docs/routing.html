@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -19,64 +19,64 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            // Registering directly in the instance
-            components: [{
-              /** ... previous properties ... */
+    var app = new Bouer('#app', {
+      // Registering directly in the instance
+      components: [{
+        /** ... previous properties ... */
 
-              /** The name of the component (Optional) */
-              // Note: If not provided it should be auto generated according to the file name
-              name?: string,
+        /** The name of the component (Optional) */
+        // Note: If not provided it should be auto generated according to the file name
+        name?: string,
 
-              /** The title that should be replaced when the page is loaded */
-              title?: string,
+        /** The title that should be replaced when the page is loaded */
+        title?: string,
 
-              /** The navigation url */
-              route?: string,
+        /** The navigation url */
+        route?: string,
 
-              /** The children of the component should inherit the `route` of the father */
-              children?: Component[],
+        /** The children of the component should inherit the `route` of the father */
+        children?: Component[],
 
-              /** Allow to set this component as the `default page` when the application loads */
-              isDefault?: boolean,
+        /** Allow to set this component as the `default page` when the application loads */
+        isDefault?: boolean,
 
-              /** Allow to set this component as the `not found page` when no route was found */
-              isNotFound?: boolean,
+        /** Allow to set this component as the `not found page` when no route was found */
+        isNotFound?: boolean,
 
-              /** ... previous hooks ... */
-            }]
-          });
+        /** ... previous hooks ... */
+      }]
+    });
           </code></pre>
         </div>
 
         <label>Example</label>
         <div e-skip>
           <pre><code lang="html">
-          <div id="app">
-            <nav>
-              <a :href="/home"> Home </a>
-              <a :href="/about"> About </a>
-            </nav>
-            <main route-view></main>
-          </div>
+    <div id="app">
+      <nav>
+        <a :href="/home"> Home </a>
+        <a :href="/about"> About </a>
+      </nav>
+      <main route-view></main>
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          new Bouer('#app', {
-            components: [
-              {
-                title: 'Home',
-                route: '/home',
-                isDefault: true,
-                url: '/pages/home.html',
-              },
-              {
-                url: '/pages/about.html',
-                title: 'About',
-                route: '/about'
-              }
-            ]
-          });
+    new Bouer('#app', {
+      components: [
+        {
+          title: 'Home',
+          route: '/home',
+          isDefault: true,
+          url: '/pages/home.html',
+        },
+        {
+          url: '/pages/about.html',
+          title: 'About',
+          route: '/about'
+        }
+      ]
+    });
           </code></pre>
         </div>
 
@@ -109,20 +109,20 @@
 
         <div e-skip>
           <pre><code lang="js">
+    {
+      components: [{
+        title: 'About',
+        route: '/about',
+        url: '/about.html',
+        children: [
           {
-            components: [{
-              title: 'About',
-              route: '/about',
-              url: '/about.html',
-              children: [
-                {
-                  url: '/about-author.html',
-                  title: 'About the author',
-                  route: '/author'
-                }
-              ]
-            }]
+            url: '/about-author.html',
+            title: 'About the author',
+            route: '/author'
           }
+        ]
+      }]
+    }
           </code></pre>
         </div>
 
@@ -136,60 +136,60 @@
 
         <h3> <a id="routing-params"> Route Params </a> </h3>
         <p>
-          To define a parameter in the route, we use <i class="note">{<i class="mark">paramName</i>}</i> and to
-          extract the data of the route's parameters, we use <i class="note mark">this.params()</i> in the
+          To define a parameter in the route, we use <i class="code-style note">{<i class="mark">paramName</i>}</i> and
+          to extract the data of the route's parameters, we use <i class="code-style note mark">this.params()</i> in the
           component instance, returning an object containing all the <i class="mark">route parameters</i>
           and <i class="mark">query parameters</i>.
         </p>
 
         <div e-skip>
           <pre><code lang="js">
-          {
-            components: [{
-              title: 'User Profile',
-              route: '/user/{userId}',
-              url: '/user-profile.html'
-            }]
-          }
+    {
+      components: [{
+        title: 'User Profile',
+        route: '/user/{userId}',
+        url: '/user-profile.html'
+      }]
+    }
           </code></pre>
         </div>
 
         <h3> <a id="routing-handler"> Routing Handler </a> </h3>
         <p>
-          Whenever we need to navigate to a route programatically, we use the <i class="note mark">app.$routing</i>
-          object to achieve that, it has the following structure:
+          Whenever we need to navigate to a route programatically, we use the <i
+            class="code-style note mark">app.$routing</i> object to achieve that, it has the following structure:
         </p>
 
         <div e-skip>
           <pre><code lang="js">
-          Routing {
-            /** Store Bouer application instance */
-            bouer: Bouer;
+    Routing {
+      /** Store Bouer application instance */
+      bouer: Bouer;
 
-            /** Store the route elements */
-            routeView: Element;
+      /** Store the route elements */
+      routeView: Element;
 
-            /** Store the Component defined has NotFound Page */
-            defaultPage?: Component;
+      /** Store the Component defined has NotFound Page */
+      defaultPage?: Component;
 
-            /** Store the Component defined has NotFound Page */
-            notFoundPage?: Component;
+      /** Store the Component defined has NotFound Page */
+      notFoundPage?: Component;
 
-            /** Store `href` value of the <base /> tag */
-            base: string;
+      /** Store `href` value of the <base /> tag */
+      base: string;
 
-            /** Navigates to a certain page without reloading all the page */
-            navigate(route: string, changeUrl?: boolean): void;
+      /** Navigates to a certain page without reloading all the page */
+      navigate(route: string, changeUrl?: boolean): void;
 
-            /** Navigates to previous page according to a number of go back */
-            popState(times?: number): void;
+      /** Navigates to previous page according to a number of go back */
+      popState(times?: number): void;
 
-            /** Changes the current url to a new one provided */
-            pushState(url: string, title?: string): void;
+      /** Changes the current url to a new one provided */
+      pushState(url: string, title?: string): void;
 
-            /** Mark all anchors having the route provided as active */
-            markActiveAnchors(route: string): void;
-          }
+      /** Mark all anchors having the route provided as active */
+      markActiveAnchors(route: string): void;
+    }
           </code></pre>
         </div>
 
@@ -199,22 +199,22 @@
 
         <div e-skip>
           <pre><code lang="js">
-          var app = new Bouer('#app', {
-            components: [
-              {
-                path: '/home.html',
-                route: '/home'
-              },
-              {
-                path: '/about.html',
-                route: '/about'
-              },
-            ]
-          });
+    var app = new Bouer('#app', {
+      components: [
+        {
+          path: '/home.html',
+          route: '/home'
+        },
+        {
+          path: '/about.html',
+          route: '/about'
+        },
+      ]
+    });
 
-          setTimeout(function () {
-            app.$routing.navigate('/about');
-          }, 5000);
+    setTimeout(function () {
+      app.$routing.navigate('/about');
+    }, 5000);
           </code></pre>
         </div>
 
@@ -229,9 +229,8 @@
         </p>
 
         <ol>
-          <li> Disable the <i class="note mark">config.usehash</i> &ndash; setting to <i class="mark">false</i> no hash
-            should
-            be added to the navigation anchors. </li>
+          <li> Disable the <i class="code-style note mark">config.usehash</i> &ndash; setting to <i
+              class="mark">false</i> no hash should be added to the navigation anchors. </li>
 
           <li> Add the <i class="note code-style">&lt;<i class="mark">base</i>&gt;</i> tag in the page head &ndash; that
             specify the base URL to use for all relative URLs in a document.
@@ -247,49 +246,49 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <!-- index.html -->
+    <!-- index.html -->
 
-          <!-- head -->
-            <base href="/" >
-          <!-- /head -->
+    <!-- head -->
+      <base href="/" >
+    <!-- /head -->
 
-          <div id="app">
-            <!-- app -->
-          </div>
+    <div id="app">
+      <!-- app -->
+    </div>
           </code></pre>
 
           <pre><code lang="js">
-          // app.js
+    // app.js
 
-          var app = new Bouer('#app', {
-            config: {
-              usehash: false
-            },
-            components: [
-              // ...
-            ]
-          });
+    var app = new Bouer('#app', {
+      config: {
+        usehash: false
+      },
+      components: [
+        // ...
+      ]
+    });
           </code></pre>
         </div>
 
         <h3> Apache Configuration Example (.htcaccess) </h3>
         <div e-skip>
           <pre><code lang="bash">
-          RewriteEngine On
+    RewriteEngine On
 
-          # Setting the base path of the project
-          RewriteBase /
+    # Setting the base path of the project
+    RewriteBase /
 
-          # Return the index.html file if the request is this
-          RewriteRule ^index\.html$ - [L]
+    # Return the index.html file if the request is this
+    RewriteRule ^index\.html$ - [L]
 
-          # If the request file name is not a directory
-          RewriteCond %{REQUEST_FILENAME} !-d
-          # If the request file name is not a file
-          RewriteCond %{REQUEST_FILENAME} !-f
-          # Return the index.html file
-          RewriteRule . index.html [L]
-              </code></pre>
+    # If the request file name is not a directory
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # If the request file name is not a file
+    RewriteCond %{REQUEST_FILENAME} !-f
+    # Return the index.html file
+    RewriteRule . index.html [L]
+          </code></pre>
         </div>
 
         <p>

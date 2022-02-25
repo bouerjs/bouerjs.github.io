@@ -1,10 +1,13 @@
 <div id="app">
+  <img {src} alt="Bouer logo">
   <h3 e-text="{{ message }}">Default Text</h3>
 </div>
+
 <script>
   var app = new Bouer('#app', {
     data: {
-      message: 'This text was injected from e-text directive 😎!'
+      message: 'This text was injected from e-text directive 😎!',
+      src: 'https://afonsomatelias.github.io/assets/bouer/img/long-256.png'
     }
   });
 </script>

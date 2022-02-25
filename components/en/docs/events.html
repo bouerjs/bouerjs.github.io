@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -15,7 +15,7 @@
           <span class="note">DOM Standard</span>, <span class="note">Bouer</span> and
           <span class="note">Custom</span> events. For all of them, they can be heard
           with the following syntax:
-          <span class="note mark">on:<i>eventname</i>="function/expression"</span>.
+          <span class="code-style note mark">on:<i>eventname</i>="function/expression"</span>.
         </p>
 
         <p>
@@ -31,10 +31,10 @@
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip>
             <pre><code lang="html">
-          <button on:click="count++">
-            Clicked {{ count }}
-          </button>
-                  </code></pre>
+    <button on:click="count++">
+      Clicked {{ count }}
+    </button>
+          </code></pre>
           </div>
         </div>
 
@@ -75,22 +75,22 @@
           <div e-skip>
 
             <pre><code lang="html">
-          <div id="app">
-            <p on:changetext="change"> Hello! </p>
-          </div>
+    <div id="app">
+      <p on:changetext="change"> Hello! </p>
+    </div>
             </code></pre>
 
             <pre><code lang="js">
-            var app = new Bouer('#app', {
-              data: {
-                change: function (evt) {
-                  evt.target.innerText = 'Hi! 😃';
-                }
-              },
-              loaded: function () {
-                this.emit('changetext');
-              }
-            });
+    var app = new Bouer('#app', {
+      data: {
+        change: function (evt) {
+          evt.target.innerText = 'Hi! 😃';
+        }
+      },
+      loaded: function () {
+        this.emit('changetext');
+      }
+    });
             </code></pre>
 
           </div>
@@ -105,7 +105,7 @@
         <h3> <a id="events-modifiers"> Modifiers </a> </h3>
         <p>
           To add modifiers to the events use <span class="note mark">.</span> (dot) after the eventName.
-          The sintax is <span class="note">on:eventName <i class="mark">.modifier1.modifier2</i>="expression"</span>
+          The syntax is <span class="note">on:eventName <i class="mark">.modifier1.modifier2</i>="expression"</span>
         </p>
 
         <p>
@@ -116,8 +116,7 @@
           <li> <span class="note mark">prevent</span> &ndash; calls <span class="note">event.preventDefault()</span>
             before running the handler. </li>
           <li> <span class="note mark">stop</span> &ndash; calls <span class="note">event.stopPropagation()</span>,
-            preventing the event reaching the
-            next element. </li>
+            preventing the event reaching the next element. </li>
           <li> <span class="note mark">once</span> &ndash; remove the event after the first
             time call. </li>
         </ul>
@@ -130,9 +129,9 @@
         <div>
           <div e-skip>
             <pre><code lang="html">
-          <button on:click.once="count++">
-            Clicked {{ count }}
-          </button>
+    <button on:click.once="count++">
+      Clicked {{ count }}
+    </button>
             </code></pre>
           </div>
         </div>

@@ -1,6 +1,8 @@
 <div id="app">
 
-  <p> Requesting a User from jsonplaceholder API </p>
+  <p>
+    Requesting a User from <b>{JSON} Placeholder</b> API
+  </p>
 
   <ul class="users">
     <li e-req="user as users/1">
@@ -16,6 +18,7 @@
   </ul>
 
 </div>
+
 <script>
   var app = new Bouer('#app', {
     middleware: function (configure, app) {
@@ -52,3 +55,53 @@
     }
   });
 </script>
+
+<style scoped>
+  ul.users {
+    list-style: none;
+  }
+
+  ul.users li {
+    display: flex;
+    margin: 6px 0;
+    padding: 4px 2px;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    max-width: 320px;
+  }
+
+  ul.users li .avatar {
+    /* Center de Content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* End Center de Content */
+    width: 80px;
+  }
+
+  ul.users li .avatar span {
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+  }
+
+  ul.users li .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ul.users li .info .row {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  ul.users li .info .row span {
+    margin: auto 0;
+  }
+</style>

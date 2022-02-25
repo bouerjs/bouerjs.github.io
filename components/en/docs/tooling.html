@@ -1,5 +1,5 @@
 <div class="page documentation">
-  <doc-menu data></doc-menu>
+  <menu-docs data></menu-docs>
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
@@ -21,15 +21,15 @@
         <div e-skip>
 
           <pre><code lang="xml">
-          <div>
-            <!-- Component Element -->
-          </div>
+    <div>
+      <!-- Component Element -->
+    </div>
 
-          <!-- Adding the script -->
-          <script src="./component.js"></script>
+    <!-- Adding the script -->
+    <script src="./component.js"></script>
 
-          <!-- Adding the style -->
-          <link href="./component.css" scoped/>
+    <!-- Adding the style -->
+    <link href="./component.css" scoped/>
           </code></pre>
 
         </div>
@@ -72,48 +72,48 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // webpack.config.js
+    // webpack.config.js
 
-          {
-            entry: "src/app.js",
-            output: {
-              path: "dist",
-              filename: 'app.js'
+    {
+      entry: "src/app.js",
+      output: {
+        path: "dist",
+        filename: 'app.js'
+      },
+      module: {
+        rules: [
+          { // Processing `js` files
+            test: /\.js$/,
+            use: ['babel-loader'],
+            exclude: /node_modules/,
+          },
+
+          { // Processing `html` files
+            test: /\.html$/i,
+            use: {
+              loader: "file-loader",
+              options: {
+                name: '[path][name].[ext]',
+                context: './src',
+              }
             },
-            module: {
-              rules: [
-                { // Processing `js` files
-                  test: /\.js$/,
-                  use: ['babel-loader'],
-                  exclude: /node_modules/,
-                },
+            exclude: /node_modules/
+          },
 
-                { // Processing `html` files
-                  test: /\.html$/i,
-                  use: {
-                    loader: "file-loader",
-                    options: {
-                      name: '[path][name].[ext]',
-                      context: './src',
-                    }
-                  },
-                  exclude: /node_modules/
-                },
-
-                { // Processing `css` files
-                  test: /\.css$/,
-                  use: {
-                    loader: "file-loader",
-                    options: {
-                      name: '[path][name].[ext]',
-                      context: './src',
-                    }
-                  },
-                  exclude: /node_modules/
-                }
-              ]
-            }
+          { // Processing `css` files
+            test: /\.css$/,
+            use: {
+              loader: "file-loader",
+              options: {
+                name: '[path][name].[ext]',
+                context: './src',
+              }
+            },
+            exclude: /node_modules/
           }
+        ]
+      }
+    }
           </code></pre>
         </div>
 
@@ -133,27 +133,27 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // webpack.config.js
+    // webpack.config.js
 
-          {
-            entry: "src/app.js",
-            output: { ... },
-            module: { ... },
-            optimization: {
-              minimize: true,
-              minimizer: [
-                  new CssMinimizerPlugin({
-                      test: /\.css$/i,
-                  }),
-                  new HtmlMinimizerPlugin({
-                      test: /\.html$/i,
-                  }),
-                  new TerserPlugin({
-                      test: /\.js(\?.*)?$/i,
-                  }),
-              ],
-            }
-          }
+    {
+      entry: "src/app.js",
+      output: { /* ... */ },
+      module: { /* ... */ },
+      optimization: {
+        minimize: true,
+        minimizer: [
+            new CssMinimizerPlugin({
+                test: /\.css$/i,
+            }),
+            new HtmlMinimizerPlugin({
+                test: /\.html$/i,
+            }),
+            new TerserPlugin({
+                test: /\.js(\?.*)?$/i,
+            }),
+        ],
+      }
+    }
           </code></pre>
         </div>
 
@@ -170,13 +170,13 @@
         </p>
         <div e-skip>
           <pre><code lang="js">
-          // .babelrc
+    // .babelrc
 
-          {
-            "presets": [
-              "@babel/preset-env"
-            ]
-          }
+    {
+      "presets": [
+        "@babel/preset-env"
+      ]
+    }
           </code></pre>
         </div>
 
@@ -197,20 +197,20 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // home.js
-          import { Component } from "bouerjs";
-          import html from "./home.html";
-          import style from "./home.css";
+    // home.js
+    import { Component } from "bouerjs";
+    import html from "./home.html";
+    import style from "./home.css";
 
-          export class Home extends Component {
-            constructor(){
-              super(html);
-            }
+    export class Home extends Component {
+      constructor(){
+        super(html);
+      }
 
-            init(){
-              this.addAssets([ style ]);
-            }
-          }
+      init(){
+        this.addAssets([ style ]);
+      }
+    }
           </code></pre>
         </div>
 
@@ -229,14 +229,14 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // .babelrc
+    // .babelrc
 
-          {
-            "presets": [
-              "@babel/preset-typescript",
-              "@babel/preset-env"
-            ]
-          }
+    {
+      "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-env"
+      ]
+    }
           </code></pre>
         </div>
 
@@ -255,34 +255,34 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // /typings/index.d.ts
+    // /typings/index.d.ts
 
-          declare module '*.html' {
-            const value: string;
-            export default value;
-          }
+    declare module '*.html' {
+      const value: string;
+      export default value;
+    }
 
-          declare module '*.css' {
-            const value: string;
-            export default value;
-          }
+    declare module '*.css' {
+      const value: string;
+      export default value;
+    }
           </code></pre>
         </div>
 
         <h4> Here a basic recommended tsconfig.json file </h4>
         <div e-skip>
           <pre><code lang="js">
-          // tsconfig.json
+    // tsconfig.json
 
-          {
-            "compilerOptions": {
-              "strict": true,
-              "target": "es5",
-              "module": "ES2015",
-              "moduleResolution": "Node",
-            },
-            "include": ["typings/**/*.d.ts", "src/**/*"]
-          }
+    {
+      "compilerOptions": {
+        "strict": true,
+        "target": "es5",
+        "module": "ES2015",
+        "moduleResolution": "Node",
+      },
+      "include": ["typings/**/*.d.ts", "src/**/*"]
+    }
           </code></pre>
         </div>
 
@@ -298,26 +298,26 @@
 
         <div e-skip>
           <pre><code lang="js">
-          // webpack.config.js
+    // webpack.config.js
 
-          {
-            ...
+    {
+      ...
 
-            module: {
-              rules: [
-                ...
+      module: {
+        rules: [
+          ...
 
-                { // Processing `ts` files
-                    test: /\.ts$/,
-                    use: ['ts-loader'],
-                    exclude: /node_modules/,
-                }
-              ]
-            },
-
-            // Allow to import .ts files without explicitly provide the file extension
-            resolve: { extensions: ['.ts'] },
+          { // Processing `ts` files
+              test: /\.ts$/,
+              use: ['ts-loader'],
+              exclude: /node_modules/,
           }
+        ]
+      },
+
+      // Allow to import .ts files without explicitly provide the file extension
+      resolve: { extensions: ['.ts'] },
+    }
           </code></pre>
         </div>
 

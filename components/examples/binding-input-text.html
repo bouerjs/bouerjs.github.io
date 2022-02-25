@@ -2,13 +2,14 @@
   <!-- Two Ways Data Binding -->
   <input type="text" e-bind="value" /><br>
 
-  <h4> {{ value }} </h4>
+  <h4 {title}> {{ value }} </h4>
 </div>
 
 <script>
   var app = new Bouer('#app', {
-      data: {
-          value: 'Change me!',
-      }
+    data: {
+      value: 'Change me!',
+      title: 'Hi from dynamic attribute 👋'
+    }
   });
 </script>

@@ -18,8 +18,11 @@
       <user-item data="$data" e-for="user of users"></user-item>
     </ul>
 
+    <!-- Injecting the footer -->
+    <app-footer></app-footer>
   </div>
 </div>
+
 <script>
   var app = new Bouer('#app', {
     data: {
@@ -50,19 +53,81 @@
     components: [
       {
         name: 'app-header',
-        template: this.tab('app-header')
+        template: $this.tab('app-header')
       },
       {
         name: 'user-item',
-        template: this.tab('user-item')
+        template: $this.tab('user-item')
       },
       {
         name: 'app-footer',
-        template: this.tab('app-footer')
+        template: $this.tab('app-footer')
       }
     ]
   });
 </script>
+
+<style scoped>
+  .form {
+    display: flex;
+  	flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 0;
+  }
+
+  .form>* {
+    margin: 1px 0;
+  }
+
+  ul.users {
+    list-style: none;
+  }
+
+  ul.users li {
+    display: flex;
+    margin: 6px 0;
+    padding: 4px 2px;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    max-width: 320px;
+  }
+
+  ul.users li .avatar {
+    /* Center de Content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* End Center de Content */
+    width: 80px;
+  }
+
+  ul.users li .avatar span {
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+  }
+
+  ul.users li .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  ul.users li .info .row {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  ul.users li .info .row span {
+    margin: auto 0;
+  }
+</style>
 
 <!-- component:user-item -->
 <li>
@@ -78,10 +143,36 @@
 <!-- component:app-header -->
 <header>
   <h3>💻 | Github Users</h3>
-  <br>
 </header>
+
+<style scoped>
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 0;
+    margin: 4px 0;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+</style>
 
 <!-- component:app-footer -->
 <footer>
   <small>Copyright © Bouer</small>
 </footer>
+
+<style scoped>
+  footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 0;
+    margin: 4px 0;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+</style>

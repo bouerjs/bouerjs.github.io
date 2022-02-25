@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="right-view">
-    <code-editor wait-data="playground-app" data="{ options: $data }"></code-editor>
+    <editor wait-data="playground-app" data="{ options: $data }"></editor>
   </div>
 </div>
 <script>
@@ -59,7 +59,7 @@
       });
     }
 
-    if (!name) return setter('<h1>Hello World 👋!</h1>');
+    if (!name) return setter('<h1>Hello Champ 👋!</h1>');
 
     // Ajusting the selected example position
     var examplesContainer = examplesView.querySelector('.examples-container');
@@ -129,6 +129,12 @@
       },
 
       {
+        name: 'events',
+        text: 'Events Listeners',
+        desc: 'Applying event listeners on elements'
+      },
+
+      {
         name: 'binding-select',
         text: 'Binding • Select',
         desc: 'Binding select element primitive property'
@@ -137,6 +143,12 @@
         name: 'binding-select-multi',
         text: 'Binding • Select Multi',
         desc: 'Binding select element with list of primitives'
+      },
+
+      {
+        name: 'directive-wait-data',
+        text: 'Waiting Data',
+        desc: 'Waiting a certain data to compile an element'
       },
       {
         name: 'directive-show-conditional',
@@ -178,7 +190,7 @@
       },
 
       {
-        name: 'watch-scope',
+        name: 'property-watch-scope',
         text: 'Watch Scope',
         desc: 'Watching a scope for any reactive prop. changes'
       },
@@ -201,7 +213,7 @@
       var editor, url = location.href.split('?')[0] + '?ex=' + example.name;
 
       // Cleaning the content
-      editorView.innerHTML = '<code-editor wait-data="playground-app" data="{ options: $data }"></code-editor>';
+      editorView.innerHTML = '<editor wait-data="playground-app" data="{ options: $data }"></editor>';
       editor = editorView.children[0];
 
       this.data.active = example.name;

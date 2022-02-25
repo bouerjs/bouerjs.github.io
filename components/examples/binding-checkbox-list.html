@@ -1,10 +1,22 @@
 <div id="app">
-  <input type="checkbox" e-bind="movies" value="Iron Man"> Iron Man <br>
-  <input type="checkbox" e-bind="movies" value="Super-Man"> Super-Man <br>
-  <input type="checkbox" e-bind="movies" value="Batman"> Batman <br>
+  <label for="c-1">
+    <input id="c-1" type="checkbox" e-bind="movies" value="Iron Man">
+    Iron Man
+  </label> <br>
+
+  <label for="c-2">
+    <input id="c-2" type="checkbox" e-bind="movies" value="Super-Man">
+    Super-Man
+  </label> <br>
+
+  <label for="c-3">
+    <input id="c-3" type="checkbox" e-bind="movies" value="Batman">
+    Batman
+  </label> <br>
 
   <p> Selected Movies: {{ movies }}</p>
 </div>
+
 <script>
   var app = new Bouer('#app', {
     data: {
