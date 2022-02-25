@@ -156,6 +156,10 @@ i {
   color: #ce9178;
 }
 
+.dark-mode .CodeMirror .CodeMirror-code .cm-atom {
+  color: #ce9178;
+}
+
 .dark-mode .CodeMirror .CodeMirror-code .cm-property {
   color: #9cdcfe;
 }
