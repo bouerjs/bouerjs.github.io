@@ -2,7 +2,7 @@ function BouerComponents(sharedOptions) {
   var lang = sharedOptions.lang;
   var loadedEvent = sharedOptions.loadedEvent;
   var mountedEvent = sharedOptions.mountedEvent;
-  var base = '/components/' + lang + '/docs/';
+  var baseDoc = '/components/' + lang + '/docs/';
 
   return [
     // Simple Component
@@ -61,7 +61,7 @@ function BouerComponents(sharedOptions) {
     // Documentation sections
     {
       name: 'bindings',
-      path: base + 'bindings.html',
+      path: baseDoc + 'bindings.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/bindings.html',
@@ -69,7 +69,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'directives',
-      path: base + 'directives.html',
+      path: baseDoc + 'directives.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/directives.html',
@@ -77,7 +77,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'components',
-      path: base + 'components.html',
+      path: baseDoc + 'components.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/components.html',
@@ -85,7 +85,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'delimiters',
-      path: base + 'delimiters.html',
+      path: baseDoc + 'delimiters.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/delimiters.html',
@@ -93,7 +93,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'events',
-      path: base + 'events.html',
+      path: baseDoc + 'events.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/events.html',
@@ -101,7 +101,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'installation',
-      path: base + 'installation.html',
+      path: baseDoc + 'installation.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/installation.html',
@@ -109,7 +109,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'instance',
-      path: base + 'instance.html',
+      path: baseDoc + 'instance.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/instance.html',
@@ -117,7 +117,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'introduction',
-      path: base + 'introduction.html',
+      path: baseDoc + 'introduction.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/introduction.html',
@@ -125,7 +125,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'methods',
-      path: base + 'methods.html',
+      path: baseDoc + 'methods.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/methods.html',
@@ -133,7 +133,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'routing',
-      path: base + 'routing.html',
+      path: baseDoc + 'routing.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/routing.html',
@@ -141,7 +141,7 @@ function BouerComponents(sharedOptions) {
     },
     {
       name: 'tooling',
-      path: base + 'tooling.html',
+      path: baseDoc + 'tooling.html',
       mounted: mountedEvent,
       loaded: loadedEvent,
       route: '/docs/tooling.html',
