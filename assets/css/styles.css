@@ -561,7 +561,7 @@ a.active-doc-menu * {
   width: 63pt;
   height: 63pt;
   border-radius: 50%;
-  top: 13pt;
+  top: 10pt;
   position: relative;
   border: 4px solid var(--bouer-blue);
 }
@@ -1752,7 +1752,7 @@ ul.top-menu-opened {
   .banner .top .logo .wrapper {
     width: 43pt;
     height: 43pt;
-    top: 8pt;
+    top: 6pt;
     position: relative;
     border: 4px solid #3178c6;
   }
