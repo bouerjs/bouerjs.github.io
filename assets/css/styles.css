@@ -224,6 +224,10 @@ i {
   border-color: var(--color-black-text);
 }
 
+.dark-mode .CodeMirror-selected {
+  background-color: #569cd629!important;
+}
+
 .dark-mode .CodeMirror.cm-s-default .CodeMirror-simplescroll-vertical div,
 .dark-mode .CodeMirror.cm-s-default .CodeMirror-simplescroll-horizontal div {
   background-color: var(--color-scroll-thumb);
