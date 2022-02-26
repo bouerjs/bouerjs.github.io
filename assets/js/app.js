@@ -64,7 +64,8 @@
       lang: lang,
       loadedEvent: function (evt) {
         var el = evt.target;
-        var isDocPageType = location.href.includes('/docs/') || location.href.includes('/cli/')
+        var isDoc = location.href.includes('/docs/');
+        var isCliDoc = location.href.includes('/cli/');
 
         var anchorsWithId = [].slice.call(el.querySelectorAll('a[id]'));
         for (let i = 0; i < anchorsWithId.length; i++) {
@@ -77,7 +78,7 @@
           }
         }
 
-        if (isDocPageType) {
+        if (isDoc || isCliDoc) {
           // Anchors modifier
           var anchors = [].slice.call(el.querySelectorAll('h1>a'));
           for (let i = 0; i < anchors.length; i++)
@@ -114,9 +115,9 @@
           eval(_js.innerText);
         }
 
-        if (isDocPageType) {
+        if (isDoc || isCliDoc) {
           // marking the active link
-          var navDoc = document.querySelector('a.nav-doc');
+          var navDoc = isDoc ? document.querySelector('a.nav-doc') : document.querySelector('a.nav-cli');
           if (navDoc && !navDoc.classList.contains('active-link'))
             navDoc.classList.add('active-link');
 
