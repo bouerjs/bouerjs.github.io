@@ -41,12 +41,12 @@ function BouerComponents(sharedOptions) {
     // Global
     {
       isDefault: true,
-      path: '/components/' + lang + '/home.component.html',
+      path: '/components/' + lang + '/home-component.html',
       route: '/',
       title: 'Bouer'
     },
     {
-      path: '/components/' + lang + '/play.component.html',
+      path: '/components/' + lang + '/play-component.html',
       route: '/play.html',
       title: 'Playground'
     },
