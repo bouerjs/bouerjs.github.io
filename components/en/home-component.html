@@ -1,0 +1,236 @@
+<div class="page">
+
+  <div class="banner">
+    <div class="top">
+      <div class="logo">
+        Bou<span class="wrapper"><span class="yellow">e</span></span>r
+      </div>
+    </div>
+    <div class="bottom">
+      <p>The simple web application builder, just think and do it!</p>
+      <div class="nav-actions">
+        <a :href="/docs/introduction.html" class="btn-like">Get Started</a>
+        <a :href="/tutorial/introduction.html" class="btn-like">Tutorial</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container page-section-space">
+    <div class="card">
+      <div class="head">
+        <p class="title"> Write in HTML file </p>
+      </div>
+      <div class="body">
+        <p>
+          Create your component with the styles (scoped or not) and
+          scripts, embedded in a single pure HTML file.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <p class="title"> No Virtual DOM </p>
+      </div>
+      <div class="body">
+        <p>
+          Bouer listens to each property (made available by the instance)
+          in the application, when the property changes, it updates the
+          element.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <p class="title"> Reuse Elements </p>
+      </div>
+      <div class="body">
+        <p>
+          Bouer gives you the opportunity to reuse elements already defined
+          in the application, as if it were a copy and paste.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="middle-content page-section-space">
+    <div class="center-content">
+      <p class="main-page-description">
+        What's <span class="note mark">Bouer.js</span>? It's <span class="note">Easy.js</span> v3.0.0 upgrade with
+        a new name, that extends for a javascript library for building user interfaces, and helps in the web
+        applications development, providing a synchronous interaction between user interfaces and Javascript
+        data. In some ways and directives, it is very similar to <span class="note">Vue.js</span> and
+        <span class="note">Angular.js</span>, but it handles things differently!
+      </p>
+    </div>
+  </div>
+
+  <div class="main-divider middle-content editor-divider">
+
+    <div class="main-page-editor-container">
+      <div class="description">
+        <div>
+          <h2>Hello World Example</h2>
+          <p>
+            Begin showing some data in your app by just setting a property with the value that you want to
+            display in <i class="note mark">data</i> property.
+          </p>
+        </div>
+      </div>
+
+      <editor wait-data="hello-world-app" data="{ options: $data }"></editor>
+    </div>
+
+    <div class="main-page-editor-container">
+      <div class="description">
+        <div>
+          <h2>TODO List Example</h2>
+          <p>
+            Loop an array in HTML like you're doing it on javascript, add or remove elements without worrying
+            about the UI.
+          </p>
+        </div>
+      </div>
+
+      <editor wait-data="todo-app" data="{ options: $data }"></editor>
+    </div>
+
+    <div class="main-page-editor-container">
+      <div class="description">
+        <div>
+          <h2>Component Example</h2>
+          <p>
+            Bouer components are written in pure html code, we can register them to
+            the Bouer instance using by a <i class="mark">.html</i> file path or using a template string.
+            Each component can have its own script and style.
+          </p>
+        </div>
+      </div>
+
+      <editor wait-data="component-app" data="{ options: $data }"></editor>
+    </div>
+
+  </div>
+
+  <div class="middle-content page-section-space">
+    <div class="center-content">
+      <div class="main-text">
+        <h3> Want to Learn more? </h3>
+        <p class="nav-actions">
+          <a :href="/docs/introduction.html" class="btn-like"> Get Started </a>
+          or take the
+          <a :href="/tutorial/introduction.html" class="btn-like"> Tutorial </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <app-footer data></app-footer>
+</div>
+<script>
+  var bouer = this.bouer;
+  this.on('loaded', function (evt) {
+    bouer.$wait.set('hello-world-app', {
+      name: 'Hello Word App',
+      content:
+        '<div id="app">\n' +
+        '  <h3> {{ greeting }} <\/h3>\n' +
+        '<\/div>\n\n' +
+        '<script>\n' +
+        '  new Bouer("#app", {\n' +
+        '    data: {\n' +
+        '      greeting: "Hello World!"\n' +
+        '    }\n' +
+        '  });\n' +
+        '<\/script>'
+    });
+
+    bouer.$wait.set('todo-app', {
+      name: 'TODO',
+      content:
+        '<div id="app">\n' +
+        '  <input type="text" e-bind="task"><br>\n' +
+        '  <p>TODO: <span> {{ task }} <\/span></p>\n\n' +
+        '  <button on:click="todos = []"> Clear </button>\n' +
+        '  <button on:click="addTodo"> Add </button><br>\n\n' +
+        '  <ul>\n' +
+        '    <li e-for="todo of todos"> {{ todo }} </li>\n' +
+        '  </ul>\n' +
+        '<\/div>\n\n' +
+        '<script>\n' +
+        '  new Bouer("#app", {\n' +
+        '    data: {\n' +
+        '      // Properties\n' +
+        '      task: "",\n' +
+        '      todos: [ "💻 Work", "🛌 Rest" ],\n' +
+        '      // Methods\n' +
+        '      addTodo: function() {\n' +
+        '        if (!this.data.task) return;\n' +
+        '          this.data.todos.push(this.data.task);\n' +
+        '          this.data.task = "";\n' +
+        '      }\n' +
+        '    }\n' +
+        '  });\n' +
+        '<\/script>'
+    });
+
+    bouer.$wait.set('component-app', {
+      name: 'Component Based App',
+      content:
+        '<div id="app">\n' +
+        '  <app-header><\/app-header>\n\n' +
+        '  <div class="content">\n' +
+        '    <p>Application Content<\/p>\n' +
+        '  <\/div>\n\n' +
+        '  <app-footer><\/app-footer>\n' +
+        '<\/div>\n\n' +
+        '<script>\n' +
+        '  var app = new Bouer("#app", {\n' +
+        '    components: [\n' +
+        '      {\n' +
+        '        name: "app-header",\n' +
+        '        template: $this.tab("header")\n' +
+        '      },\n' +
+        '      {\n' +
+        '        name: "app-footer",\n' +
+        '        template: $this.tab("footer")\n' +
+        '      },\n' +
+        '    ]\n' +
+        '  });\n' +
+        '<\/script>',
+
+      tabs: [
+        {
+          name: 'header',
+          content:
+            '<header>\n' +
+            '  <span class="logo"><\/span> \n' +
+            '<\/header>\n\n' +
+            '<style scoped>\n' +
+            '  header {\n' +
+            '    display: flex;\n' +
+            '  }\n' +
+            '  .logo {\n' +
+            '    margin: auto;\n' +
+            '    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");\n' +
+            '    height: 60px;\n' +
+            '    background-repeat: no-repeat;\n' +
+            '    flex: 1;\n' +
+            '    background-size: contain;\n' +
+            '  }\n' +
+            '<\/style>'
+        },
+        {
+          name: 'footer',
+          content:
+            '<footer>\n' +
+            '  <small>Copyright © Bouer<\/small>\n' +
+            '<\/footer>'
+        }
+      ]
+    });
+
+  });
+
+</script>
