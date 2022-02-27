@@ -116,6 +116,11 @@
   }
 
   this.on('loaded', function () {
+    var _ = setTimeout(() => {
+      bouer.$routing.markActiveAnchor(document.querySelector('.nav-tutorial'));
+      clearTimeout(_);
+    }, 100);
+
     var splitted = location.href.split('/');
     var section = (splitted[splitted.length - 1]).replace('.html', '');
 
@@ -132,11 +137,6 @@
     this.data.topicPrev = this.data.topics[index - 1] || {};
 
     getExample(this.data.ex);
-
-    var _ = setTimeout(() => {
-      bouer.$routing.markActiveAnchor(document.querySelector('.nav-tutorial'));
-      clearTimeout(_);
-    }, 500);
 
     tutorialBtnEvent = this.bouer.on('tutorial-btn-pressed', function () {
       component.data.tutorialMenuOpened = !component.data.tutorialMenuOpened;
