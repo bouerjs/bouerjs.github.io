@@ -2527,13 +2527,17 @@
           });
       };
       Component.prototype.on = function (eventName, callback) {
-          var context = (eventName == 'requested' || eventName == 'failed' || eventName == 'blocked') ? this.bouer : this;
+          var set = new Set(['mounted', 'beforeLoad', 'loaded', 'beforeDestroy', 'destroyed']);
+          var registerHooks = new Set(['requested', 'created', 'beforeMount', 'blocked', 'failed']);
+          if (registerHooks.has(eventName))
+              Logger.warn("The “" + eventName + "” Event is called before the component is mounted, to be dispatched" +
+                  "it needs to be on registration object: { " + eventName + ": function(){ ... }, ... }.");
           var evt = new ServiceProvider(this.bouer).get('EventHandler').on({
               eventName: eventName,
               callback: callback,
               attachedNode: this.el,
-              context: context,
-              modifiers: { once: true, autodestroy: false },
+              context: this,
+              modifiers: { once: set.has(eventName), autodestroy: false },
           });
           this.events.push(evt);
           return evt;
@@ -2665,9 +2669,7 @@
               if (!hasBaseElement)
                   Logger.warn("It seems like you are not using the “<base href=\"/base/components/path/\" />” " +
                       "element, try to add as the first child into “<head></head>” element.");
-              forEach(_this.requests[path], function (request) {
-                  request.fail(error, path);
-              });
+              forEach(_this.requests[path], function (request) { return request.fail(error, path); });
               delete _this.requests[path];
           });
       };
@@ -2717,52 +2719,49 @@
               return getContent(component.path);
           });
       };
-      ComponentHandler.prototype.order = function (componentElement, data, callback) {
+      ComponentHandler.prototype.order = function (componentElement, data, loadedCallback) {
           var _this = this;
           var $name = toLower(componentElement.nodeName);
           var mComponents = this.components;
-          var hasComponent = mComponents[$name];
-          if (!hasComponent)
+          var inComponent = mComponents[$name];
+          if (!inComponent)
               return Logger.error("No component with name “" + $name + "” registered.");
-          var component = hasComponent;
-          var icomponent = component;
+          var component = inComponent;
+          var iComponent = component;
           var mainExecutionWrapper = function () {
               if (component.template) {
                   var newComponent = (component instanceof Component) ? component : new Component(component);
                   newComponent.bouer = _this.bouer;
-                  _this.insert(componentElement, newComponent, data, callback);
+                  _this.insert(componentElement, newComponent, data, loadedCallback);
                   if (component.keepAlive === true)
                       mComponents[$name] = component;
                   return;
               }
               if (!component.path)
                   return Logger.error("Expected a valid value in `path` or `template` got invalid value at “" + $name + "” component.");
-              var requestedEvent = _this.addComponentEventAndEmitGlobalEvent('requested', componentElement, component, _this.bouer);
-              if (requestedEvent)
-                  requestedEvent.emit();
-              // Make or Add request
+              _this.addEvent('requested', componentElement, component, _this.bouer)
+                  .emit();
+              // Make component request or Add
               _this.request(component.path, {
                   success: function (content) {
                       var newComponent = (component instanceof Component) ? component : new Component(component);
-                      icomponent.template = newComponent.template = content;
+                      iComponent.template = newComponent.template = content;
                       newComponent.bouer = _this.bouer;
-                      _this.insert(componentElement, newComponent, data, callback);
+                      _this.insert(componentElement, newComponent, data, loadedCallback);
                       if (component.keepAlive === true)
                           mComponents[$name] = component;
                   },
                   fail: function (error) {
                       Logger.error("Failed to request <" + $name + "></" + $name + "> component with path “" + component.path + "”.");
                       Logger.error(buildError(error));
-                      if (typeof icomponent.failed !== 'function')
-                          return;
-                      icomponent.failed(new CustomEvent('failed'));
+                      _this.addEvent('failed', componentElement, component, _this.bouer).emit();
                   }
               });
           };
           // Checking the restrictions
-          if (icomponent.restrictions && icomponent.restrictions.length > 0) {
+          if (iComponent.restrictions && iComponent.restrictions.length > 0) {
               var blockedRestrictions_1 = [];
-              var restrictions = icomponent.restrictions.map(function (restriction) {
+              var restrictions = iComponent.restrictions.map(function (restriction) {
                   var restrictionResult = restriction.call(_this.bouer, component);
                   if (restrictionResult === false)
                       blockedRestrictions_1.push(restriction);
@@ -2775,7 +2774,7 @@
                           .catch(function () { return blockedRestrictions_1.push(restriction); });
                   return restrictionResult;
               });
-              var blockedEvent_1 = this.addComponentEventAndEmitGlobalEvent('blocked', componentElement, component, this.bouer);
+              var blockedEvent_1 = this.addEvent('blocked', componentElement, component, this.bouer);
               var emitter_1 = function () { return blockedEvent_1.emit({
                   detail: {
                       component: component.name,
@@ -2794,40 +2793,45 @@
           }
           return mainExecutionWrapper();
       };
-      ComponentHandler.prototype.find = function (callback) {
+      ComponentHandler.prototype.find = function (predicate) {
           var keys = Object.keys(this.components);
           for (var i = 0; i < keys.length; i++) {
               var component = this.components[keys[i]];
-              if (callback(component))
+              if (predicate(component))
                   return component;
           }
           return null;
       };
       /** Subscribe the hooks of the instance */
-      ComponentHandler.prototype.addComponentEventAndEmitGlobalEvent = function (eventName, element, component, context) {
+      ComponentHandler.prototype.addEvent = function (eventName, element, component, context) {
+          var _this = this;
           var callback = component[eventName];
-          this.eventHandler.emit({
-              eventName: 'component:' + eventName,
-              init: {
-                  detail: { component: component }
-              }
-          });
-          if (typeof callback !== 'function')
-              return { emit: (function () { }) };
-          var emitter = this.eventHandler.on({
-              eventName: eventName,
-              callback: function (evt) { return callback.call(component, evt); },
-              attachedNode: element,
-              modifiers: { once: true },
-              context: context || component
-          }).emit;
-          return {
-              emit: function (init) { return emitter({
+          if (typeof callback === 'function')
+              this.eventHandler.on({
+                  eventName: eventName,
+                  callback: function (evt) { return callback.call(context || component, evt); },
+                  attachedNode: element,
+                  modifiers: { once: true },
+                  context: context || component
+              });
+          var emitter = function (init) {
+              _this.eventHandler.emit({
+                  attachedNode: element,
+                  once: true,
+                  eventName: eventName,
                   init: init
-              }); }
+              });
+              _this.eventHandler.emit({
+                  eventName: 'component:' + eventName,
+                  init: { detail: { component: component } },
+                  once: true
+              });
+          };
+          return {
+              emit: function (init) { return emitter(init); }
           };
       };
-      ComponentHandler.prototype.insert = function (componentElement, component, data, callback) {
+      ComponentHandler.prototype.insert = function (componentElement, component, data, onComponentCallback) {
           var _this = this;
           var $name = toLower(componentElement.nodeName);
           var container = componentElement.parentElement;
@@ -2857,15 +2861,22 @@
                       return Logger.error(("The component <" + $name + "></" + $name + "> " +
                           "seems to have multiple root element, it must have only one root."));
                   component.el = htmlSnippet.children[0];
-                  _this.addComponentEventAndEmitGlobalEvent('created', component.el, component, _this.bouer);
-                  component.emit('created');
               });
           }
           if (isNull(component.el))
               return;
-          if (isFunction(callback))
-              callback(component);
           var rootElement = component.el;
+          if (isFunction(onComponentCallback))
+              onComponentCallback(component);
+          // Adding the listeners
+          var createdEvent = this.addEvent('created', component.el, component);
+          var beforeMountEvent = this.addEvent('beforeMount', component.el, component);
+          var mountedEvent = this.addEvent('mounted', component.el, component);
+          var beforeLoadEvent = this.addEvent('beforeLoad', component.el, component);
+          var loadedEvent = this.addEvent('loaded', component.el, component);
+          this.addEvent('beforeDestroy', component.el, component);
+          this.addEvent('destroyed', component.el, component);
+          createdEvent.emit();
           // tranfering the attributes
           forEach(toArray(componentElement.attributes), function (attr) {
               componentElement.removeAttribute(attr.name);
@@ -2918,11 +2929,10 @@
           var initializer = component.init;
           if (isFunction(initializer))
               initializer.call(component);
-          this.addComponentEventAndEmitGlobalEvent('beforeMount', component.el, component);
-          component.emit('beforeMount');
+          beforeMountEvent.emit();
           container.replaceChild(rootElement, componentElement);
           var rootClassList = {};
-          // Retrieving all the classes of the retu elements
+          // Retrieving all the classes of the root element
           rootElement.classList.forEach(function (key) { return rootClassList[key] = true; });
           // Changing each selector to avoid conflits
           var changeSelector = function (style, styleId) {
@@ -2937,15 +2947,15 @@
                   var mRule = rule;
                   var ruleText = mRule.selectorText;
                   if (ruleText) {
-                      var firstOrDefaultRule = ruleText.split(' ')[0];
-                      var selector = (firstOrDefaultRule[0] == '.' || firstOrDefaultRule[0] == '#')
-                          ? firstOrDefaultRule.substring(1) : firstOrDefaultRule;
-                      var separation = rootClassList[selector] ? "" : " ";
+                      var firstRule = ruleText.split(' ')[0];
+                      var selector = (firstRule[0] == '.' || firstRule[0] == '#')
+                          ? firstRule.substring(1) : firstRule;
+                      var separator = rootClassList[selector] ? "" : " ";
                       var uniqueIdentifier = "." + styleId;
                       var selectorTextSplitted = mRule.selectorText.split(' ');
                       if (selectorTextSplitted[0] === toLower(rootElement.tagName))
                           selectorTextSplitted.shift();
-                      mRule.selectorText = uniqueIdentifier + separation + selectorTextSplitted.join(' ');
+                      mRule.selectorText = uniqueIdentifier + separator + selectorTextSplitted.join(' ');
                   }
                   if (isStyle)
                       rules.push(mRule.cssText);
@@ -2994,24 +3004,16 @@
                   // Executing the mixed scripts
                   _this.serviceProvider.get('Evaluator')
                       .execRaw((scriptContent || ''), component);
-                  _this.addComponentEventAndEmitGlobalEvent('mounted', component.el, component);
-                  component.emit('mounted');
+                  mountedEvent.emit();
                   // TODO: Something between this two events
-                  _this.addComponentEventAndEmitGlobalEvent('beforeLoad', component.el, component);
-                  component.emit('beforeLoad');
+                  beforeLoadEvent.emit();
                   _this.serviceProvider.get('Compiler')
                       .compile({
-                      data: Reactive.transform({
-                          context: component,
-                          data: component.data
-                      }),
-                      el: rootElement,
+                      data: Reactive.transform({ context: component, data: component.data }),
+                      onDone: function () { return loadedEvent.emit(); },
                       componentSlot: elementSlots,
                       context: component,
-                      onDone: function () {
-                          _this.addComponentEventAndEmitGlobalEvent('loaded', component.el, component);
-                          component.emit('loaded');
-                      }
+                      el: rootElement,
                   });
                   Task.run(function (stopTask) {
                       if (component.el.isConnected)
@@ -3081,8 +3083,6 @@
                   Logger.error(("Error loading the <script src=\"" + url + "\"></script> in " +
                       "<" + $name + "></" + $name + "> component, remove it in order to be compiled."));
                   Logger.log(error);
-                  _this.addComponentEventAndEmitGlobalEvent('failed', componentElement, component, _this.bouer)
-                      .emit();
               });
           });
       };
@@ -3334,21 +3334,24 @@
               node.addEventListener(eventName, callback, { once: true });
               node.dispatchEvent(new CustomEvent(eventName, init));
           };
-          forEach(events, function (evt) {
+          this.$events[eventName] = where(events, function (evt, idx) {
               var node = evt.attachedNode;
+              var isOnceEvent = ifNullReturn((evt.modifiers || {}).once, false) || ifNullReturn(once, false);
               // If a node was provided, just dispatch the events in this node
               if (attachedNode) {
                   if (node !== attachedNode)
-                      return;
-                  return emitter(node, evt.callback);
+                      return true;
+                  emitter(node, evt.callback);
+                  return !isOnceEvent;
               }
               // Otherwise, if this events has a node, dispatch the node event
-              if (node)
-                  return emitter(node, evt.callback);
+              if (node) {
+                  emitter(node, evt.callback);
+                  return !isOnceEvent;
+              }
               // Otherwise, dispatch the event
               evt.callback.call(_this.bouer, new CustomEvent(eventName, init));
-              if (ifNullReturn(once, false) === true)
-                  events.splice(events.indexOf(evt), 1);
+              return !isOnceEvent;
           });
       };
       EventHandler.prototype.cleanup = function () {
@@ -3463,7 +3466,7 @@
           // Listening to the page navigation
           GLOBAL.addEventListener('popstate', function (evt) {
               evt.preventDefault();
-              _this.navigate((evt.state || location.href), {
+              _this.navigate(((evt.state || {}).url || location.href), {
                   setURL: false
               });
           });
@@ -3502,7 +3505,7 @@
           new ServiceProvider(this.bouer).get('ComponentHandler')
               .order(componentElement, this.bouer.data, function (component) {
               component.on('loaded', function () {
-                  _this.markActiveAnchorsWithRoute(routeToSet);
+                   _this.markActiveAnchorsWithRoute(routeToSet);
               });
           });
       };
@@ -3510,7 +3513,7 @@
           url = urlResolver(url).href;
           if (DOM.location.href === url)
               return;
-          GLOBAL.history.pushState(url, (title || ''), url);
+          GLOBAL.history.pushState({ url: url, title: title }, (title || ''), url);
       };
       Routing.prototype.popState = function (times) {
           if (isNull(times))
