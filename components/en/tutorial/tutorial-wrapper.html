@@ -96,12 +96,6 @@
 
     if (!name) return setter('<h3> Hello Champ 👋! </h3>');
 
-    // // Ajusting the selected example position
-    // var examplesContainer = examplesView.querySelector('.examples-container');
-    // var activeExample = examplesContainer.querySelector('.active-item');
-    // if (activeExample)
-    //   examplesContainer.scrollTop = activeExample.offsetTop - 165;
-
     fetch(location.origin + "/components/examples/" + name + ".html", {
       headers: { 'Content-Type': 'text/plain' }
     }).then(function (response) {
