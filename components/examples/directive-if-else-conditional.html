@@ -1,15 +1,15 @@
 <div id="app">
   <input type="number" e-bind="binary" /> <br>
 
-  <p e-if="binary == 1">
+  <h2 e-if="binary == 1">
     {{ binary }} is on 🙂
-  </p>
-  <p e-else-if="binary == 0">
+  </h2>
+  <h2 e-else-if="binary == 0">
     {{ binary }} is off 🙁
-  </p>
-  <p e-else>
+  </h2>
+  <h2 e-else>
     {{ binary }} is not binary 🤨
-  </p>
+  </h2>
 </div>
 
 <script>
