@@ -3334,7 +3334,7 @@
               node.addEventListener(eventName, callback, { once: true });
               node.dispatchEvent(new CustomEvent(eventName, init));
           };
-          this.$events[eventName] = where(events, function (evt, idx) {
+          this.$events[eventName] = where(events, function (evt) {
               var node = evt.attachedNode;
               var isOnceEvent = ifNullReturn((evt.modifiers || {}).once, false) || ifNullReturn(once, false);
               // If a node was provided, just dispatch the events in this node
@@ -3505,7 +3505,7 @@
           new ServiceProvider(this.bouer).get('ComponentHandler')
               .order(componentElement, this.bouer.data, function (component) {
               component.on('loaded', function () {
-                   _this.markActiveAnchorsWithRoute(routeToSet);
+                  _this.markActiveAnchorsWithRoute(routeToSet);
               });
           });
       };
