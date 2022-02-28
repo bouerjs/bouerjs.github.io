@@ -941,7 +941,7 @@
           _this.watches = [];
           _this.get = function () {
               ReactiveEvent.emit('BeforeGet', _this);
-              _this.propValue = _this.isComputed ? _this.computedGetter() : _this.propValue;
+              _this.propValue = _this.isComputed ? _this.computedGetter.call(_this.context) : _this.propValue;
               var value = _this.propValue;
               ReactiveEvent.emit('AfterGet', _this);
               return value;
@@ -984,7 +984,7 @@
                   _this.propValue = value;
               }
               if (_this.isComputed && _this.computedSetter)
-                  _this.computedSetter(value);
+                  _this.computedSetter.call(_this.context, value);
               ReactiveEvent.emit('AfterSet', _this);
               _this.notify();
           };
@@ -2831,7 +2831,7 @@
               emit: function (init) { return emitter(init); }
           };
       };
-      ComponentHandler.prototype.insert = function (componentElement, component, data, onComponentCallback) {
+      ComponentHandler.prototype.insert = function (componentElement, component, data, onComponent) {
           var _this = this;
           var $name = toLower(componentElement.nodeName);
           var container = componentElement.parentElement;
@@ -2866,8 +2866,6 @@
           if (isNull(component.el))
               return;
           var rootElement = component.el;
-          if (isFunction(onComponentCallback))
-              onComponentCallback(component);
           // Adding the listeners
           var createdEvent = this.addEvent('created', component.el, component);
           var beforeMountEvent = this.addEvent('beforeMount', component.el, component);
@@ -3010,7 +3008,11 @@
                   _this.serviceProvider.get('Compiler')
                       .compile({
                       data: Reactive.transform({ context: component, data: component.data }),
-                      onDone: function () { return loadedEvent.emit(); },
+                      onDone: function () {
+                          if (isFunction(onComponent))
+                              onComponent(component);
+                          loadedEvent.emit();
+                      },
                       componentSlot: elementSlots,
                       context: component,
                       el: rootElement,
@@ -3503,10 +3505,8 @@
               this.pushState(resolver.href, DOM.title);
           var routeToSet = urlCombine(resolver.baseURI, (usehash ? '#' : ''), page.route);
           new ServiceProvider(this.bouer).get('ComponentHandler')
-              .order(componentElement, this.bouer.data, function (component) {
-              component.on('loaded', function () {
-                  _this.markActiveAnchorsWithRoute(routeToSet);
-              });
+              .order(componentElement, this.bouer.data, function () {
+              _this.markActiveAnchorsWithRoute(routeToSet);
           });
       };
       Routing.prototype.pushState = function (url, title) {
