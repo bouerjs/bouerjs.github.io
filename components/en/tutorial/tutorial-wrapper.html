@@ -116,7 +116,7 @@
   }
 
   this.on('loaded', function () {
-    var _ = setTimeout(() => {
+    var _ = setTimeout(function () {
       bouer.$routing.markActiveAnchor(document.querySelector('.nav-tutorial'));
       clearTimeout(_);
     }, 100);
