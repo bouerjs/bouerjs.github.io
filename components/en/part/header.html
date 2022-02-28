@@ -45,3 +45,14 @@
     </div>
   </nav>
 </header>
+<script>
+  var component = this;
+  this.on('loaded', function () {
+    var buttons = this.el.querySelectorAll('ul>li');
+    for (var el of buttons) {
+      el.addEventListener('click', function () {
+        component.data.menuOpened = false;
+      });
+    }
+  })
+</script>

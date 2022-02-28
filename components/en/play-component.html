@@ -14,7 +14,7 @@
 
     <div class="examples-container nice-scroll">
 
-      <div class="item" e-for="exp of examples" on:click="loadExample(exp)">
+      <div class="item" e-for="exp of examples" on:click="loadExample(exp);">
         <p e-text="{{ exp.text }}" e-class="{ 'active-item' : exp.name == active }"> Example Name </p>
         <small e-text="{{ exp.desc }}">Example description</small>
       </div>
@@ -28,11 +28,11 @@
 <script>
   var bouer = this.bouer;
   var params = this.params();
-  var component = this;
+  var _this = this;
 
   function getExample(name) {
-    var editorView = component.el.querySelector('.right-view');
-    var examplesView = component.el.querySelector('.left-view');
+    var editorView = _this.el.querySelector('.right-view');
+    var examplesView = _this.el.querySelector('.left-view');
     editorView.classList.remove('error');
 
     function setter(content) {
@@ -227,7 +227,7 @@
     ],
 
     loadExample: function (example) {
-      var editorView = component.el.querySelector('.right-view');
+      var editorView = _this.el.querySelector('.right-view');
       var editor, url = location.href.split('?')[0] + '?ex=' + example.name;
 
       // Cleaning the content
@@ -246,6 +246,7 @@
       getExample(example.name);
 
       history.replaceState(example, example.text, url);
+      _this.data.docMenuOpened = false;
     },
   });
 </script>
