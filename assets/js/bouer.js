@@ -2527,8 +2527,8 @@
           });
       };
       Component.prototype.on = function (eventName, callback) {
-          var set = new Set(['mounted', 'beforeLoad', 'loaded', 'beforeDestroy', 'destroyed']);
-          var registerHooks = new Set(['requested', 'created', 'beforeMount', 'blocked', 'failed']);
+          var set = new Set(['created', 'beforeMount', 'mounted', 'beforeLoad', 'loaded', 'beforeDestroy', 'destroyed']);
+          var registerHooks = new Set(['requested', 'blocked', 'failed']);
           if (registerHooks.has(eventName))
               Logger.warn("The “" + eventName + "” Event is called before the component is mounted, to be dispatched" +
                   "it needs to be on registration object: { " + eventName + ": function(){ ... }, ... }.");
@@ -2719,7 +2719,7 @@
               return getContent(component.path);
           });
       };
-      ComponentHandler.prototype.order = function (componentElement, data, loadedCallback) {
+      ComponentHandler.prototype.order = function (componentElement, data, onComponent) {
           var _this = this;
           var $name = toLower(componentElement.nodeName);
           var mComponents = this.components;
@@ -2732,7 +2732,7 @@
               if (component.template) {
                   var newComponent = (component instanceof Component) ? component : new Component(component);
                   newComponent.bouer = _this.bouer;
-                  _this.insert(componentElement, newComponent, data, loadedCallback);
+                  _this.insert(componentElement, newComponent, data, onComponent);
                   if (component.keepAlive === true)
                       mComponents[$name] = component;
                   return;
@@ -2747,7 +2747,7 @@
                       var newComponent = (component instanceof Component) ? component : new Component(component);
                       iComponent.template = newComponent.template = content;
                       newComponent.bouer = _this.bouer;
-                      _this.insert(componentElement, newComponent, data, loadedCallback);
+                      _this.insert(componentElement, newComponent, data, onComponent);
                       if (component.keepAlive === true)
                           mComponents[$name] = component;
                   },
@@ -2874,136 +2874,136 @@
           var loadedEvent = this.addEvent('loaded', component.el, component);
           this.addEvent('beforeDestroy', component.el, component);
           this.addEvent('destroyed', component.el, component);
-          createdEvent.emit();
-          // tranfering the attributes
-          forEach(toArray(componentElement.attributes), function (attr) {
-              componentElement.removeAttribute(attr.name);
-              if (attr.nodeName === 'class')
-                  return componentElement.classList.forEach(function (cls) {
-                      rootElement.classList.add(cls);
-                  });
-              if (attr.nodeName === 'data') {
-                  if (_this.delimiter.run(attr.value).length !== 0)
-                      return Logger.error(("The “data” attribute cannot contain delimiter, " +
-                          "source element: <" + $name + "></" + $name + ">."));
-                  var inputData_1 = {};
-                  var mData = Extend.obj(data, { $data: data });
-                  var reactiveEvent = ReactiveEvent.on('AfterGet', function (reactive) {
-                      if (!(reactive.propName in inputData_1))
-                          inputData_1[reactive.propName] = undefined;
-                      Prop.set(inputData_1, reactive.propName, reactive);
-                  });
-                  // If data value is empty gets the main scope value
-                  if (attr.value === '')
-                      inputData_1 = Extend.obj(_this.bouer.data);
-                  else {
-                      // Other wise, compiles the object provided
-                      var mInputData_1 = _this.serviceProvider.get('Evaluator')
-                          .exec({
-                          data: mData,
-                          expression: attr.value,
-                          context: _this.bouer
-                      });
-                      if (!isObject(mInputData_1))
-                          return Logger.error(("Expected a valid Object Literal expression in “"
-                              + attr.nodeName + "” and got “" + attr.value + "”."));
-                      // Adding all non-existing properties
-                      forEach(Object.keys(mInputData_1), function (key) {
-                          if (!(key in inputData_1))
-                              inputData_1[key] = mInputData_1[key];
-                      });
-                  }
-                  reactiveEvent.off();
-                  Reactive.transform({
-                      context: component,
-                      data: inputData_1
-                  });
-                  return forEach(Object.keys(inputData_1), function (key) {
-                      Prop.transfer(component.data, inputData_1, key);
-                  });
-              }
-              rootElement.attributes.setNamedItem(attr);
-          });
+          var scriptsAssets = where(component.assets, function (asset) { return toLower(asset.nodeName) === 'script'; });
           var initializer = component.init;
           if (isFunction(initializer))
               initializer.call(component);
-          beforeMountEvent.emit();
-          container.replaceChild(rootElement, componentElement);
-          var rootClassList = {};
-          // Retrieving all the classes of the root element
-          rootElement.classList.forEach(function (key) { return rootClassList[key] = true; });
-          // Changing each selector to avoid conflits
-          var changeSelector = function (style, styleId) {
-              var isStyle = (style.nodeName === 'STYLE'), rules = [];
-              if (!style.sheet)
-                  return;
-              var cssRules = style.sheet.cssRules;
-              for (var i = 0; i < cssRules.length; i++) {
-                  var rule = cssRules.item(i);
-                  if (!rule)
-                      continue;
-                  var mRule = rule;
-                  var ruleText = mRule.selectorText;
-                  if (ruleText) {
-                      var firstRule = ruleText.split(' ')[0];
-                      var selector = (firstRule[0] == '.' || firstRule[0] == '#')
-                          ? firstRule.substring(1) : firstRule;
-                      var separator = rootClassList[selector] ? "" : " ";
-                      var uniqueIdentifier = "." + styleId;
-                      var selectorTextSplitted = mRule.selectorText.split(' ');
-                      if (selectorTextSplitted[0] === toLower(rootElement.tagName))
-                          selectorTextSplitted.shift();
-                      mRule.selectorText = uniqueIdentifier + separator + selectorTextSplitted.join(' ');
-                  }
-                  if (isStyle)
-                      rules.push(mRule.cssText);
-              }
-              if (isStyle)
-                  style.innerText = rules.join(' ');
-          };
-          var scriptsAssets = where(component.assets, function (asset) { return toLower(asset.nodeName) === 'script'; });
-          var stylesAssets = where(component.assets, function (asset) { return toLower(asset.nodeName) !== 'script'; });
-          var styleAttrName = 'component-style';
-          // Configuring the styles
-          forEach(stylesAssets, function (asset) {
-              var mStyle = asset.cloneNode(true);
-              if (mStyle instanceof HTMLLinkElement) {
-                  var path = component.path[0] === '/' ? component.path.substring(1) : component.path;
-                  mStyle.href = pathResolver(path, mStyle.getAttribute('href') || '');
-                  mStyle.rel = "stylesheet";
-              }
-              //Checking if this component already have styles added
-              if (_this.stylesController[$name]) {
-                  var controller = _this.stylesController[$name];
-                  if (controller.elements.indexOf(rootElement) === -1) {
-                      controller.elements.push(rootElement);
-                      forEach(controller.styles, function ($style) {
-                          rootElement.classList.add($style.getAttribute(styleAttrName));
-                      });
-                  }
-                  return;
-              }
-              var styleId = code(7, 'bouer-s');
-              mStyle.setAttribute(styleAttrName, styleId);
-              if ((mStyle instanceof HTMLLinkElement) && mStyle.hasAttribute('scoped'))
-                  mStyle.onload = function (evt) { return changeSelector(evt.target, styleId); };
-              _this.stylesController[$name] = {
-                  styles: [DOM.head.appendChild(mStyle)],
-                  elements: [rootElement]
-              };
-              if (!mStyle.hasAttribute('scoped'))
-                  return;
-              rootElement.classList.add(styleId);
-              if (mStyle instanceof HTMLStyleElement)
-                  return changeSelector(mStyle, styleId);
-          });
           var compile = function (scriptContent) {
               try {
                   // Executing the mixed scripts
                   _this.serviceProvider.get('Evaluator')
                       .execRaw((scriptContent || ''), component);
+                  createdEvent.emit();
+                  // tranfering the attributes
+                  forEach(toArray(componentElement.attributes), function (attr) {
+                      componentElement.removeAttribute(attr.name);
+                      if (attr.nodeName === 'class')
+                          return componentElement.classList.forEach(function (cls) {
+                              rootElement.classList.add(cls);
+                          });
+                      if (attr.nodeName === 'data') {
+                          if (_this.delimiter.run(attr.value).length !== 0)
+                              return Logger.error(("The “data” attribute cannot contain delimiter, " +
+                                  "source element: <" + $name + "></" + $name + ">."));
+                          var inputData_1 = {};
+                          var mData = Extend.obj(data, { $data: data });
+                          var reactiveEvent = ReactiveEvent.on('AfterGet', function (reactive) {
+                              if (!(reactive.propName in inputData_1))
+                                  inputData_1[reactive.propName] = undefined;
+                              Prop.set(inputData_1, reactive.propName, reactive);
+                          });
+                          // If data value is empty gets the main scope value
+                          if (attr.value === '')
+                              inputData_1 = Extend.obj(_this.bouer.data);
+                          else {
+                              // Other wise, compiles the object provided
+                              var mInputData_1 = _this.serviceProvider.get('Evaluator')
+                                  .exec({
+                                  data: mData,
+                                  expression: attr.value,
+                                  context: _this.bouer
+                              });
+                              if (!isObject(mInputData_1))
+                                  return Logger.error(("Expected a valid Object Literal expression in “"
+                                      + attr.nodeName + "” and got “" + attr.value + "”."));
+                              // Adding all non-existing properties
+                              forEach(Object.keys(mInputData_1), function (key) {
+                                  if (!(key in inputData_1))
+                                      inputData_1[key] = mInputData_1[key];
+                              });
+                          }
+                          reactiveEvent.off();
+                          Reactive.transform({
+                              context: component,
+                              data: inputData_1
+                          });
+                          return forEach(Object.keys(inputData_1), function (key) {
+                              Prop.transfer(component.data, inputData_1, key);
+                          });
+                      }
+                      rootElement.attributes.setNamedItem(attr);
+                  });
+                  beforeMountEvent.emit();
+                  container.replaceChild(rootElement, componentElement);
                   mountedEvent.emit();
-                  // TODO: Something between this two events
+                  var rootClassList_1 = {};
+                  // Retrieving all the classes of the root element
+                  rootElement.classList.forEach(function (key) { return rootClassList_1[key] = true; });
+                  // Changing each selector to avoid conflits
+                  var changeSelector_1 = function (style, styleId) {
+                      var isStyle = (style.nodeName === 'STYLE'), rules = [];
+                      if (!style.sheet)
+                          return;
+                      var cssRules = style.sheet.cssRules;
+                      for (var i = 0; i < cssRules.length; i++) {
+                          var rule = cssRules.item(i);
+                          if (!rule)
+                              continue;
+                          var mRule = rule;
+                          var ruleText = mRule.selectorText;
+                          if (ruleText) {
+                              var firstRule = ruleText.split(' ')[0];
+                              var selector = (firstRule[0] == '.' || firstRule[0] == '#')
+                                  ? firstRule.substring(1) : firstRule;
+                              var separator = rootClassList_1[selector] ? "" : " ";
+                              var uniqueIdentifier = "." + styleId;
+                              var selectorTextSplitted = mRule.selectorText.split(' ');
+                              if (selectorTextSplitted[0] === toLower(rootElement.tagName))
+                                  selectorTextSplitted.shift();
+                              mRule.selectorText = uniqueIdentifier + separator + selectorTextSplitted.join(' ');
+                          }
+                          if (isStyle)
+                              rules.push(mRule.cssText);
+                      }
+                      if (isStyle)
+                          style.innerText = rules.join(' ');
+                  };
+                  var stylesAssets = where(component.assets, function (asset) { return toLower(asset.nodeName) !== 'script'; });
+                  var styleAttrName_1 = 'component-style';
+                  // Configuring the styles
+                  forEach(stylesAssets, function (asset) {
+                      var mStyle = asset.cloneNode(true);
+                      if (mStyle instanceof HTMLLinkElement) {
+                          var path = component.path[0] === '/' ? component.path.substring(1) : component.path;
+                          mStyle.href = pathResolver(path, mStyle.getAttribute('href') || '');
+                          mStyle.rel = "stylesheet";
+                      }
+                      // Checking if this component already have styles added
+                      if (_this.stylesController[$name]) {
+                          var controller = _this.stylesController[$name];
+                          if (controller.elements.indexOf(rootElement) === -1) {
+                              controller.elements.push(rootElement);
+                              forEach(controller.styles, function ($style) {
+                                  rootElement.classList.add($style.getAttribute(styleAttrName_1));
+                              });
+                          }
+                          return;
+                      }
+                      ;
+                      var styleId = code(7, 'bouer-s');
+                      mStyle.setAttribute(styleAttrName_1, styleId);
+                      if ((mStyle instanceof HTMLLinkElement) && mStyle.hasAttribute('scoped'))
+                          mStyle.onload = function (evt) { return changeSelector_1(evt.target, styleId); };
+                      _this.stylesController[$name] = {
+                          styles: [DOM.head.appendChild(mStyle)],
+                          elements: [rootElement]
+                      };
+                      if (!mStyle.hasAttribute('scoped'))
+                          return;
+                      rootElement.classList.add(styleId);
+                      if (mStyle instanceof HTMLStyleElement)
+                          return changeSelector_1(mStyle, styleId);
+                  });
                   beforeLoadEvent.emit();
                   _this.serviceProvider.get('Compiler')
                       .compile({
