@@ -71,6 +71,9 @@
               <i class="fa fa-check-circle"></i>
               <span class="text"> Console </span>
             </span>
+            <span class="msg-count">
+              <small class="msg-counter">(0)</small>
+            </span>
           </span>
           <span class="message"></span>
         </div>
@@ -152,6 +155,7 @@
       tabConfig.activeTab = codeEditor.querySelector('div[tab-id="main"]');
       var codeScreen = tabConfig.activeScreen = codeEditor.querySelector('div[screen-tab-id="main"]');
       var resultScreen = codeEditor.querySelector('.editor-result .screen').children[0];
+      var msgCounter = element.querySelector('.msg-counter');
 
       // Configuring the instance var
       this.el = codeEditor;
@@ -169,7 +173,7 @@
       var messageContainer = consoleSection.querySelector('.message');
       var icons = {
         warn: 'fa-warning',
-        fine: 'fa-check-circle',
+        log: 'fa-check-circle',
         error: 'fa-times-circle'
       }
 
@@ -190,6 +194,8 @@
       // Confifuring the instance functions
       this.console = {
         add: function (obj) {
+          var number = msgCounter.innerText.replace('(', '').replace(')', '') * 1;
+          msgCounter.innerText = "("+ (number + 1) +")";
           var type = (obj.type || 'fa-check-circle');
           messageContainer.innerHTML += '<p class="line fa ' + type + '">' +
             (obj.message || JSON.stringify(obj)) +
@@ -198,8 +204,9 @@
           setConsoleIcon(icons[type]);
         },
         clear: function () {
+          msgCounter.innerText = "(0)";
           messageContainer.innerHTML = '';
-          setConsoleIcon(icons.fine);
+          setConsoleIcon(icons.log);
         }
       };
 
@@ -270,8 +277,7 @@
       }
 
       consoleSection.onclick = function (evt) {
-        var $class = 'open-extra',
-          fun = 'add';
+        var $class = 'open-extra', fun = 'add';
         fun = consoleSection.classList.contains($class) ? 'remove' : 'add';
         consoleSection.classList[fun]($class);
       }
@@ -297,13 +303,15 @@
         };
 
         for (var key in $$refs) {
-          contentWindow.console[key] = function (input, value) {
+          function logger(input, value) {
             console.log.apply(null, [].slice.call(arguments));
             self.console.add({
-              type: 'error',
+              type: logger.key,
               message: [input.message || input, value || ''].join(' ')
             });
           }
+
+          contentWindow.console[(logger.key = key)] = logger;
         }
 
         contentWindow.$this = self;
@@ -314,7 +322,7 @@
       // functions
       function runCode() {
         // Clear the console
-        setConsoleIcon(icons.fine);
+        setConsoleIcon(icons.log);
         self.console.clear();
 
         // Execute your code...
@@ -378,11 +386,12 @@
   });
 
   this.export({
-    showResult: false,
-    isTutorialAvailable: false,
-    tab_id: 1,
     name: (this.data.options || {}).name || this.name,
+    isTutorialAvailable: false,
+    consoleMsgCount: 0,
+    showResult: false,
     tabList: [],
+    tab_id: 1,
     addTab: function () {
       this.data.tabList.push({ id: this.data.tab_id++, name: 'new-tab' });
     },
@@ -725,6 +734,10 @@
 
   .editor .extra-area .console {
     cursor: pointer;
+  }
+
+  .editor .extra-area .console .msg-count {
+    right: 10px;
   }
 
   .editor .console .fa-check-circle {
