@@ -69,7 +69,7 @@
         keepAlive?: boolean,
 
         /** restrictions of this component */
-        restrictions?: ((component: Component): boolean)[],
+        restrictions?: (function name(component: Component): boolean)[],
 
         // Lifecycles Hooks
 
