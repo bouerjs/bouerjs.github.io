@@ -117,30 +117,25 @@
   };
   var resizeCallback;
 
-  this.on('mounted', function (evt) {
-    var element = evt.target;
-    var editor = element.children[0];
-    var $classes = editor.classList;
-    var resultScreen = element.querySelector('.editor-result .screen').children[0];
-
-    var exec = bouer.lazy(function (width) {
-      var has = $classes.contains('mobile');
-      if (MOBILE_SIZE >= width) {
-        if (!has) $classes.add('mobile');
-      } else {
-        if (has) $classes.remove('mobile');
-      }
-    }, 200);
-
-    (resizeCallback = function (evt) {
-      exec(element.clientWidth);
-    })(element.clientWidth);
-
-    window.addEventListener('resize', resizeCallback, false);
-  });
-
   this.on('loaded', function (evt) {
     var element = evt.target;
+
+    (function () {
+      var editor = element.children[0];
+      var $classes = editor.classList;
+      var resultScreen = element.querySelector('.editor-result .screen').children[0];
+
+      var exec = bouer.lazy(function (width) {
+        var addMobileClass = (MOBILE_SIZE >= width) && !$classes.contains('mobile');
+        addMobileClass ? $classes.add('mobile') : $classes.remove('mobile');
+      }, 200);
+
+      (resizeCallback = function (evt) {
+        exec(element.clientWidth);
+      })(element.clientWidth);
+
+      window.addEventListener('resize', resizeCallback, false);
+    })()
 
     // Editor config
     function Editor(selector, options) {
@@ -195,7 +190,7 @@
       this.console = {
         add: function (obj) {
           var number = msgCounter.innerText.replace('(', '').replace(')', '') * 1;
-          msgCounter.innerText = "("+ (number + 1) +")";
+          msgCounter.innerText = "(" + (number + 1) + ")";
           var type = (obj.type || 'fa-check-circle');
           messageContainer.innerHTML += '<p class="line fa ' + type + '">' +
             (obj.message || JSON.stringify(obj)) +
