@@ -2019,17 +2019,17 @@
               forEach(mWait.nodes, function (nodeWaiting) {
                   _this.compiler.compile({
                       el: nodeWaiting,
+                      context: mWait.context,
                       data: Reactive.transform({
-                          context: _this.context,
+                          context: mWait.context,
                           data: mWait.data
                       }),
-                      context: _this.context
                   });
               });
               if (ifNullReturn(mWait.once, false))
                   delete dataStore.wait[nodeValue];
           }
-          return dataStore.wait[nodeValue] = { nodes: [ownerNode] };
+          return dataStore.wait[nodeValue] = { nodes: [ownerNode], context: this.context };
       };
       Directive.prototype.custom = function (node, data) {
           var ownerNode = this.toOwnerNode(node);
@@ -2527,9 +2527,9 @@
           });
       };
       Component.prototype.on = function (eventName, callback) {
-          var set = new Set(['created', 'beforeMount', 'mounted', 'beforeLoad', 'loaded', 'beforeDestroy', 'destroyed']);
-          var registerHooks = new Set(['requested', 'blocked', 'failed']);
-          if (registerHooks.has(eventName))
+          var instanceHooksSet = new Set(['created', 'beforeMount', 'mounted', 'beforeLoad', 'loaded', 'beforeDestroy', 'destroyed']);
+          var registerHooksSet = new Set(['requested', 'blocked', 'failed']);
+          if (registerHooksSet.has(eventName))
               Logger.warn("The “" + eventName + "” Event is called before the component is mounted, to be dispatched" +
                   "it needs to be on registration object: { " + eventName + ": function(){ ... }, ... }.");
           var evt = new ServiceProvider(this.bouer).get('EventHandler').on({
@@ -2537,7 +2537,7 @@
               callback: callback,
               attachedNode: this.el,
               context: this,
-              modifiers: { once: set.has(eventName), autodestroy: false },
+              modifiers: { once: instanceHooksSet.has(eventName), autodestroy: false },
           });
           this.events.push(evt);
           return evt;
@@ -3774,7 +3774,12 @@
               },
               set: function (key, data, once) {
                   if (!(key in dataStore.wait))
-                      return dataStore.wait[key] = { data: data, nodes: [], once: ifNullReturn(once, false) };
+                      return dataStore.wait[key] = {
+                          data: data,
+                          nodes: [],
+                          once: ifNullReturn(once, false),
+                          context: _this_1
+                      };
                   var mWait = dataStore.wait[key];
                   mWait.data = data;
                   forEach(mWait.nodes, function (nodeWaiting) {
@@ -3782,11 +3787,11 @@
                           return;
                       compiler.compile({
                           el: nodeWaiting,
+                          context: mWait.context,
                           data: Reactive.transform({
-                              context: _this_1,
+                              context: mWait.context,
                               data: mWait.data
                           }),
-                          context: _this_1
                       });
                   });
                   if (ifNullReturn(once, false))
