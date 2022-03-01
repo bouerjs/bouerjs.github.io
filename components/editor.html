@@ -126,11 +126,16 @@
       var resultScreen = element.querySelector('.editor-result .screen').children[0];
 
       var exec = bouer.lazy(function (width) {
-        var addMobileClass = (MOBILE_SIZE >= width) && !$classes.contains('mobile');
-        addMobileClass ? $classes.add('mobile') : $classes.remove('mobile');
-      }, 200);
+        var isMobile = (MOBILE_SIZE >= width);
+        var has = $classes.contains('mobile');
+        if (isMobile) {
+          if (!has) $classes.add('mobile');
+        } else {
+          if (has) $classes.remove('mobile');
+        }
+      }, 100);
 
-      (resizeCallback = function (evt) {
+      (resizeCallback = function () {
         exec(element.clientWidth);
       })(element.clientWidth);
 
@@ -806,7 +811,7 @@
     border-radius: 5px;
     color: var(--color-text);
     max-width: 115px;
-    width: 110px;
+    min-width: 90px;
   }
 
   .editor.mobile.show-result .editor-result {
