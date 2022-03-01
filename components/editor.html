@@ -6,24 +6,24 @@
         <div class="top">
           <div class="tab-container">
             <div class="tab active" tab-id="main" on:click="selectTab(event)">
-              <i class="fa fa-globe" title="The Main Code" onclick="this.parentNode.click()"></i>
+              <i class="center-icon main-tab fa fa-file-code-o" title="The Main Code"
+                onclick="this.parentNode.click()"></i>
               <label e-title="{{ name }}" onclick="this.parentNode.click()"> Bouer Editor </label>
             </div>
 
             <!-- List of tabs -->
             <div class="tab" title="Use $this.tab('{{ tab.name }}') to get the tab content" e-for="(tab,idx) of tabList"
               tab-id="{{ tab.id }}" on:click="selectTab(event, tab)">
-              <label contenteditable tabindex="1" spellcheck="false" on:click="selectTab(event, tab)"
-                on:input="tab.name = event.target.textContent">
+              <label contenteditable tabindex="1" spellcheck="false" on:input="tab.name = event.target.textContent">
                 {{ tab.name || 'new-tab' }}
               </label>
-              <i class="center-icon fa fa-close" on:click="remTab(idx, event.target.parentNode)"></i>
+              <i class="close-icon" on:click="remTab(idx, event.target.parentNode)">x</i>
             </div>
-          </div>
 
-          <span class="add-tab">
-            <i class="center-icon fa fa-plus" on:click="addTab"></i>
-          </span>
+            <span class="add-tab">
+              <i class="icon" on:click="addTab">+</i>
+            </span>
+          </div>
         </div>
 
         <!-- Screens -->
@@ -579,21 +579,25 @@
     position: relative;
   }
 
-  .editor-aside .top .fa {
-    padding: 0 8px;
+  .editor-aside .top .main-tab {
+    width: 18px;
+    height: 18px;
+    border-radius: 15px;
+    font-size: 10pt;
+    margin: 0 4px;
+    margin-top: 2px;
   }
 
   .editor-aside .top label {
     font-size: 9pt;
   }
 
-  .editor-aside .tab-container,
-  .editor-aside .add-tab {
+  .editor-aside .tab-container {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    right: 40px;
+    right: 0;
     display: flex;
     align-items: center;
     overflow-x: auto;
@@ -601,20 +605,27 @@
   }
 
   .editor-aside .add-tab {
-    left: auto;
-    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 30px;
   }
 
-  .editor-aside .add-tab .fa {
-    background-color: var(--color-editor-screen);
+  .editor-aside .add-tab .icon {
     transition: background-color .2s;
     border-radius: 3px;
-    font-size: 8px;
+    font-size: 18px;
     width: 28px;
     height: 28px;
     padding: 0;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .editor-aside .add-tab .icon:hover {
+    background-color: var(--color-editor-screen);
   }
 
   .editor-aside .add-tab .fa:active {
@@ -665,27 +676,29 @@
     padding: 1px 2px;
     border-radius: 2px;
     cursor: text;
-    min-width: 90px;
+    min-width: 30px;
   }
 
   .editor-aside .tab-container .tab label[contenteditable]:focus {
     background-color: var(--color-bg-lighter);
   }
 
-  .editor-aside .tab-container .tab .fa-close {
+  .editor-aside .tab-container .tab .close-icon {
     position: absolute;
     right: 4px;
     font-size: 9pt;
     background-color: var(--color-border);
     border-radius: 15px;
     color: var(--color-text);
+    transition: color .2s;
     width: 16px;
     height: 16px;
-    padding: 0;
-    transition: color .2s;
+    padding: 0px 1px;
+    text-align: center;
+    padding-bottom: 2px;
   }
 
-  .editor-aside .tab-container .tab .fa-close:hover {
+  .editor-aside .tab-container .tab .close-icon:hover {
     color: var(--color-red);
   }
 
