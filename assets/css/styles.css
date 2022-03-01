@@ -123,7 +123,7 @@ i {
   --color-doc-menu: #373839;
   --color-doc-menu-darker: #343536;
 
-  --color-editor-screen: #3a3b3c80;
+  --color-editor-screen: #454647;
   --color-editor-caret: #aaaaaa;
   --color-editor-border: #3f3f3f;
   --color-editor-result-screen: #f8f8f8;
@@ -225,7 +225,7 @@ i {
 }
 
 .dark-mode .CodeMirror-selected {
-  background-color: #569cd629!important;
+  background-color: #569cd629 !important;
 }
 
 .dark-mode .CodeMirror.cm-s-default .CodeMirror-simplescroll-vertical div,
@@ -1290,7 +1290,7 @@ pre.dont,
 
 /* For tutorial menu */
 .side-menu-closed {
-  left: -100% !important;
+  left: -1000% !important;
 }
 
 ul.top-menu-opened {
@@ -1714,6 +1714,18 @@ ul.top-menu-opened {
 
 /* End Animations classes */
 
+@media (max-width: 390px) {
+  .middle-content .center-content .nav-actions {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .middle-content .center-content .nav-actions a {
+    margin: 10px 0;
+  }
+}
+
 @media (max-width: 450px) {
   .card-container {
     display: flex;
@@ -1737,6 +1749,19 @@ ul.top-menu-opened {
 
   .documentation .view .navigator>div {
     padding: 10px 46px;
+  }
+
+  .page.tutorial .left-view {
+    min-width: unset !important;
+  }
+
+  .page.tutorial .left-view .section {
+    padding: 15px 20px;
+  }
+
+  .page.playground .left-view {
+    min-width: unset !important;
+    max-width: unset !important;
   }
 }
 
@@ -1771,6 +1796,10 @@ ul.top-menu-opened {
     font-size: 16pt;
     margin-top: 5px;
   }
+
+  .page.documentation .view .section {
+    padding: 15px 35px;
+  }
 }
 
 @media (max-width: 700px) {
@@ -1797,7 +1826,7 @@ ul.top-menu-opened {
     position: absolute;
     z-index: 100;
     transition: left .4s;
-    left: -100%;
+    left: -1000%;
     bottom: 0;
     top: 50px;
     min-width: 250px;
@@ -1857,7 +1886,7 @@ ul.top-menu-opened {
     position: absolute;
     z-index: 100;
     transition: left .4s;
-    left: -100%;
+    left: -1000%;
     bottom: 0;
     top: 50px;
     min-width: 250px;
@@ -1868,7 +1897,7 @@ ul.top-menu-opened {
     position: absolute;
     z-index: 100;
     transition: left .4s;
-    left: -100%;
+    left: -1000%;
     bottom: 0;
     top: 50px;
     min-width: unset;
