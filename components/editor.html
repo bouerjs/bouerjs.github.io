@@ -17,7 +17,7 @@
               <label contenteditable tabindex="1" spellcheck="false" on:input="tab.name = event.target.textContent">
                 {{ tab.name || 'new-tab' }}
               </label>
-              <i class="close-icon" on:click="remTab(idx, event.target.parentNode)">x</i>
+              <i class="close-icon" on:click="remTab(idx, event.target.parentNode, tab)">x</i>
             </div>
 
             <span class="add-tab">
@@ -396,8 +396,11 @@
     addTab: function () {
       this.data.tabList.push({ id: this.data.tab_id++, name: 'new-tab' });
     },
-    remTab: function (index, removedTab) {
-      if (tabConfig.activeTab === removedTab)
+    remTab: function (index, tabNode, tab) {
+      if (!confirm("Are you sure you want to close '"+ tab.name +"' tab?"))
+        return;
+
+      if (tabConfig.activeTab === tabNode)
         this.el.querySelector('[tab-id="main"]').click();
 
       this.data.tabList.splice(index, 1);
