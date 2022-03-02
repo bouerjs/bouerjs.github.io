@@ -27,13 +27,14 @@
     </p>
 
     <p>
-      When we want to combine a component with <i class="note mark">e-for</i> directive, we need to inject the current
-      scope to the component because the <i class="note mark">e-for</i> directive will be transfered.
+      When we want to combine a component with <i class="note mark">e-for</i> directive, the <i
+        class="note mark">data</i> directive implicitly created if it does not exists, in order to inject the current
+      scope to the component.
     </p>
 
     <div e-skip>
       <pre><code lang="html">
-    <item data="$data" e-for="item of items"></item>
+    <item e-for="item of items"></item>
       </code></pre>
     </div>
   </section>
