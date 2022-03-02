@@ -2179,11 +2179,8 @@
                   var dataNode = null;
                   if (dataNode = toArray(node.attributes).find(function (attr) {
                       var attrName = attr.name;
-                      // In case of data="..."
-                      if (attrName === Constants.data)
-                          return true;
-                      // In case of data:[data-id]="..."
-                      return startWith(attrName, Constants.data + ':');
+                      // In case of data="..." or data:[data-id]="..."
+                      return (attrName === Constants.data || startWith(attrName, Constants.data + ':'));
                   }))
                       return directive.data(dataNode, data);
                   // put="..." directive
@@ -2885,6 +2882,12 @@
                   _this.serviceProvider.get('Evaluator')
                       .execRaw((scriptContent || ''), component);
                   createdEvent.emit();
+                  // If the component has the e-for directive
+                  // And Does not have the data directive assigned, create it implicitly
+                  if (componentElement.hasAttribute(Constants.for) && !(toArray(componentElement.attributes).find(function (attr) {
+                      return (attr.name === Constants.data || startWith(attr.name, Constants.data + ':'));
+                  })))
+                      componentElement.setAttribute('data', '$data');
                   // tranfering the attributes
                   forEach(toArray(componentElement.attributes), function (attr) {
                       componentElement.removeAttribute(attr.name);
