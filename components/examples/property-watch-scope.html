@@ -19,12 +19,10 @@
 
     loaded: function () {
       this.react(function () {
-        var max = this.data.max;
-        var min = this.data.min;
-
-        // Note that set the `result` property from the de source object
-        // to be able to react to the UI
-        this.data.result = max - min;
+        // We use `with` to spread the properties of `this.data`
+        with (this.data) {
+          result = max - min;
+        }
       });
     }
   });

@@ -23,12 +23,16 @@
             var value = v || '';
             var splitted = value.split(' ');
 
-            if (splitted.length == 1)
-              return this.data.firstName = v;
+            // We use `with` to spread the properties of `this.data`
+            with (this.data) {
+              if (splitted.length == 1)
+                return firstName = v;
 
-            // getting the first and last name
-            this.data.firstName = splitted[0];
-            this.data.lastName = splitted[splitted.length - 1] || '';
+              // getting the first and last name
+              firstName = splitted[0];
+              lastName = splitted[splitted.length - 1] || '';
+            }
+
           }
         }
       }
