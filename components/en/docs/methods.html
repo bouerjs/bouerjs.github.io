@@ -94,6 +94,62 @@
           </code></pre>
         </div>
 
+        <h3><a id="method-unbind">unbind</a></h3>
+        <p>
+          It's used to unbind a element from a property. The method expects two parameters:
+          <span class="note">app.unbind(boundNode: <i class="mark">Node</i>, boundAttrName?: <i
+              class="mark">string</i>, boundPropName?: <i class="mark">string</i>)</span>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">boundNode</span> &ndash; The bound node. </li>
+          <li> <span class="note mark">boundAttrName</span> &ndash; The attribute name that was bound.</li>
+          <li> <span class="note mark">boundPropName</span> &ndash; The data property name that was bound.</li>
+        </ul>
+
+        <div e-skip>
+          <pre><code lang="html">
+    <div id="app">
+      <input type="text" e-bind="value">
+      <p>{{ value }}</p>
+    </div>
+          </code></pre>
+
+          <pre><code lang="js">
+    var app = new Bouer('#app', {
+      value: ''
+    });
+
+    var input = document.querySelector('input');
+    var paragraph = document.querySelector('p');
+
+    app.unbind(input, 'value');
+    app.unbind(paragraph, '#text');
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            Note that to unbind the property inside of <i class="note">&lt;<i class="mark">p</i>&gt;</i> tag we used <i
+              class="note mark">#text</i> element name, it's because Bouer targets certain text of the tab content.
+          </p>
+        </div>
+
+        <div e-skip>
+          <pre><code lang="js">
+    var paragraph = document.querySelector('p');
+
+    app.unbind(paragraph, '#text', 'value');
+          </code></pre>
+        </div>
+
+        <div class="block-note warn">
+          <p>
+            If the <i class="note">boundAttrName</i> and/or <i class="note">boundPropName</i> is not defined all the binds according to
+            <i class="note">boundNode</i> will be removed.
+          </p>
+        </div>
+
         <h3><a id="method-emit">emit</a></h3>
         <p>
           Allows to dispatch a specific event, whether customized (events added in elements) or added in the instance.
