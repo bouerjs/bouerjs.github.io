@@ -1,19 +1,36 @@
 <div id="app">
 
   <p>
-    Requesting Users from <b>{JSON} Placeholder</b> API
+    <b>{JSON} Placeholder</b>  API Status: <b e-text="{{ status }}"></b>
   </p>
 
+  <div class="navigation">
+    <button on:click="start > 0 ? start-- : 0"
+            title="Prev page"
+            e-disabled="{ 'true' : start === 0 }"> &lt; </button>
+    <span e-text="Page {{ start + 1 }} | {{ 10 / limit }}"> Page # | # </span>
+    <button on:click="start++"
+            title="Next page"
+            e-disabled="{ 'true' : start + 1 === 10 / limit }"> &gt; </button>
+  </div>
+
   <ul class="users">
-    <li e-req="user of users">
+    <li e-req="user of users?_start={{ (start * limit) }}&_limit={{ limit }}"
+        on:request="requested"
+        on:response="responded"
+        on:fail="failed"
+        on:done="done">
+
       <div class="avatar">
-        <span e-skeleton e-style="background-image: url(https://i.pravatar.cc/200?img={{ user.id }});"></span>
+        <span e-style="background-image: url(https://i.pravatar.cc/200?img={{ user.id }});"
+              e-skeleton></span>
       </div>
       <div class="info">
         <div class="row"> <span e-skeleton> <b>Id: </b> {{ user.id }} </span> </div>
         <div class="row"> <span e-skeleton> <b>Name: </b> {{ user.name }} </span> </div>
         <div class="row"> <span e-skeleton> <b>Username: </b>{{ user.username }} </span> </div>
       </div>
+
     </li>
   </ul>
 
@@ -52,11 +69,48 @@
           });
         });
       });
-    }
+    },
+    data: {
+      start: 0,
+      limit: 2,
+      status: '',
+
+      // Methods
+      requested: function (evt) {
+        this.data.status = 'Requesting to Server...';
+      },
+      responded: function (evt) {
+        this.data.status = 'Server Responded...';
+      },
+      failed: function (evt) {
+        this.data.status = 'Request Failed...';
+      },
+      done: function (evt) {
+        var _this = this;
+        setTimeout(function () {
+          _this.data.status = 'Ok';
+        }, 2000);
+      },
+    },
   });
 </script>
 
 <style scoped>
+  .navigation {
+    display: flex;
+    margin: 10px 0;
+    margin-left: 39px;
+  }
+
+  .navigation>* {
+    flex: 1;
+    max-width: 90px;
+  }
+
+  .navigation>span {
+		text-align: center;
+  }
+
   ul.users {
     list-style: none;
   }

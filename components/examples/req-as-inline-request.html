@@ -1,11 +1,16 @@
 <div id="app">
 
   <p>
-    Requesting a User from <b>{JSON} Placeholder</b> API
+    <b>{JSON} Placeholder</b> API Status: <b e-text="{{ status }}"></b>
   </p>
 
   <ul class="users">
-    <li e-req="user as users/1">
+    <li e-req="user as users/1"
+        on:request="requested"
+        on:response="responded"
+        on:fail="failed"
+        on:done="done">
+
       <div class="avatar">
         <span e-skeleton e-style="background-image: url(https://i.pravatar.cc/200?img={{ user.id }});"></span>
       </div>
@@ -14,6 +19,7 @@
         <div class="row"> <span e-skeleton> <b>Name: </b> {{ user.name }} </span> </div>
         <div class="row"> <span e-skeleton> <b>Username: </b>{{ user.username }} </span> </div>
       </div>
+
     </li>
   </ul>
 
@@ -52,6 +58,26 @@
           });
         });
       });
+    },
+
+    data: {
+      status: '',
+      // Methods
+      requested: function (evt) {
+        this.data.status = 'Requesting to Server...';
+      },
+      responded: function (evt) {
+        this.data.status = 'Server Responded...';
+      },
+      failed: function (evt) {
+        this.data.status = 'Request Failed...';
+      },
+      done: function (evt) {
+        var _this = this;
+        setTimeout(function () {
+          _this.data.status = 'Ok';
+        }, 2000);
+      },
     }
   });
 </script>
