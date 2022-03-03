@@ -57,11 +57,11 @@
       if (!url)
           return Promise.reject(new Error("Invalid Url"));
       var createXhr = function (method) {
-          if (DOM.documentMode && (!method.match(/^(get|post)$/i) || !GLOBAL.XMLHttpRequest)) {
-              return new GLOBAL.ActiveXObject("Microsoft.XMLHTTP");
+          if (DOM.documentMode && (!method.match(/^(get|post)$/i) || !WIN.XMLHttpRequest)) {
+              return new WIN.ActiveXObject("Microsoft.XMLHTTP");
           }
-          else if (GLOBAL.XMLHttpRequest) {
-              return new GLOBAL.XMLHttpRequest();
+          else if (WIN.XMLHttpRequest) {
+              return new WIN.XMLHttpRequest();
           }
           throw new Error("This browser does not support XMLHttpRequest.");
       };
@@ -322,17 +322,16 @@
       };
       if (isCurrentDir(path))
           return toDirPath(relative).relative + path.substring(1);
-      if (isParentDir(path)) {
-          var parts_1 = toDirPath(relative).parts;
-          parts_1.push((function pathLookUp(value) {
-              if (!isParentDir(value))
-                  return value;
-              parts_1.pop();
-              return pathLookUp(value.substring(3));
-          })(path));
-          return parts_1.join('/');
-      }
-      return path;
+      if (!isParentDir(path))
+          return path;
+      var parts = toDirPath(relative).parts;
+      parts.push((function pathLookUp(value) {
+          if (!isParentDir(value))
+              return value;
+          parts.pop();
+          return pathLookUp(value.substring(3));
+      })(path));
+      return parts.join('/');
   }
   function buildError(error) {
       if (!error)
@@ -340,8 +339,8 @@
       error.stack = '';
       return error;
   }
+  var WIN = window;
   var DOM = document;
-  var GLOBAL = globalThis;
   var anchor = $CreateEl('a').build();
 
   var Constants = {
@@ -691,7 +690,7 @@
                           isHtml = true;
                       var result = _this.evaluator.exec({
                           data: data,
-                          expression: field.expression,
+                          code: field.expression,
                           context: context
                       });
                       result = isNull(result) ? '' : result;
@@ -766,7 +765,7 @@
                           // Array Set
                           boundModelValue = boundModelValue || _this.evaluator.exec({
                               data: data,
-                              expression: dataBindModel,
+                              code: dataBindModel,
                               context: context
                           });
                           // select-multiple handling
@@ -798,13 +797,13 @@
                                   isReturn: false,
                                   context: context,
                                   data: Extend.obj(data, { $vl: value }),
-                                  expression: dataBindProperty + '=$vl'
+                                  code: dataBindProperty + '=$vl'
                               });
                           }
                           // Array Set
                           boundModelValue = boundModelValue || _this.evaluator.exec({
                               data: data,
-                              expression: dataBindModel,
+                              code: dataBindModel,
                               context: context
                           });
                           // select-multiple handling
@@ -828,7 +827,7 @@
               ReactiveEvent.once('AfterGet', function (evt) {
                   var getValue = function () { return _this.evaluator.exec({
                       data: data,
-                      expression: dataBindProperty,
+                      code: dataBindProperty,
                       context: context
                   }); };
                   // Adding the event on emittion
@@ -867,6 +866,19 @@
               return $BindTwoWay();
           return $BindOneWay();
       };
+      Binder.prototype.remove = function (boundNode, boundAttrName, boundPropName) {
+          this.binds = where(this.binds, function (bind) {
+              var node = bind.watch.node;
+              if ((node.ownerElement || node.parentElement) !== boundNode)
+                  return true;
+              if (isNull(boundAttrName))
+                  return bind.watch.destroy();
+              if (node.nodeName === boundAttrName &&
+                  (boundPropName === bind.watch.property || isNull(boundPropName)))
+                  return bind.watch.destroy();
+              return true;
+          });
+      };
       Binder.prototype.onPropertyChange = function (propertyName, callback, targetObject) {
           var mWatch;
           ReactiveEvent.once('AfterGet', function (event) {
@@ -901,6 +913,9 @@
       /** Creates a process to unbind properties that is not connected to the DOM anymone */
       Binder.prototype.cleanup = function () {
           var _this = this;
+          var autoUnbind = ifNullReturn(this.bouer.config.autoUnbind, true);
+          if (autoUnbind == false)
+              return;
           Task.run(function () {
               _this.binds = where(_this.binds, function (bind) {
                   if (bind.isConnected())
@@ -1169,7 +1184,7 @@
                   };
                   _this.evaluator.exec({
                       data: data,
-                      expression: attr.value,
+                      code: attr.value,
                       context: _this.context
                   });
               });
@@ -1210,7 +1225,7 @@
               _this.evaluator.exec({
                   data: data,
                   isReturn: false,
-                  expression: conditionalExpression,
+                  code: conditionalExpression,
                   context: _this.context,
                   aditional: {
                       _cb: function (chainIndex) {
@@ -1246,7 +1261,7 @@
           (execute = function (element) {
               var value = _this.evaluator.exec({
                   data: data,
-                  expression: nodeValue,
+                  code: nodeValue,
                   context: _this.context,
               });
               element.style.display = value ? '' : 'none';
@@ -1299,7 +1314,7 @@
               }
               whereValue = _this.evaluator.exec({
                   data: data,
-                  expression: whereValue,
+                  code: whereValue,
                   context: _this.context
               });
               // where:myFilter
@@ -1320,7 +1335,7 @@
                           var prop = _a[_i];
                           var propValue = _this.evaluator.exec({
                               data: item,
-                              expression: prop,
+                              code: prop,
                               context: _this.context
                           });
                           if (toStr(propValue).includes(whereValue)) {
@@ -1391,8 +1406,8 @@
                       once: true
                   }); }
               });
-              // Addin
-              listedItemsHandler[options.method]({
+              // Updating the handler
+              listedItemsHandler.splice(options.index, 0, {
                   el: forClonedItem,
                   data: forData
               });
@@ -1418,7 +1433,7 @@
               var iterable = isForOf ? rightHand : "Object.keys(" + rightHand + ")";
               var sourceValue = _this.evaluator.exec({
                   data: data,
-                  expression: rightHand,
+                  code: rightHand,
                   context: _this.context
               });
               return {
@@ -1447,6 +1462,8 @@
                       expObj = expObj || $ExpressionBuilder(trim(ifNullReturn(node.nodeValue, '')));
                       var leftHandParts = expObj.leftHandParts;
                       var _index_or_value = leftHandParts[1] || '_index_or_value';
+                      if (_index_or_value === '_index_or_value')
+                          return;
                       forEach(array, function (item, index) {
                           item.data[_index_or_value] = index;
                       });
@@ -1464,40 +1481,53 @@
                       return reOrganizeIndexes();
                   }
                   case 'splice': { // Indexed removal handler
-                      var removedItems = mListedItems[method].apply(mListedItems, args);
+                      var index_1 = args[0];
+                      var deleteCount = args[1];
+                      var removedItems = mListedItems.splice(index_1, deleteCount);
                       forEach(removedItems, function (item) { return $RemoveEl(item.el); });
-                      var index = args[0];
                       expObj = expObj || $ExpressionBuilder(trim(ifNullReturn(node.nodeValue, '')));
                       var leftHandParts = expObj.leftHandParts;
                       var _index_or_value = leftHandParts[1] || '_index_or_value';
+                      var _insert_args = [].slice.call(args, 2);
+                      // Adding the items to the dom
+                      forEach(_insert_args, function (item) {
+                          index_1++;
+                          $InsertForItem({
+                              // Getting the next reference
+                              reference: listedItemsHandler[index_1].el || comment,
+                              index: index_1,
+                              item: item,
+                          });
+                      });
+                      if (_index_or_value === '_index_or_value')
+                          return;
                       // Fixing the index value
-                      for (; index < listedItemsHandler.length; index++) {
-                          var item = listedItemsHandler[index].data;
+                      for (; index_1 < listedItemsHandler.length; index_1++) {
+                          var item = listedItemsHandler[index_1].data;
                           if (typeof item[_index_or_value] === 'number')
-                              item[_index_or_value] = index;
+                              item[_index_or_value] = index_1;
                       }
                       return;
                   }
                   case 'push':
                   case 'unshift': { // Addition handler
                       // Gets the last item as default
-                      var indexRef_1 = mListedItems.length;
                       var isUnshift_1 = method == 'unshift';
-                      var reference_1 = isUnshift_1 ? listedItemsHandler[0].el : undefined;
-                      // Adding the itens to the dom
+                      var indexRef_1 = isUnshift_1 ? 0 : mListedItems.length;
+                      var reference_1 = isUnshift_1 ? listedItemsHandler[0].el : comment;
+                      // Adding the items to the dom
                       forEach([].slice.call(args), function (item) {
                           var ref = $InsertForItem({
                               index: indexRef_1++,
                               reference: reference_1,
-                              method: method,
                               item: item,
                           });
                           if (isUnshift_1)
                               reference_1 = ref;
                       });
-                      if (!isUnshift_1)
-                          return;
-                      return reOrganizeIndexes();
+                      if (isUnshift_1)
+                          reOrganizeIndexes();
+                      return;
                   }
                   default: return execute();
               }
@@ -1515,7 +1545,7 @@
           (execute = function () {
               expObj = expObj || $ExpressionBuilder(trim(ifNullReturn(node.nodeValue, '')));
               var iterable = expObj.iterableExpression, filters = expObj.filters;
-              // Cleaning the
+              // Cleaning the existing items
               forEach(listedItemsHandler, function (item) {
                   if (!item.el.parentElement)
                       return;
@@ -1526,15 +1556,14 @@
                   data: data,
                   isReturn: false,
                   context: _this.context,
-                  expression: "var __e = _each, __fl = _filters, __f = _for; " +
+                  code: "var __e = _each, __fl = _filters, __f = _for; " +
                       "__f(__fl(" + iterable + "), function($$itm, $$idx) { __e($$itm, $$idx); })",
                   aditional: {
                       _for: forEach,
                       _each: function (item, index) {
                           $InsertForItem({
                               index: index,
-                              item: item,
-                              method: 'push'
+                              item: item
                           });
                       },
                       _filters: function (list) {
@@ -1588,7 +1617,7 @@
           });
           var mInputData = this.evaluator.exec({
               data: data,
-              expression: nodeValue,
+              code: nodeValue,
               context: this.context
           });
           if (!isObject(mInputData))
@@ -1642,7 +1671,7 @@
               return;
           var inputData = this.evaluator.exec({
               data: data,
-              expression: nodeValue,
+              code: nodeValue,
               context: this.context
           });
           if (!isObject(inputData))
@@ -1656,7 +1685,7 @@
               context: this.context,
               onUpdate: function () { return execute(_this.evaluator.exec({
                   data: data,
-                  expression: nodeValue,
+                  code: nodeValue,
                   context: _this.context
               })); }
           });
@@ -1698,7 +1727,7 @@
               // Other wise, compiles the object provided
               var mInputData_1 = this.evaluator.exec({
                   data: mData,
-                  expression: nodeValue,
+                  code: nodeValue,
                   context: this.context
               });
               if (!isObject(mInputData_1))
@@ -2914,7 +2943,7 @@
                               var mInputData_1 = _this.serviceProvider.get('Evaluator')
                                   .exec({
                                   data: mData,
-                                  expression: attr.value,
+                                  code: attr.value,
                                   context: _this.bouer
                               });
                               if (!isObject(mInputData_1))
@@ -3159,73 +3188,34 @@
       function Evaluator(bouer) {
           var _this = _super.call(this) || this;
           _this.bouer = bouer;
-          _this.global = _this.createWindow();
           ServiceProvider.add('Evaluator', _this);
           return _this;
       }
-      Evaluator.prototype.createWindow = function () {
-          var mWindow;
-          $CreateEl('iframe', function (frame, dom) {
-              frame.style.display = 'none!important';
-              dom.body.appendChild(frame);
-              mWindow = frame.contentWindow;
-              dom.body.removeChild(frame);
-          });
-          delete mWindow.name;
-          return mWindow;
-      };
-      Evaluator.prototype.execRaw = function (expression, context) {
+      Evaluator.prototype.execRaw = function (code, context) {
           // Executing the expression
           try {
-              var mExpression = "(function(){ " + expression + " }).apply(this, arguments)";
-              GLOBAL.Function(mExpression).apply(context || this.bouer);
+              Function("(function(){ " + code + " }).call(this)")
+                  .call(context || this.bouer);
           }
           catch (error) {
               Logger.error(buildError(error));
           }
       };
       Evaluator.prototype.exec = function (options) {
-          var _this = this;
-          var data = options.data, args = options.args, expression = options.expression, isReturn = options.isReturn, aditional = options.aditional, context = options.context;
-          var mGlobal = this.global;
-          var noConfigurableProperties = {};
-          context = context || this.bouer;
-          var dataToUse = Extend.obj(aditional || {}, { $root: this.bouer.data, $mixin: Extend.mixin });
-          // Defining the scope data
-          forEach(Object.keys(data), function (key) {
-              Prop.transfer(dataToUse, data, key);
+          var data = options.data, args = options.args, expression = options.code, isReturn = options.isReturn, aditional = options.aditional, context = options.context;
+          var dataToUse = Extend.obj((aditional || {}), (data || {}), {
+              $root: this.bouer.data,
+              $mixin: Extend.mixin
           });
-          // Applying the global data to the dataToUse variable
-          forEach(Object.keys(this.bouer.globalData), function (key) {
-              if (key in dataToUse)
-                  return Logger.warn('It was not possible to use the globalData property "' + key +
-                      '" because it already defined in the current scope.');
-              Prop.transfer(dataToUse, _this.bouer.globalData, key);
-          });
-          var keys = Object.keys(dataToUse);
-          var returnedValue;
-          // Spreading all the properties
-          forEach(keys, function (key) {
-              delete mGlobal[key];
-              // In case of non-configurable property store them to be handled
-              if (key in mGlobal && Prop.descriptor(mGlobal, key).configurable === true)
-                  noConfigurableProperties[key] = mGlobal[key];
-              if (key in noConfigurableProperties)
-                  mGlobal[key] = dataToUse[key];
-              Prop.transfer(mGlobal, dataToUse, key);
-          });
-          // Executing the expression
           try {
-              var mExpression = 'return(function(){"use strict"; ' +
-                  (isReturn === false ? '' : 'return') + ' ' + expression + ' }).apply(this, arguments)';
-              returnedValue = this.global.Function(mExpression).apply(context, args);
+              return Function('var d$=arguments[0].d;return(function(){var r$;with(d$){' +
+                  (isReturn === false ? '' : 'r$=') + expression +
+                  '}return r$;}).apply(this, arguments[0].a)')
+                  .call((context || this.bouer), { d: dataToUse, a: args });
           }
           catch (error) {
               Logger.error(buildError(error));
           }
-          // Removing the properties
-          forEach(keys, function (key) { return delete mGlobal[key]; });
-          return returnedValue;
       };
       return Evaluator;
   }(Base));
@@ -3272,7 +3262,7 @@
               var mArguments = [evt];
               var isResultFunction = _this.evaluator.exec({
                   data: data,
-                  expression: nodeValue,
+                  code: nodeValue,
                   args: mArguments,
                   aditional: { event: evt },
                   context: context
@@ -3327,6 +3317,12 @@
               var isEqual = (evt.eventName === eventName && callback == evt.callback);
               if (attachedNode && (evt.attachedNode === attachedNode) && isEqual)
                   return false;
+              // In this case remove all
+              var isRemoveAll = (evt.eventName === eventName &&
+                  evt.attachedNode === attachedNode &&
+                  isNull(callback));
+              if (isRemoveAll)
+                  return;
               return !isEqual;
           });
       };
@@ -3362,6 +3358,9 @@
       };
       EventHandler.prototype.cleanup = function () {
           var _this = this;
+          var autoOffEvent = ifNullReturn(this.bouer.config.autoOffEvent, true);
+          if (autoOffEvent == false)
+              return;
           Task.run(function () {
               forEach(Object.keys(_this.$events), function (key) {
                   _this.$events[key] = where(_this.$events[key], function (event) {
@@ -3470,7 +3469,7 @@
           if (this.defaultPage)
               this.navigate(DOM.location.href);
           // Listening to the page navigation
-          GLOBAL.addEventListener('popstate', function (evt) {
+          WIN.addEventListener('popstate', function (evt) {
               evt.preventDefault();
               _this.navigate(((evt.state || {}).url || location.href), {
                   setURL: false
@@ -3517,12 +3516,12 @@
           url = urlResolver(url).href;
           if (DOM.location.href === url)
               return;
-          GLOBAL.history.pushState({ url: url, title: title }, (title || ''), url);
+          WIN.history.pushState({ url: url, title: title }, (title || ''), url);
       };
       Routing.prototype.popState = function (times) {
           if (isNull(times))
               times = -1;
-          GLOBAL.history.go(times);
+          WIN.history.go(times);
       };
       Routing.prototype.toPage = function (url) {
           // Default Page
@@ -3856,7 +3855,7 @@
                   attachedNode: el
               }); }
           });
-          GLOBAL.addEventListener('beforeunload', function () {
+          WIN.addEventListener('beforeunload', function () {
               if (_this_1.isDestroyed)
                   return;
               eventHandler.emit({
@@ -3999,6 +3998,16 @@
               callback: callback,
               attachedNode: attachedNode
           });
+      };
+      /**
+       * Removes the bind from an element
+       * @param boundNode the node having the bind
+       * @param boundAttrName the bound attribute name
+       * @param boundPropName the bound property name
+       */
+      Bouer.prototype.unbind = function (boundNode, boundAttrName, boundPropName) {
+          return new ServiceProvider(this).get('Binder').
+              remove(boundNode, boundPropName, boundAttrName);
       };
       /**
        * Dispatch an event
