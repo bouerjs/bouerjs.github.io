@@ -2,4 +2,4 @@
 
 ## Bouer.js Website Repository
 
-Copyright (c) 2019-Present, Afonso Matumona.
+Copyright (c) 2019-Present, Afonso Matumona
