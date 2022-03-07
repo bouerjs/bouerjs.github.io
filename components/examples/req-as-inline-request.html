@@ -14,10 +14,24 @@
       <div class="avatar">
         <span e-skeleton e-style="background-image: url(https://i.pravatar.cc/200?img={{ user.id }});"></span>
       </div>
+
       <div class="info">
-        <div class="row"> <span e-skeleton> <b>Id: </b> {{ user.id }} </span> </div>
-        <div class="row"> <span e-skeleton> <b>Name: </b> {{ user.name }} </span> </div>
-        <div class="row"> <span e-skeleton> <b>Username: </b>{{ user.username }} </span> </div>
+        <div class="row">
+          <span e-skeleton> <b>Name: </b> {{ user.name }} </span>
+        </div>
+        <div class="row">
+          <span e-skeleton> <b>Username: </b>{{ user.username }} </span>
+        </div>
+
+        <div class="row">
+          <span e-skeleton> <b>Phone: </b> {{ user.phone }} </span>
+        </div>
+        <div class="row">
+          <span e-skeleton> <b>Email: </b> {{ user.email }} </span>
+        </div>
+        <div class="row">
+          <span e-skeleton> <b>Company: </b>{{ user.company.name }} </span>
+        </div>
       </div>
 
     </li>
@@ -93,14 +107,15 @@
     padding: 4px 2px;
     border-radius: 6px;
     border: 1px solid #e5e5e5;
-    max-width: 320px;
+    max-width: 340px;
   }
 
   ul.users li .avatar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 80px;
+    margin-top: 10px;
   }
 
   ul.users li .avatar span {
@@ -128,6 +143,6 @@
   ul.users li .info .row span {
     margin: auto 0;
     border-radius: 15px;
-    margin: 1px 0;
+    margin: 3px 0;
   }
 </style>
