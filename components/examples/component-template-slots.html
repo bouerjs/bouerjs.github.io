@@ -49,7 +49,9 @@
 
   this.export({
     isEmpty: false,
-    required: 'The Field "'+ this.data.label +'" is Required'
+    required: function $computed(){
+    	return 'The Field "'+ this.data.label +'" is Required';
+    }
   });
 </script>
 
