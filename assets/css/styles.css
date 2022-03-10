@@ -208,6 +208,10 @@ i {
   color: #b5cea8;
 }
 
+.dark-mode .CodeMirror.cm-s-default .cm-builtin {
+  color: #dcdcaa;
+}
+
 .light-theme .CodeMirror.cm-s-default span[role="presentation"] {
   color: var(--color-text);
 }
