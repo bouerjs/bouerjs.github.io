@@ -97,8 +97,8 @@
         <h3><a id="method-unbind">unbind</a></h3>
         <p>
           It's used to unbind a element from a property. The method expects two parameters:
-          <span class="note">app.unbind(boundNode: <i class="mark">Node</i>, boundAttrName?: <i
-              class="mark">string</i>, boundPropName?: <i class="mark">string</i>)</span>.
+          <span class="note">app.unbind(boundNode: <i class="mark">Node</i>, boundAttrName?: <i class="mark">string</i>,
+            boundPropName?: <i class="mark">string</i>)</span>.
         </p>
 
         <ul>
@@ -145,8 +145,8 @@
 
         <div class="block-note warn">
           <p>
-            If the <i class="note">boundAttrName</i> and/or <i class="note">boundPropName</i> is not defined all the binds according to
-            <i class="note">boundNode</i> will be removed.
+            If the <i class="note">boundAttrName</i> and/or <i class="note">boundPropName</i> is not defined all the
+            binds according to <i class="note">boundNode</i> will be removed.
           </p>
         </div>
 
@@ -255,6 +255,12 @@
             called whenever a property is setted. </li>
         </ul>
 
+        <div class="block-note info">
+          <p>
+            We can also use <i class="note mark code-style">Bouer.toJsObj(/* ... */)</i>, it does the samething.
+          </p>
+        </div>
+
         <div e-if="typeof noApp === 'undefined'">
           <div e-skip>
 
@@ -342,8 +348,8 @@
         <ul>
           <li> <span class="code-style note mark">watchableScope</span> &ndash; the function that should be called when
             the any reactive property change. </li>
-          <li> <span class="code-style note mark">{ Watch[] } returns</span> &ndash; an object having all the watches
-            and the method to destroy watches at once.
+          <li> <span class="code-style note mark">{ <i>watches</i>[], <i>destroy():</i> void } returns</span> &ndash; an object having
+            all the watches and the method to destroy watches at once.
           </li>
         </ul>
 
