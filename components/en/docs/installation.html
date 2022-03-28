@@ -26,13 +26,13 @@
         </p>
 
         <p>
-          <a class="download-btn btn-like" download> Development Version </a>
+          <a class="download-btn btn-like" e-href="{{ urls.cdn.umd }}" download> Development Version </a>
         </p>
 
         <p>Or, the minified one</p>
 
         <p>
-          <a class="download-btn btn-like" download> Production Version </a>
+          <a class="download-btn btn-like" e-href="{{ urls.min.umd }}" download> Production Version </a>
         </p>
 
         <p> Or, we can use... </p>
@@ -96,19 +96,22 @@
         <ul>
           <li> <i class="note mark">UMD</i> &ndash; <i class="note">bouer.js</i> can be used directly in the browser
             via a <i class="note code-style"> &lt;<i class="mark">script</i>&gt;</i> tag. Minified version:
-            <i class="note">bouer.min.js</i>. (gzipped: <i class="mark">19.60kb</i>).
+            <i class="note">bouer.min.js</i>. (gzipped: <i class="mark">20.07kb</i>).
           </li>
 
-          <li> <i class="note mark">ESM</i> &ndash; <i class="note">bouer.esm.js</i> stands for ES Modules. It is
-            Javascript's proposal to implement a standard module system. Minified version:
-            <i class="note">bouer.esm.min.js</i>. (gzipped: <i class="mark">19.55kb</i>).
+          <li> <i class="note mark">ESM</i> &ndash; <a download title="Download" e-href="{{ urls.cdn.esm }}"
+              class="info-border mark note">bouer.esm.js</a> stands for ES Modules. It is Javascript's proposal to
+            implement a standard module system. Minified version: <a download title="Download"
+              e-href="{{ urls.min.esm }}" class="info-border mark note">bouer.esm.min.js</a>. (gzipped: <i
+              class="mark">20.03kb</i>).
           </li>
 
-          <li> <i class="note mark">CommonJS</i> &ndash; <i class="note">bouer.common.js</i> wraps each module in a
-            function called <i class="note">require</i>, and includes an object called
-            <i class="note mark"><i>module.</i>exports</i>, which exports code for availability to be required by
-            other modules. Minified version: <i class="note">bouer.common.min.js</i>. (gzipped: <i class="mark">19.59
-              kb</i>).
+          <li> <i class="note mark">CommonJS</i> &ndash; <a download title="Download" e-href="{{ urls.cdn.cjs }}"
+              class="info-border mark note">bouer.common.js</a> wraps each module in a function called <i
+              class="note">require</i>, and includes an object called <i class="note mark"><i>module.</i>exports</i>,
+            which exports code for availability to be required by other modules. Minified version: <a download
+              e-href="{{ urls.cdn.cjs }}" title="Download" class="info-border mark note">bouer.common.min.js</a>.
+              (gzipped: <i class="mark">20.06 kb</i>).
           </li>
         </ul>
       </section>
