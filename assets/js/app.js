@@ -48,14 +48,14 @@
       version: 'v3.0.0',
       urls: {
         min: {
-          umd: '',
-          cjs: '',
-          esm: ''
+          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.min.js',
+          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.common.min.js',
+          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.esm.min.js'
         },
         cdn: {
-          umd: '',
-          cjs: '',
-          esm: ''
+          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.js',
+          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.common.js',
+          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.0.0/dist/bouer.esm.js'
         }
       }
       // Methods
