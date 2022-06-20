@@ -648,7 +648,8 @@ a.active-doc-menu * {
 .card {
   color: var(--color-text);
   width: 300px;
-  height: 165px;
+  min-height: 165px;
+  max-height: 195px;
   margin: 10px 20px;
   border-radius: 4px;
   overflow: hidden;
@@ -1787,7 +1788,8 @@ ul.top-menu-opened {
 
   .card {
     width: 260px;
-    height: 170px;
+    min-height: 170px;
+    max-height: 200px;
     margin: 10px 20px;
   }
 
