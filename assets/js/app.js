@@ -92,7 +92,7 @@
           var codeText = code.innerHTML;
           var lang = code.getAttribute('lang');
           var highlightedCode = Prism.highlight(codeText, Prism.languages[lang], lang);
-          code.innerHTML = highlightedCode;
+          code.innerHTML = highlightedCode.replaceAll('<span class="token operator">=</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>', '=>');
 
           Promise.resolve(code.querySelectorAll('.attr-value'))
             .then(function (attrValues) {
