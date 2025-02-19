@@ -236,7 +236,9 @@
               firstHeight: first.offsetHeight - 2,
               secondHeight: second.offsetHeight - 2
             };
+
             document.onmousemove = onMouseMove;
+
             document.onmouseup = function () {
               document.onmouseup = document.onmousemove = null;
             }
@@ -250,7 +252,7 @@
 
             // prevent negative-sized elements
             delta.y = Math.min(Math.max(delta.y, -md.firstHeight), md.secondHeight);
-            delta.x = Math.min(Math.max(delta.x, -md.firstHeight), md.secondHeight);
+            delta.x = Math.min(Math.max(delta.x, -md.firstWidth), md.secondWidth);
 
             switch (dir) {
               case 'y':
@@ -258,11 +260,12 @@
                 element.style.top = md.offsetTop + delta.y + "px";
                 first.style.height = (md.firstHeight + delta.y) + "px";
                 second.style.height = (md.secondHeight - delta.y) + "px";
+
                 element.style.flex = first.style.flex = second.style.flex = 'unset';
                 break;
               case 'x':
                 element.style.width = '2px';
-                element.style.top = md.offsetTop + delta.x + "px";
+                element.style.left = md.offsetLeft + delta.x + "px";
                 first.style.width = (md.firstWidth + delta.x) + "px";
                 second.style.width = (md.secondWidth - delta.x) + "px";
 
@@ -272,9 +275,12 @@
           }
         }
 
-        dragElement(resizable,
+        dragElement(
+          resizable,
           self.el.querySelector('.editor-aside.editor-html'),
-          self.el.querySelector('.editor-aside.editor-result'), self.resizable);
+          self.el.querySelector('.editor-aside.editor-result'),
+          self.resizable
+        );
       }
 
       consoleSection.onclick = function (evt) {
@@ -305,10 +311,13 @@
 
         for (var key in $$refs) {
           function logger(input, value) {
-            console.log.apply(null, [].slice.call(arguments));
+            var method = logger.key;
+            console[method].apply(null, [].slice.call(arguments));
             self.console.add({
-              type: logger.key,
-              message: [input.message || input, value || ''].join(' ')
+              type: method,
+              message: [
+                input.message || input, value || ''
+              ].join(' ')
             });
           }
 
@@ -330,11 +339,10 @@
         function createTemplate(content) {
           return '<html lang="en"><head><meta charset="UTF-8"><title>' + (self.name || 'Live') + ' • Editor<\/title>' +
             '<script src="' + document.baseURI + 'assets/js/bouer.js"><\/script>' +
-            '<style> * { margin: 0; font-family: "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "M PLUS 1",' +
-            ' "Trebuchet MS", "Droid Sans","Helvetica Neue", sans-serif; } body { padding: 2px 4px; }' +
-            'input, button { border: 1px solid lightgray; border-radius: 3px; margin: 1px; } button { padding: 3px 10px; } </style>' +
-            '<\/head><body>' + (content || '') + '<\/body>' +
-            '<\/html>';
+            '<style>*{margin:0;font-family:"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","M PLUS 1",' +
+            '"Trebuchet MS","Droid Sans","Helvetica Neue",sans-serif;}body{padding:2px 4px;}' +
+            'input,button{border:1px solid lightgray;border-radius:3px;margin:1px;}button{padding:3px 10px;}</style>' +
+            '<\/head><body>' + (content || '') + '<\/body><\/html>';
         }
 
         var content = createTemplate(self.editor.getValue());
@@ -356,7 +364,7 @@
 
       function setConsoleIcon(name) {
         var keys = Object.keys(icons);
-        for (let i = 0; i < keys.length; i++)
+        for (var i = 0; i < keys.length; i++)
           consoleIcon.classList.remove(icons[keys[i]]);
         consoleIcon.classList.add(name);
       }
@@ -397,7 +405,7 @@
       this.data.tabList.push({ id: this.data.tab_id++, name: 'new-tab' });
     },
     remTab: function (index, tabNode, tab) {
-      if (!confirm("Are you sure you want to close '"+ tab.name +"' tab?"))
+      if (!confirm("Are you sure you want to close '" + tab.name + "' tab?"))
         return;
 
       if (tabConfig.activeTab === tabNode)
