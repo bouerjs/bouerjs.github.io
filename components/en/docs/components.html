@@ -142,6 +142,25 @@
             the component: <span class="code-style note mark">get(<i>string</i>)</span>. </li>
         </ul>
 
+        <h3> <a id="component-view"></a> View Components </h3>
+        <p>
+          We can also view active components using also methods into <i class="note">app.<i
+              class="mark">$components</i></i>.
+        </p>
+
+        <ul>
+          <li> <span class="note mark">viewBy</span> &ndash; Retrieves the actives components matching the a provided
+            expression. It expects a callback as parameter where it will be provided actives componentes to match an
+            expression you desire: <i class="code-style note mark">viewBy(<i>(component) => { /* ... */ }</i>)</i>.
+          </li>
+          <li> <span class="note mark">viewByName</span> &ndash; Retrieves the actives components matching the component
+            name. It expects the component name as parameter: <i
+              class="code-style note mark">viewByName(<i>componentName</i>)</i>. </li>
+          <li> <span class="note mark">viewById</span> &ndash; Retrieves the active component matching the component
+            element or the root element id. It expects the element id as parameter:  <i
+              class="code-style note mark">viewById(<i>elementId</i>)</i>. </li>
+        </ul>
+
         <h3> <a id="component-format"> Component Format </a> </h3>
         <p>
           They are written into .html files, containing <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i>
@@ -246,6 +265,9 @@
 
       /** Method used to build the `url attributes` or `query parameters` */
       params(): object;
+
+      /** Sets data into a target object, by default is the `component.data` */
+      set(inputData: object, targetObject?: object): object;
 
       /** Component Events Handler */
 
@@ -408,21 +430,21 @@
 
         <div e-skip>
           <pre><code lang="txt">
-    |_ Project
-      |_ components
-      |   |_ home
-      |     |_ home.html
-      |     |_ home.css
-      |     |_ home.js
+    |_ 📁 MyProject
+      |_ 📁 components
+      |   |_ 📁 home
+      |     |_ 📄 home.html
+      |     |_ 📊 home.css
+      |     |_ 📜 home.js
 
-      |  |_ about
-      |     |_ about.html
-      |     |_ about.css
-      |     |_ about.js
+      |   |_ 📁 about
+      |     |_ 📄 about.html
+      |     |_ 📊 about.css
+      |     |_ 📜 about.js
 
-      |_ js
-      |  |_ bouer.esm.js
-      |_ app.js
+      |_ 📁 js
+      |  |_ 📜 bouer.esm.js
+      |_ 📜 app.js
               </code></pre>
         </div>
 
@@ -437,11 +459,7 @@
 
     export default class Home extends Component {
       constructor(){
-        super("/components/home/home.html");
-      }
-
-      init(){
-        this.addAssets([
+        super("/components/home/home.html", [
           { src: './home.css' }
         ]);
       }
@@ -454,11 +472,7 @@
 
     export default class About extends Component {
       constructor(){
-        super("/components/about/about.html");
-      }
-
-      init(){
-        this.addAssets([ './about.css' ]);
+        super("/components/about/about.html", [ './about.css' ]);
       }
     }
           </code></pre>
@@ -470,7 +484,7 @@
     import About from "./components/about/about.js";
 
     var app = new Bouer('#app', {
-      components: [ new Home(), new About() ]
+      components: [Home, About]
     });
           </code></pre>
         </div>
@@ -492,13 +506,12 @@
 
         <p>
           The <i class="code-style note mark">init</i> method is called after the component is instantiated, and
-          commonly used for code initialization, like
-          <i class="code-style note mark">addAssets(<i>[ string | { /* ... */ } ]</i>)</i>.
+          commonly used for code initialization.
         </p>
 
         <p>
-          The component <i class="note mark">addAssets(<i>[ string | { /* ... */ } ]</i>)</i> method is used for adding
-          assets like .js and/or .css files to the component. It expects a list of the asset's path or
+          The second parameter of component <i class=" code-style note mark">constructor</i> expects an array:
+          <i>[ string | { /* ... */ } ]</i> used to add assets like .js and/or .css files to the component. It expects a list of the asset's path or
           <i class="code-style  note">{ type: <i class="mark">string</i>, src: <i class="mark">string</i>, scoped:
             <i class="mark">boolean</i> }</i>, where:
         </p>
@@ -513,7 +526,7 @@
               class="note mark">type</i>
             property can be optional.
           </li>
-          <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="note mark">scoped</i>.
+          <li> <span class="note mark">scoped</span> &ndash; used to mark the asset as <i class="mark">scoped</i>.
             By default the value is <i class="code-style note mark">true</i>.
           </li>
         </ul>

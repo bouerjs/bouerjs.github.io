@@ -57,7 +57,14 @@
         prefetch?: boolean;
 
         /** Defines the default color of the skeleton */
-        skeleton?: { background: string, wave: string }
+        skeleton?: {
+          /** the color of the wave */
+          wave?: string;
+          /** the color of the background */
+          background?: string;
+          /** Number of skeletons to be inserted */
+          numberOfItems?: number;
+        }
 
         /** Allow to unbind an Element if isn't connected to the DOM, by default is `true` */
         autoUnbind?: boolean;
@@ -183,7 +190,7 @@
 
         <br>
         <p>
-          With computed properties we can customize how we want a value go be printed in the UI, and controll a value
+          With computed properties we can customize how we want a value go be printed in the UI, and control a value
           need to distribuited as this example shows:
         </p>
 

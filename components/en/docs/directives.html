@@ -208,6 +208,27 @@
           `e-skeleton` attribute from the elements.
         </p>
 
+        <p>
+          We can also specify the number of skeletons to be inserted to the while waiting for the response, by default
+          it is only one element that is shown, we use <span class="note mark">numberOfItems</span> to increase the items.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="js">
+    var app = new Bouer('#app', {
+        config: {
+          skeleton: {
+            wave: 'lightgrey';
+            background: 'grey';
+            numberOfItems: 4;
+          }
+        }
+      }
+    });
+          </code></pre>
+        </div>
+
+
         <div e-skip>
 
           <pre><code lang="html">
@@ -534,9 +555,9 @@
 
         <div e-skip>
           <pre><code lang="html">
-          <div id="app">
-    <input type="text" ref="username">
-          </div>
+    <div id="app">
+      <input type="text" ref="username">
+    </div>
           </code></pre>
 
           <pre><code lang="js">

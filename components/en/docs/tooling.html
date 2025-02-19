@@ -204,11 +204,7 @@
 
     export class Home extends Component {
       constructor(){
-        super(html);
-      }
-
-      init(){
-        this.addAssets([ style ]);
+        super(html, [style]);
       }
     }
           </code></pre>
@@ -329,9 +325,9 @@
       </section>
       <section class="navigator">
         <div class="left">
-          <a class="next" :href="/docs/routing.html">
+          <a class="next" :href="/docs/module.html">
             <i class="fa fa-angle-left"></i>
-            <span>Routing</span>
+            <span>Module</span>
           </a>
         </div>
         <div class="middle">

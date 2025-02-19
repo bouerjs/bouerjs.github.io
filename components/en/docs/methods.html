@@ -71,7 +71,8 @@
           Allows you to remove an event added to the instance. The method expects three parameters:
           <span class="note">app.off(eventName: <i class="mark">string</i>, callback: <i class="mark">Function</i>,
             attachedNode?:
-            <i class="mark">Element</i>)</span>.
+            <i class="mark">Element</i>)</span>. We also can remove an event using <i
+            class="note mark"><i>event</i>.destroy()</i> method from.
         </p>
 
         <ul>
@@ -91,6 +92,9 @@
     });
 
     app.off('eventName', event.callback);
+
+    // Or, use destroy method from event object
+    event.destroy();
           </code></pre>
         </div>
 
@@ -348,8 +352,8 @@
         <ul>
           <li> <span class="code-style note mark">watchableScope</span> &ndash; the function that should be called when
             the any reactive property change. </li>
-          <li> <span class="code-style note mark">{ <i>watches</i>[], <i>destroy():</i> void } returns</span> &ndash; an object having
-            all the watches and the method to destroy watches at once.
+          <li> <span class="code-style note mark">{ <i>watches</i>[], <i>destroy():</i> void } returns</span> &ndash; an
+            object having all the watches and the method to destroy watches at once.
           </li>
         </ul>
 
@@ -408,6 +412,12 @@
         <p>
           The method used to destroy the application. It expects no parameters.
         </p>
+        <div e-skip>
+          <pre><code lang="js">
+    var app = new Bouer('#app');
+    app.destroy();
+          </code></pre>
+        </div>
       </section>
       <section class="navigator">
         <div class="left">
