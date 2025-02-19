@@ -23,10 +23,6 @@ function BouerComponents(sharedOptions) {
       path: '/components/menu-cli-docs.html'
     },
     {
-      name: 'menu-tutorial',
-      path: '/components/menu-tutorial.html'
-    },
-    {
       name: 'editor',
       path: '/components/editor.html'
     },
@@ -146,6 +142,14 @@ function BouerComponents(sharedOptions) {
       loaded: loadedEvent,
       route: '/docs/tooling.html',
       title: 'Tooling • Documentation'
+    },
+    {
+      name: 'module',
+      path: baseDoc + 'module.html',
+      mounted: mountedEvent,
+      loaded: loadedEvent,
+      route: '/docs/module.html',
+      title: 'Module • Documentation'
     },
 
     // Tutorial
