@@ -1,0 +1,910 @@
+<div class="page documentation">
+  <menu-docs data></menu-docs>
+  <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="module"> Module </a> </h1>
+        <p>
+          Bouer can also be used as module, it just needs to be installed, we are going to split the exports by each
+          types.
+        </p>
+
+        <p>
+          The code below show all the <i class="mark">classes</i> exported:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    export {
+      class Bouer { /* default export */ },
+
+      class Component { /* ... */ },
+
+      class Reactive { /* ... */ },
+
+      class Compiler { /* ... */ },
+
+      class Routing { /* ... */ },
+
+      class Watch { /* ... */ },
+
+      class Extend { /* ... */ },
+
+      class Prop { /* ... */ },
+
+      class ViewChild { /* ... */ },
+
+      class IoC { /* ... */ }
+    }
+          </code></pre>
+        </div>
+
+        <p>
+          All the classes (except <i class="note mark">Bouer</i>) area automatically added to the <i
+            class="note mark">IoC</i> (Service Provider) as <a
+            href="https://www.dofactory.com/javascript/design-patterns/singleton" class="mark"
+            target="_blank">singleton</a>, so instead of creating a new instance of the class we can use the IoC to get
+          the instance attached to a Bouer instance.
+        </p>
+
+        <h3> <a id="module-ioc"> IoC Container </a> </h3>
+        <p>
+          It's a <i class="note mark">Service Provider</i> container with all the services that will be used in the
+          application. It does not automatically injects the dependencies as commun IoC does, because
+          <i class="mark">JavaScript</i> does not preserve the object type in the <i class="mark">constructor</i>. So,
+          in order to resolve de dependency it needs to be
+          done manually.
+        </p>
+
+        <b> <a id="module-ioc-structure"> Structure • IoC </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class IoC {
+      /**
+       * Adds a service to generic app
+       * @param ctor the service that should be resolved future on
+       * @param params the parameter that needs to be resolved every time the service is requested.
+       * @param isSingleton mark the service as singleton to avoid creating an instance whenever it's requested
+       */
+       add(
+         ctor: Constructor,
+         params?: Params˂Constructor˃[],
+         isSingleton?: boolean
+       ): void
+
+       /**
+       * Resolves the Service with all it's dependencies
+       * @param ctor the class the needs to be resolved
+       * @returns the instance of the class resolved
+       */
+       resolve(
+         ctor: Constructor
+       ): Service
+
+      /**
+       * Defines the bouer app containing all the services that needs
+       * to be provided in this app
+       */
+      static app(app: Bouer): {
+        /** Adds a service to be provided in whole the app */
+        add(
+          ctor: Constructor,
+          params?: Params˂Constructor˃[],
+          isSingleton?: boolean
+        ): void,
+
+        /** Resolve the Service with all it's dependencies */
+        resolve(
+          ctor: Constructor
+        ): Service,
+
+        /** Dispose all the added service of the current app */
+        clear(): void
+      }
+
+      /** Creates a new instance of a class provided */
+      static new(
+        ctor: Constructor,
+        params?: Params˂Constructor˃[]
+      ): Service
+
+      /** Generates a unique Id for the application */
+      static newId(): number
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-ioc-usage"> Usage • IoC </a> </h4>
+        <p>
+          To be able to create the instance of a Service (Class) we call the <i class="mark">resolve</i>
+          method from <i class="mark">app</i> and all the dependencies of the class will be injected
+          automatically (if it was added before):
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { Component, IoC } from 'bouerjs';
+    import html from './custom.html';
+
+    class CustomComponent extends Component {
+      routing: Routing;
+
+      constructor() {
+        super(html);
+
+        // Resolving Routing Service
+        this.routing = IoC.app(this.bouer!).resolve(Routing);
+      }
+    }
+
+    export default CustomComponent;
+          </code></pre>
+        </div>
+
+        <br>
+
+        <div class="block-note warn">
+          <p>
+            Custom Components added as class are instantiated with no paramaters,
+            to let the <i class="note mark">Bouer Component Handler</i> know which instance it should create, the
+            component should be added to the <i class="note mark">IoC</i> with the parameters values if applicable.
+          </p>
+        </div>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { default as Bouer, Component, IoC } from 'bouerjs';
+    import html from './custom.html';
+
+    class CustomComponent extends Component {
+      dependency1: object;
+      dependency2: object;
+
+
+      constructor(
+        dependency1: object,
+        dependency2: object
+      ) {
+        super(html);
+
+        // Resolving Routing Service
+        this.routing = IoC.app(this.bouer!).resolve(Routing);
+      }
+    }
+
+    new Bouer('#app', {
+      beforeLoad(el) {
+        IoC.app(this).add(CustomComponent, [
+          { /* Dependency 1 */ },
+          { /* Dependency 2 */ }
+        ]);
+      }
+    });
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-compiler">Compiler</a> </h3>
+        <p>
+          Compiler class is used to compile an html snippet code. The class has the following structure:
+        </p>
+
+        <b> <a id="module-compiler-structure"> Structure • Compiler </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class Compiler {
+      constructor(
+        bouer: Bouer,
+        binder: Binder,
+        delimiterHandler: DelimiterHandler,
+        eventHandler: EventHandler,
+        componentHandler: ComponentHandler,
+        directives?: CustomDirective
+      );
+
+      /**
+       * Compiles an html element
+       */
+      compile(options: {
+        /** The element that wil be compiled */
+        el: Element,
+
+        /** The data that should be injected in the compilation */
+        data?: Data,
+
+        /**
+         * In case of components having content inside of the definition,
+         * a wrapper (Example: ˂div˃) with the content need to be provided
+         * in `componentSlot` property in order to be replaced on the compilation.
+         */
+        componentSlot?: Element,
+
+        /** The function that should be fired when the compilation is done */
+        onDone?: (element: Element, data?: object) => void | Promise˂any˃,
+
+        /** The context of this compilation process */
+        context: RenderContext,
+
+        /* Allow to provide the connectivity source of the element to be compiled */
+        isConnected?: () => boolean
+      }): Element | void;
+
+      /**
+       * Analize an html snippet code and return `true` for valid and `false` for invalid.
+       * Note: the `compile` function already has this method implemented
+       */
+      analize(htmlSnippet: String): boolean;
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-compiler-usage"> Usage • Compiler </a> </h4>
+        <p>
+          To be able to create the <i class="note mark">Compiler</i> instance we advise to use IoC to automatically
+          resolve all the dependencies of the service.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { Component, Compiler, IoC } from 'bouerjs';
+    import html from './custom.html';
+
+    class CustomComponent extends Component {
+      constructor() {
+        super(html);
+      }
+
+      init() {
+        // Resolving Compiler Service
+        const compiler = IoC.app(this.bouer!).resolve(Compiler);
+
+        const element = document.createElement('div');
+        element.innerHTML = `˂h1˃{{ name }}˂/h1˃`;
+
+        compiler.compile({
+          el: element,
+          data: { name: 'My Component' },
+          context: this
+        });
+      }
+    }
+
+    export default CustomComponent;
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-routing">Routing</a> </h3>
+        <p>
+          Routing class is used for routing handling. The class has the following structure:
+        </p>
+
+        <b> <a id="module-routing-structure"> Structure • Routing </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class Routing {
+      // The bouer instance attached to this Routing
+      bouer: Bouer;
+
+      // The defaultPage
+      defaultPage?: Component | IComponentOptions;
+
+      // The notFoundPage
+      notFoundPage?: Component | IComponentOptions;
+
+      // Element where all the pages will be rendered
+      routeView: Element | null = null;
+
+      // The active anchors (˂a href="..."˃˂/a˃)
+      activeAnchors: HTMLAnchorElement[] = [];
+
+      // Store `href` value of the ˂base /˃ tag
+      base: string | null = null;
+
+      constructor(bouer: Bouer);
+
+      /** Initialize the routing instance */
+      init(): void;
+
+      /**
+       * Navigates to a certain page without reloading all the page
+       * @param {string} route the route to navigate to
+       * @param {object?} options navigation options
+       */
+      navigate(route: string, options?: {
+        /** allow to change the url after the navigation, default value is `true` */
+        setURL?: boolean,
+        /** the data object that should be injected to the page to be loaded, default value is the main data */
+        data?: object
+      }): void;
+
+      /**
+       * Changes the current url to a new one provided
+       * @param {string} url the url to change
+       * @param {string?} title the of the new url
+       */
+      pushState(url: string, title?: string): void;
+
+      /**
+       * Navigates to previous page according to the number of times
+       * @param {number?} times number to pages to go back
+       */
+      popState(times?: number): void;
+
+      /**
+       * Mark an anchor as active
+       * @param {HTMLAnchorElement} anchor the anchor to mark
+       */
+      markActiveAnchor(anchor: HTMLAnchorElement): void;
+
+      /**
+       * Mark all anchors having the route provided as active
+       * @param {string} route the that need to marked
+       */
+      markActiveAnchorsWithRoute(route: string): void;
+
+      /**
+       * Allow to configure the `Default Page` and `NotFound Page`
+       * @param {Component|IComponentOptions} component the component to be checked
+       */
+      configure(component: Component | IComponentOptions): void;
+
+      /** Clear the route view/
+      clear(): void;
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-routing-usage"> Usage • Routing </a> </h4>
+        <p>
+          To be able to create the <i class="note mark">Routing</i> instance we advise to use IoC to automatically
+          resolve all the dependencies of the service.
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { Component, Routing, IoC } from 'bouerjs';
+    import html from './custom.html';
+
+    class CustomComponent extends Component {
+      constructor() {
+        super(html);
+      }
+
+      init() {
+        // Resolving Routing Service
+        const compiler = IoC.app(this.bouer!).resolve(Routing);
+
+        const element = document.createElement('div');
+        element.innerHTML = `˂h1˃{{ name }}˂/h1˃`;
+
+        compiler.compile({
+          el: element,
+          data: { name: 'My Component' },
+          context: this
+        });
+      }
+    }
+
+    export default CustomComponent;
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-watch"> Watch </a> </h3>
+        <p>
+          Watch class is used internally in Bouer for to store all the information of a watched property, the class has
+          the following structure:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    class Watch {
+      readonly property: string;
+      readonly node: Node | undefined;
+      readonly descriptor: Reactive;
+      readonly callback: WatchCallback;
+      readonly onDestroy?: () => void | undefined;
+
+      constructor(descriptor: Reactive, callback: WatchCallback, options?: {
+        node?: Node,
+        onDestroy?: () => void
+      });
+
+      destroy(): void;
+    }
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-extend"> Extend </a> </h3>
+        <p>
+          Extend static class is used combine objects or arrays. The class has the following structure:
+        </p>
+
+        <b> <a id="module-extend-structure"> Structure • Extend </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class Extend {
+      /**
+       * Combines different object into a new one
+       * @param {object} args Objects to be combined
+       * @returns A new object having the properties of all the objects
+       */
+      static obj˂T˃(...args: T[]): T;
+
+      /**
+       * Adds properties to the first object provided
+       * @param {object} out the object that should be added all the properties from the other one
+       * @param {object} args the objects where the properties should be extracted from
+       * @returns the first object with all the new properties added on
+       */
+      static mixin˂OutType, InType˃(
+        out: OutType, ...args: InType[]
+      ): OutType & InType;
+
+      /**
+       * Combines different arrays into a new one
+       * @param {object} args arrays to be combined
+       * @returns a new arrat having the items of all the arrays
+       */
+      static array˂T˃(...args: T[]): T;
+
+      /**
+       * transfers the props of first object to the second and the seconds to the first
+       * @param {object} t1 the first object
+       * @param {object} t2 the second object
+       */
+      matcher˂T1, T2˃(t1: T1, t2: T2): void;
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-extend-usage"> Usage • Extend </a> </h4>
+        <p>
+          As it's a static class we can call it's methods right away:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { Extend } from 'bouerjs';
+
+    // Obj
+    const extendedObj = Extend.obj({ name: 'Afonso' }, { age: 12 });
+
+    // Mixin
+    const outObject = { name: 'Afonso ' };
+    const mixinedObject = Extend.mixin(outObject, { age: 12 });
+
+    // Array
+    const extendArray = Extend.array([1, 2, 3], [4, 5, 6]);
+
+    // Matcher
+    const obj1 = { name: 'Elias' };
+    const obj2 = { age: 16 };
+    Extend.matcher(obj1, obj2);
+
+    // Result:
+    // obj1 => { name: 'Elias', age: 16 }
+    // obj2 => { name: 'Elias', age: 16 }
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-prop"> Prop </a> </h3>
+        <p>
+          Prop static class is used handle object properties. The class has the following structure:
+        </p>
+
+        <b> <a id="module-prop-structure"> Structure • Prop </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class Prop {
+      /**
+       * Sets a property to an object
+       * @param {object} obj the object to set the property
+       * @param {string} propName the property name to be set
+       * @param {object} descriptor the descriptor of the object
+       * @returns the object with the new property
+       */
+      static set˂T extends {}˃(
+        obj: T, propName: keyof T | string, descriptor: PropertyDescriptor
+      ): T;
+
+      /**
+       * Retrieves the descriptor of an property
+       * @param {object} obj the object where the descriptor will be retrieved
+       * @param {string} propName the property name
+       * @returns the property descriptor or undefined
+       */
+      static descriptor˂T extends {}˃(obj: T, propName: keyof T): PropertyDescriptor | undefined;
+
+      /**
+       * Makes a deep copy of a property from an object to another
+       * @param {object} destination the destination object
+       * @param {object} source the source object
+       * @param {string} propName the property to be transfered
+       */
+      static transfer˂S extends {}, D extends {}˃(
+        destination: Destination,
+        source: S,
+        propName: keyof S
+      ): void;
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-prop-usage"> Usage • Prop </a> </h4>
+        <p>
+          As it's a static class we can call it's methods right away:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="ts">
+    import { Prop } from 'bouerjs';
+
+    const sourceObj = { name: 'Afonso Matumona' };
+    Prop.set(sourceObj, 'age', { value: 12 });
+
+    const propertyDescriptor = Prop.descriptor(sourceObj, 'name');
+
+    const destinationObj = {};
+    Prop.transfer(destinationObj, sourceObj, 'name');
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-viewchild"> ViewChild </a> </h3>
+        <p>
+          ViewChild static class is used query active Components. The class has the following structure:
+        </p>
+
+        <b> <a id="module-viewchild-structure"> Structure • ViewChild </a> </b>
+        <div e-skip>
+          <pre><code lang="ts">
+    class ViewChild {
+      /**
+       * Retrieves the actives components matching the a provided expression
+       * @param {Bouer} bouer the app instance
+       * @param {Function} expression the expression function to match the required component
+       * @returns a list of components matching the expression
+       */
+      static by˂Child˃(
+        bouer: Bouer,
+        expression: (component: Component) => boolean
+      ): Child[];
+
+      /**
+       * Retrieves the active component matching the component element or the root element id
+       * @param {Bouer} bouer the app instance
+       * @param {string} id the id o the component
+       * @returns The Component or null
+       */
+      static byId˂Child˃(bouer: Bouer, id: string): Child | null;
+
+      /**
+       * Retrieves the actives components matching the component name
+       * @param {Bouer} bouer the app instance
+       * @param {string} name the component name
+       * @returns a list of components matching the name
+       */
+      static byName˂Child˃(bouer: Bouer, name: string): Child[];
+    }
+          </code></pre>
+        </div>
+
+        <h4> <a id="module-viewchild-usage"> Usage • ViewChild </a> </h4>
+        <p>
+          As it's a static class, we can call it's methods right away:
+        </p>
+
+        <pre><code lang="ts">
+    import { Component, ViewChild } from 'bouerjs';
+    import html from './custom.html';
+
+    class CustomComponent extends Component {
+      constructor() {
+        super(html);
+      }
+
+      init() {
+        const bouer = this.bouer!;
+
+        const activeComponents = ViewChild.by(bouer, c => c.name.toLowerCase() == 'mycomponent');
+
+        const activeComponents = ViewChild.byName(bouer, 'mycomponent');
+
+        const activeComponent = ViewChild.byId(bouer, 'mycomponent-id');
+      }
+    }
+
+    export default CustomComponent;
+        </code></pre>
+
+        <br>
+        <h3> <a id="module-interfaces"> Interfaces </a> </h3>
+        <p>
+          The <i class="mark">interfaces</i> are also exported as is show in code below:
+        </p>
+        <div e-skip>
+          <pre><code lang="ts">
+    export {
+      interface IAsset;
+
+      interface IBinderConfig;
+
+      interface IBinderOptions;
+
+      interface IBouerConfig;
+
+      interface IBouerOptions;
+
+      interface IComponentOptions;
+
+      interface IDelimiter;
+
+      interface IDelimiterResponse;
+
+      interface IEventEmitterOptions;
+
+      interface IEventModifiers;
+
+      interface IEventSubscription;
+
+      interface IMiddleware;
+
+      interface IMiddlewareObject;
+    }
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-types"> Types </a> </h3>
+        <p>
+          There are also <i class="mark">types</i> exported as shown in code below:
+        </p>
+        <div e-skip>
+          <pre><code lang="ts">
+    export {
+      /* Type */
+      type Constructor;
+      type CustomDirective;
+      type Props;
+      type DataType;
+      type Dynamic;
+      type Params;
+      type RenderContext;
+      type SkeletonOptions;
+      type WatchCallback;
+    }
+          </code></pre>
+        </div>
+
+        <br>
+        <h3> <a id="module-functions"> Functions </a> </h3>
+        <p>
+          Helper <i class="mark">Functions</i> were also exported to help and boost the development of the application
+          in some way if necessary:
+        </p>
+        <div e-skip>
+          <pre><code lang="ts">
+    export {
+      /* Function */
+      function webRequest(url: string, options?: {
+        body?: any;
+        headers?: object;
+        method?: string;
+        beforeSend?: (xhr: XMLHttpRequest) => void;
+      }): Promise˂IResponse˃,
+
+      // Function that generates a unique id
+      function code(len?: number, prefix?: string, sufix?: string): string,
+
+      // Checks if an value is null
+      function isNull(input: any): boolean,
+
+      // Checks if value is an object
+      function isObject(input: any): boolean,
+
+      // Checks if object has at least one property or an array has at least one item
+      function isFilledObj(input: any): boolean,
+
+      // Checks if the a value is a primitive
+      function isPrimitive(input: any): boolean,
+
+      // Checks if a value is a string
+      function isString(input: any): boolean,
+
+      // Checks if an object is empty
+      function isEmptyObject(input: any): boolean,
+
+      // Check if a value is a Function
+      function isFunction(input: any): boolean,
+
+      // Checks if a value is null, and if it is, return the value provided as second parameter
+      function ifNullReturn˂T˃(v: any, _return: T): any | T,
+
+      // Checks a value is null, if it is, throw an exception
+      function ifNullStop(el: Element | undefined | null): void,
+
+      // Trim value in both side
+      function trim(value: string): boolean,
+
+      // Checks if a string starts with a provided string
+      function startWith(value: string, pattern: string): boolean,
+
+      // Lower a string
+      function toLower(str: string): string,
+
+      // Transforms a value to string
+      function toStr(input: any),
+
+      // Loop an array of items
+      function forEach˂T˃(
+        iterable: T[],
+        callback?: (item: T, index: number) => void,
+        context?: object
+      ): void,
+
+      // Filter a list of items
+      function where˂T˃(
+        iterable: T[],
+        callback?: (item: T, index: number) => any,
+        context?: object
+      ): T[],
+
+      // Transforms an iterable to an array
+      function toArray(array: any): any[],
+
+      // Creates an comment element
+      function createComment(id?: string, content?: string): Comment,
+
+      // Creates an element with any type of tag
+      function createAnyEl(elName: string,
+        callback?: (element: HTMLElement, dom: Document) => void
+      ): {
+        // Appends an element and return the object for possible chaining
+        appendTo: (target: Element) => ...;
+
+        // Returns the created element
+        build: () => any;
+
+        // Returns the first child of the created element
+        child: () => Element;
+
+        // Returns all the children of the created element
+        children: () => Element[];
+      },
+
+      // Creates an element with named HTML Elements
+      function createEl˂Key extends keyof HTMLElementTagNameMap˃(
+        elName: Key,
+        callback?: (element: HTMLElementTagNameMap[Key], dom: Document) => void
+      ): {
+        // Appends an element and return the object for possible chaining
+        appendTo: (target: Element) => ...;
+
+        // Returns the created element
+        build: () => HTMLElementTagNameMap[Key];
+
+        // Returns the first child of the created element
+        child: () => Element;
+
+        // Returns all the children of the created element
+        children: () => Element[];
+      },
+
+      // Removes an element from the DOM
+      function removeEl(el: Element): void,
+
+      // Maps object properties from source to destination
+      function mapper(source: dynamic, destination: dynamic): void,
+
+      // Returns destructed url as properties
+      urlResolver(url: string): {
+        href: string;
+        baseURI: string;
+        protocol: string;
+        host: string;
+        search: string;
+        hash: string;
+        hostname: string;
+        port: string;
+        pathname: string;
+        origin: string;
+      },
+
+      // Combines a base url with url parts
+      function urlCombine(base: string, ...parts: string[]): string,
+
+      /**
+       * Relative path resolver
+       * @param { string } relative the path of the actual path
+       * @param { string } path the actual path
+       * @returns { string } path with ./resolved-path
+       */
+      function pathResolver(relative: string, path: string): string,
+
+      // Removes the `stack` property content
+      function buildError(error: any): any,
+
+      // Empty function, returns the provided value
+      function fnEmpty(input?: any): any,
+
+      // Calls a function, either a normal function or async function
+      function fnCall(fn?: any): any,
+
+      // Finds an attribute from a element
+      function findAttribute(
+        element: Element,
+        attrs: string[],
+        removeIfFound?: boolean
+      ): Attr | null,
+
+      // Finds a directive in an element
+      function findDirective(node: Node, name: string): Attr | null,
+
+      // Gets the root element of an element, in case of Component,
+      // gets the actual component element, like MyComponent
+      function getRootElement(el: Element): Element,
+
+      // Generates a new copy of an object
+      function copyObject˂TObject extends dynamic˃(object: TObject): TObject,
+
+      // Transforms an object to a reactive one and sets it to the targetObject
+      function setData˂
+        InputData extends {},
+        TargetObject extends {},
+        DataResult extends InputData & TargetObject
+      ˃(
+        context: RenderContext, inputData: InputData, targetObject?: TargetObject
+      ): DataResult,
+
+      // Compiles a `HTML snippet` | HTMLElement to an `Object Literal`
+      function htmlToJsObj(input: string | HTMLElement, options?: {
+        names?: string;
+        values?: string;
+      }, onSet?: (
+          builtObject: object,
+          propName: string,
+          value: any,
+          element: Element
+        ) => void
+      ): object | null
+    }
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            All these exports are not actually separated, they were just separated for better understanding
+          </p>
+        </div>
+      </section>
+
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/docs/routing.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Routing</span>
+          </a>
+        </div>
+        <div class="middle">
+
+          <small>
+            Help us improve this documentation on github!
+            <a href="https://github.com/bouerjs/bouerjs.github.io/blob/main/components/en/docs/module.html"
+              title="Take me to Github">Edit this on Github</a>
+          </small>
+
+        </div>
+        <div class="right">
+          <a class="next" :href="/docs/tooling.html">
+            <span>Tooling</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>
