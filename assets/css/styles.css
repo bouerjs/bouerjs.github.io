@@ -55,7 +55,7 @@ i {
   --color-light-blue: lightblue;
   --color-light-yellow: khaki;
   --color-soft-grey: #6161614d;
-  --color-white-text: #fafafa;
+  --color-white-text: #e8e8e8;
   --color-black-text: #4a4a4a;
   --set-shadow: 0px 0px 3px .1px var(--color-shadow);
 
@@ -307,6 +307,11 @@ body {
   background-color: var(--color-bg);
 }
 
+html,
+body {
+  scroll-behavior: smooth;
+}
+
 hr {
   margin-top: 35px;
   border: 1px solid var(--color-disable);
@@ -490,6 +495,9 @@ nav>div .top-menu-handler .menu-btn-container {
   text-shadow: 0px 0px 1px var(--color-shadow);
 }
 
+.menu>ul>li>ul>li>ul>li>a {
+  font-size: 11pt;
+}
 
 a.active-doc-menu,
 a.active-doc-menu * {
@@ -1187,9 +1195,9 @@ pre code::after,
   border-left-width: 3px;
 }
 
-.block-note>* {
+.page .section .block-note>* {
   display: block;
-  margin: 14px 14px !important;
+  margin: 14px 14px;
   font-size: 10pt;
 }
 
