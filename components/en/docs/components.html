@@ -323,6 +323,14 @@
           </code></pre>
         </div>
 
+        <p>
+          Normally a 'property' from app data is used into the <i class="note mark">e-put</i> directive
+          expression to be able to switch the component to be injected. <i class="note warn-border">All the
+          content inside the element having the <i class="note mark">e-put</i> directive will automatically
+          updated whenever the property value changes.</i> and in case of and empty value, the element will
+          be cleared. Usefull for tab element type.
+        </p>
+
         <h3> <a id="component-keep-alive"> Keep Alive </a> </h3>
         <p>
           By default, the components are re-created when they are requested to be injected do the DOM, to

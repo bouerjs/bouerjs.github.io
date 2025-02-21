@@ -45,17 +45,17 @@
       menuLangDropdown: false,
       themeIco: 'fa-moon-o',
 
-      version: 'v3.1.0',
+      version: 'v3.1.1',
       urls: {
         min: {
-          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.min.js',
-          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.common.min.js',
-          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.esm.min.js'
+          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.min.js',
+          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.common.min.js',
+          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.esm.min.js'
         },
         cdn: {
-          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.js',
-          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.common.js',
-          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.0/dist/bouer.esm.js'
+          umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.js',
+          cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.common.js',
+          esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.esm.js'
         }
       }
       // Methods
