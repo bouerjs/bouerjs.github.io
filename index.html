@@ -6,7 +6,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="./assets/js/theme.js"></script>
+
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
   <link href="./assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="./assets/css/styles.css" rel="stylesheet" type="text/css">
@@ -16,6 +18,7 @@
   <link rel="stylesheet" href="./assets/cm/lib/codemirror.css" type="text/css">
   <link rel="stylesheet" href="./assets/cm/addon/scroll/simplescrollbars.css" type="text/css">
   <link rel="stylesheet" href="./assets/cm/addon/fold/foldgutter.css" type="text/css">
+
   <script src="./assets/cm/lib/codemirror.js"></script>
   <script src="./assets/cm/mode/xml/xml.js"></script>
   <script src="./assets/cm/mode/css/css.js"></script>
@@ -43,6 +46,32 @@
 
     <app-header data="$data"></app-header>
     <main route-view></main>
+
+    <div class="search-container" e-show="showSearchContainer">
+      <div class="search-closabe-area" on:click="showSearchContainer = false"></div>
+
+      <div class="search-card">
+        <div class="search-input">
+          <i class="fa fa-search"></i>
+          <input type="text" placeholder="Search..." e-bind="search">
+          <span on:click="showSearchContainer = false" class="search-container-close" title="Close Modal • ESC">x</span>
+        </div>
+
+        <div class="search-results">
+
+          <a :href="{{ result.url }}" on:click="onSearchItemClick" class="search-item" e-for="result of searchResults">
+            <div class="icon">
+              <i class="fa {{ result.icon }}"></i>
+            </div>
+            <div class="text">
+              <h3 class="title" e-text="{{ result.title }}">Name</h3>
+              <small class="description" e-text="{{ result.description }}">Description</small>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <script src="./assets/js/prism.js"></script>
