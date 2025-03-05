@@ -47,7 +47,7 @@
     <app-header data="$data"></app-header>
     <main route-view></main>
 
-    <div class="search-container" e-show="showSearchContainer">
+    <div class="search-container" e-if="showSearchContainer">
       <div class="search-closabe-area" on:click="showSearchContainer = false"></div>
 
       <div class="search-card">
@@ -56,7 +56,8 @@
           <input type="text" placeholder="Search..." e-bind="search">
           <span on:click="showSearchContainer = false" class="search-container-close" title="Close Modal • ESC">x</span>
         </div>
-
+        <br>
+        <p> Searching for: {{ search }} </p>
         <div class="search-results">
 
           <a :href="{{ result.url }}" on:click="onSearchItemClick" class="search-item" e-for="result of searchResults">
@@ -65,7 +66,7 @@
             </div>
             <div class="text">
               <h3 class="title" e-text="{{ result.title }}">Name</h3>
-              <small class="description" e-text="{{ result.description }}">Description</small>
+              <small class="description" e-text="{{ result.description }}"></small>
             </div>
           </a>
         </div>

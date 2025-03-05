@@ -212,21 +212,11 @@
         /** The data that should be injected in the compilation */
         data?: Data,
 
-        /**
-         * In case of components having content inside of the definition,
-         * a wrapper (Example: ˂div˃) with the content need to be provided
-         * in `componentSlot` property in order to be replaced on the compilation.
-         */
-        componentSlot?: Element,
-
         /** The function that should be fired when the compilation is done */
         onDone?: (element: Element, data?: object) => void | Promise˂any˃,
 
         /** The context of this compilation process */
-        context: RenderContext,
-
-        /* Allow to provide the connectivity source of the element to be compiled */
-        isConnected?: () => boolean
+        context: RenderContext
       }): Element | void;
 
       /**
@@ -847,9 +837,6 @@
       // Gets the root element of an element, in case of Component,
       // gets the actual component element, like MyComponent
       function getRootElement(el: Element): Element,
-
-      // Generates a new copy of an object
-      function copyObject˂TObject extends dynamic˃(object: TObject): TObject,
 
       // Transforms an object to a reactive one and sets it to the targetObject
       function setData˂

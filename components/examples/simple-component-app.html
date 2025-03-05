@@ -1,0 +1,48 @@
+<div id="app">
+  <app-header></app-header>
+
+  <div class="content">
+    <p>Application Content</p>
+  </div>
+
+  <app-footer></app-footer>
+</div>
+
+<script>
+  var app = new Bouer("#app", {
+    components: [
+      {
+        name: "app-header",
+        template: $this.tab("header")
+      },
+      {
+        name: "app-footer",
+        template: $this.tab("footer")
+      },
+    ]
+  });
+</script>
+
+<!-- component:header -->
+<header>
+  <span class="logo"></span>
+</header>
+
+<style scoped>
+  header {
+    display: flex;
+  }
+  .logo {
+    margin: auto;
+    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");
+    height: 60px;
+    background-repeat: no-repeat;
+    flex: 1;
+    background-size: contain;
+  }
+</style>
+
+<!-- component:footer -->
+<footer>
+  <small>Copyright © Bouer</small>
+</footer>

@@ -73,9 +73,15 @@
     editorView.classList.remove('error');
 
     function setter(content) {
-      var splitted = content.split(/<!-- component:[^>]* -->/g);
-      var mainContent = splitted.shift();
+      // Sliting the content
+      var splitted = content.split(new RegExp('<!-- component:[^>]* -->', 'ig'));
+
+      // Retrieving the first section, as main editor content
+      var $mainContent = splitted.shift();
+
+      // Extracting the names
       var componentsNames = content.match(/<!-- component:(.*?) -->/g);
+
       var tabs = splitted.map(function (content, index) {
         var name = componentsNames[index].match(/<!-- component:(.*?) -->/)[1];
 
@@ -87,7 +93,7 @@
 
       bouer.$wait.set('tutorial-app', {
         name: 'Tutorial',
-        content: mainContent.trim(),
+        content: $mainContent.trim(),
         type: 'expanded',
         resizable: 'y',
         tabs: tabs

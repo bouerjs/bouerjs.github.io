@@ -1,4 +1,4 @@
-<div class="editor-wrapper">
+<div class="editor-wrapper" e-class="{ 'maximized' : isMaximized }">
   <div class="editor" e-class="{ 'show-result' : showResult }">
     <div class="main">
       <div class="editor-aside editor-html">
@@ -50,15 +50,18 @@
         </div>
       </div>
       <span class="resizable"></span>
-      <div class="editor-aside editor-result" e-skip>
+      <div class="editor-aside editor-result">
 
         <!-- Top Editor Bar -->
         <div class="top result-container">
           <label> Output </label>
+
+          <span class="expand-button" on:click="isMaximized = !isMaximized">[{{ isMaximized ? '› ‹' : '‹ ›'
+            }}]</span>
         </div>
 
         <!-- Editor Result Screen -->
-        <div class="screen-wrapper">
+        <div class="screen-wrapper" e-skip>
           <div class="screen">
             <iframe frameBorder="0"
               style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 100%;height: 100%;"></iframe>
@@ -66,14 +69,14 @@
         </div>
 
         <!-- Editor Console Screen -->
-        <div class="extra-area nice-scroll">
+        <div class="extra-area nice-scroll" e-skip>
           <span class="info console">
             <span>
               <i class="fa fa-check-circle"></i>
               <span class="text"> Console </span>
             </span>
             <span class="msg-count">
-              <small class="msg-counter">(0)</small>
+              <small class="msg-counter"></small>
             </span>
           </span>
           <span class="message"></span>
@@ -196,7 +199,7 @@
       this.console = {
         add: function (obj) {
           var number = msgCounter.innerText.replace('(', '').replace(')', '') * 1;
-          msgCounter.innerText = "(" + (number + 1) + ")";
+          msgCounter.innerText = "Errors: " + (number + 1);
           var type = (obj.type || 'fa-check-circle');
           messageContainer.innerHTML += '<p class="line fa ' + type + '">' +
             (obj.message || JSON.stringify(obj)) +
@@ -205,7 +208,7 @@
           setConsoleIcon(icons[type]);
         },
         clear: function () {
-          msgCounter.innerText = "(0)";
+          msgCounter.innerText = "";
           messageContainer.innerHTML = '';
           setConsoleIcon(icons.log);
         }
@@ -395,6 +398,7 @@
   });
 
   this.export({
+    isMaximized: false,
     name: (this.data.options || {}).name || this.name,
     isTutorialAvailable: false,
     consoleMsgCount: 0,
@@ -869,6 +873,34 @@
     background-color: transparent !important;
     height: auto;
     margin: 0;
+  }
+
+  .expand-button {
+    cursor: pointer;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    background-color: var(--color-bg-lighter);
+    padding: 4px;
+    padding-bottom: 5px;
+    margin: auto 0 auto auto;
+  }
+
+  .expand-button:hover {
+    background-color: transparent;
+    border-color: var(--color-bg-lighter);
+  }
+
+  .maximized {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+
+  .maximized .editor {
+    height: auto;
   }
 
   /* End CodeMirror */

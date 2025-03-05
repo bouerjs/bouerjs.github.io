@@ -1,0 +1,27 @@
+<div id="app">
+  <input type="text" e-bind="task"><br>
+  <p>TODO: <span> {{ task }} </span></p>
+
+  <button on:click="todos = []"> Clear </button>
+  <button on:click="addTodo"> Add </button><br>
+
+  <ul>
+    <li e-for="todo of todos"> {{ todo }} </li>
+  </ul>
+</div>
+
+<script>
+  new Bouer("#app", {
+    data: {
+      // Properties
+      task: "",
+      todos: ["💻 Work", "🛌 Rest"],
+      // Methods
+      addTodo: function () {
+        if (!this.data.task) return;
+        this.data.todos.push(this.data.task);
+        this.data.task = "";
+      }
+    }
+  });
+</script>

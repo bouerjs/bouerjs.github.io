@@ -173,7 +173,7 @@
         <p>
           The <i class="note code-style">&lt;<i class="mark">style</i>&gt;</i> tag here works as expected, by default
           the styles is global to set it has a scoped one just add the <i class="note mark">scoped</i> attribute. This
-          adds a class like <i class="note">bouer-sA1b2C3d</i> to the rules of the style.
+          adds a class like <i class="note">e-A1b2C</i> to the rules of the style.
         </p>
 
         <div e-skip>
@@ -471,6 +471,9 @@
           { src: './home.css' }
         ]);
       }
+
+      route = "/home";
+      isDefault = true; // Property used for Routing component type
     }
           </code></pre>
 
@@ -482,6 +485,8 @@
       constructor(){
         super("/components/about/about.html", [ './about.css' ]);
       }
+
+      route = "/about";
     }
           </code></pre>
 

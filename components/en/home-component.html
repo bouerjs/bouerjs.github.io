@@ -130,104 +130,63 @@
 <script>
   var bouer = this.bouer;
   this.on('loaded', function (evt) {
-    bouer.$wait.set('hello-world-app', {
-      name: 'Hello Word App',
-      content:
-        '<div id="app">\n' +
-        '  <h3> {{ greeting }} <\/h3>\n' +
-        '<\/div>\n\n' +
-        '<script>\n' +
-        '  new Bouer("#app", {\n' +
-        '    data: {\n' +
-        '      greeting: "Hello World!"\n' +
-        '    }\n' +
-        '  });\n' +
-        '<\/script>'
+
+    function loadExample(name, callback) {
+      return fetch(location.origin + "/components/examples/" + name + ".html", {
+        headers: { 'Content-Type': 'text/plain' }
+      }).then(function (response) {
+        if (!response.ok)
+          throw new Error(response.statusText);
+        return response.text();
+      }).then(function (content) {
+
+        // Sliting the content
+        var splitted = content.split(new RegExp('<!-- component:[^>]* -->', 'ig'));
+
+        // Retrieving the first section, as main editor content
+        var $mainContent = splitted.shift();
+
+        // Extracting the names
+        var componentsNames = content.match(/<!-- component:(.*?) -->/g);
+
+        var tabs = splitted.map(function (content, index) {
+          var name = componentsNames[index].match(/<!-- component:(.*?) -->/)[1];
+          return {
+            content: content.trim(),
+            name: name
+          }
+        });
+
+        return callback({
+          content: $mainContent,
+          tabs: tabs
+        })
+      }).catch(function (err) {
+        editorView.classList.add('error');
+        console.error(err);
+      });
+    }
+
+    loadExample('hello-world', function (options) {
+      bouer.$wait.set('hello-world-app', {
+        name: 'Hello Word App',
+        content: options.content
+      });
     });
 
-    bouer.$wait.set('todo-app', {
-      name: 'TODO',
-      content:
-        '<div id="app">\n' +
-        '  <input type="text" e-bind="task"><br>\n' +
-        '  <p>TODO: <span> {{ task }} <\/span></p>\n\n' +
-        '  <button on:click="todos = []"> Clear </button>\n' +
-        '  <button on:click="addTodo"> Add </button><br>\n\n' +
-        '  <ul>\n' +
-        '    <li e-for="todo of todos"> {{ todo }} </li>\n' +
-        '  </ul>\n' +
-        '<\/div>\n\n' +
-        '<script>\n' +
-        '  new Bouer("#app", {\n' +
-        '    data: {\n' +
-        '      // Properties\n' +
-        '      task: "",\n' +
-        '      todos: [ "💻 Work", "🛌 Rest" ],\n' +
-        '      // Methods\n' +
-        '      addTodo: function() {\n' +
-        '        if (!this.data.task) return;\n' +
-        '          this.data.todos.push(this.data.task);\n' +
-        '          this.data.task = "";\n' +
-        '      }\n' +
-        '    }\n' +
-        '  });\n' +
-        '<\/script>'
+    loadExample('todo-app', function (options) {
+      bouer.$wait.set('todo-app', {
+        name: 'TODO',
+        content: options.content
+      });
     });
 
-    bouer.$wait.set('component-app', {
-      name: 'Component Based App',
-      content:
-        '<div id="app">\n' +
-        '  <app-header><\/app-header>\n\n' +
-        '  <div class="content">\n' +
-        '    <p>Application Content<\/p>\n' +
-        '  <\/div>\n\n' +
-        '  <app-footer><\/app-footer>\n' +
-        '<\/div>\n\n' +
-        '<script>\n' +
-        '  var app = new Bouer("#app", {\n' +
-        '    components: [\n' +
-        '      {\n' +
-        '        name: "app-header",\n' +
-        '        template: $this.tab("header")\n' +
-        '      },\n' +
-        '      {\n' +
-        '        name: "app-footer",\n' +
-        '        template: $this.tab("footer")\n' +
-        '      },\n' +
-        '    ]\n' +
-        '  });\n' +
-        '<\/script>',
-
-      tabs: [
-        {
-          name: 'header',
-          content:
-            '<header>\n' +
-            '  <span class="logo"><\/span> \n' +
-            '<\/header>\n\n' +
-            '<style scoped>\n' +
-            '  header {\n' +
-            '    display: flex;\n' +
-            '  }\n' +
-            '  .logo {\n' +
-            '    margin: auto;\n' +
-            '    background-image: url("https://afonsomatelias.github.io/assets/bouer/img/long.png");\n' +
-            '    height: 60px;\n' +
-            '    background-repeat: no-repeat;\n' +
-            '    flex: 1;\n' +
-            '    background-size: contain;\n' +
-            '  }\n' +
-            '<\/style>'
-        },
-        {
-          name: 'footer',
-          content:
-            '<footer>\n' +
-            '  <small>Copyright © Bouer<\/small>\n' +
-            '<\/footer>'
-        }
-      ]
+    loadExample('simple-component-app', function (options) {
+      bouer.$wait.set('component-app', {
+        name: 'Component Based App',
+        content: options.content,
+        tabs: options.tabs
+      });
     });
 
   });

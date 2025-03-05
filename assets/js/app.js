@@ -53,7 +53,11 @@
     if (searchableComponents.length == 0) {
       searchableComponents = this.options.components.filter(x =>
         x.path && x.route &&
-        (x.path.includes('docs/') || x.path.includes('tutorial/')));
+        (
+          x.path.includes('docs/') ||
+          x.path.includes('tutorial/') ||
+          x.path.includes('cli/')
+        ));
     }
 
     // Clear it before do new search
@@ -155,7 +159,10 @@
     });
 
     this.watch('showSearchContainer', function (value) {
-      if (value == false) return;
+      if (value == false) {
+        this.data.search = '';
+        return;
+      }
 
       document.querySelector('.search-container .search-card .search-input input')
         .focus();
@@ -280,7 +287,8 @@
 
   new Bouer('#bouer-app', {
     config: {
-      usehash: false
+      usehash: false,
+      prefetch: true
     },
     data: data,
     components: components,
