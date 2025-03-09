@@ -215,6 +215,8 @@
     // Methods
   };
 
+  Prism.languages["shell"] = Prism.languages["txt"];
+
   var components = BouerComponents({
     lang: lang,
     loadedEvent: function (evt) {

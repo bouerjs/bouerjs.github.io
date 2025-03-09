@@ -3,12 +3,94 @@
   <aside class="view nice-scroll">
     <div class="content">
       <section class="section">
-        <h1> <a id="intro"> Introduction </a> </h1>
+        <h1> <a id="intro"> Getting Started </a> </h1>
 
-        <h3> <a id="cli-info"> CLI </a> </h3>
         <p>
-
+          The Bouer CLI is a command-line interface tool which allows you to scaffold, develop, deploy, and maintain
+          Bouer applications directly from a command shell.
         </p>
+
+        <p>
+          Bouer CLI is published on npm as <i class="note">bouer-cli</i> package and includes a binary named <i
+            class="note mark">bouerjs</i>. Commands invoking <i class="note mark">bouer</i> are using the Bouer CLI.
+        </p>
+
+        <hr>
+
+        <h3> <a id="installation"> Installation 🚀 Guide </a> </h3>
+
+        <h4> <a id="prerequisites">Prerequisites</a> </h4>
+        <ul>
+          <li> <i class="note">Node.js</i> - v^14.20.1 or newer </li>
+          <li> <i class="note">Text editor</i> - One good option is <a href="https://code.visualstudio.com/"
+              target="_blank" class="mark">Visual Studio Code</a> </li>
+          <li> <i class="note">Terminal</i> - Required for running <i class="mark">Bouer CLI</i> commands</li>
+        </ul>
+
+        <h4> <a id="install-cli">Installing</a> </h4>
+
+        <p>
+          To get started with Bouer CLI, you need to install it globally using npm. This allows you to access the CLI
+          from anywhere on your system.
+        </p>
+
+        <pre><code lang="shell">
+    npm install -g bouer-cli
+        </code></pre>
+
+        <p>
+          This will download and install Bouer CLI globally, making it available for use in your projects.
+        </p>
+
+        <h4> <a id="verify-install">Verify the Installation</a> </h4>
+        <p>
+          Once the installation is complete, you can check if everything is set up correctly by verifying the installed
+          version.
+        </p>
+
+        <pre><code lang="shell">
+    bouer -v
+
+    # or
+
+    bouer --version
+        </code></pre>
+
+        <p>
+          If the installation was successful, you should see the current version of Bouer CLI displayed in the terminal.
+          🎉 You're All Set! Now that Bouer CLI is installed, you're ready to start building amazing things! 🚀
+        </p>
+
+        <p>
+          If you run into any issues, ensure that your Node.js and npm are up to date by running:
+        </p>
+
+        <pre><code lang="shell">
+    node -v
+    npm -v
+        </code></pre>
+
+        <h4> <a id="available-commands">Available Commands</a> </h4>
+        <p>
+          The CLI as a lot of commands that allow you to control your project, bellow you may available commands that it
+          provides
+        </p>
+
+        <ul>
+          <li><i class="note"><span class="mark">bouer</span> -v, --version</i> - Display CLI version</li>
+          <li><i class="note"><span class="mark">bouer</span> -h, --help</i> - Display help information</li>
+          <li><i class="note"><span class="mark">bouer</span> install</i> - Installs dependencies for the current
+            Bouer.js project</li>
+          <li><i class="note"><span class="mark">bouer</span> create new [-t, --template ]</i> - Create a new Bouer.js
+            project with optional template type (blank or routing)</li>
+          <li><i class="note"><span class="mark">bouer</span> create component [-p, --path ]</i> - Create a new
+            component in the current project</li>
+          <li><i class="note"><span class="mark">bouer</span> run</i> - Runs the development live server for the current
+            Bouer.js project</li>
+          <li><i class="note"><span class="mark">bouer</span> build [-m, --mode ]</i> - Builds the Bouer.js project for
+            development or production (dev or prod)</li>
+        </ul>
+
       </section>
 
       <section class="navigator">
@@ -20,8 +102,8 @@
           </small>
         </div>
         <div class="right">
-          <a class="next" :href="/docs/installation.html">
-            <span>Installation</span>
+          <a class="next" :href="/cli/create-project.html">
+            <span>Creating a Project</span>
             <i class="fa fa-angle-right"></i>
           </a>
         </div>

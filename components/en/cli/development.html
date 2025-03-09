@@ -1,0 +1,70 @@
+<div class="page documentation">
+  <menu-cli-docs data></menu-cli-docs>
+  <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="development"> Development </a> </h1>
+
+        <p>
+          Bouer CLI uses Webpack to launch and build the projects, among the following presets @babel/preset-env to be
+          able to process the files in your project.
+        </p>
+
+        <h3> <a id="html-assets"> HTML and Static Assets </a> </h3>
+        <p>
+          The file <i class="note mark">index.html</i> is starting point of the application, after the compilation, the
+          main .js, containing all the logic of your application will be added automatically in this file.
+        </p>
+
+        <p>
+          All the assets that needs to be imported in the main file we just need to import, the <i
+            class="note mark">base</i> tag will resolve the path of the files according to the valie provided in the <i
+            class="note mark">href</i> attribute.
+        </p>
+
+        <h3> <a id="working-webpack"> Working with Webpack </a> </h3>
+        <p>
+          By default the CLI has it own <i class="mark">webpack.config.js</i> that is used to build and run the project,
+          but it can be overwritten by creating a new <i class="mark">webpack.config.js</i>, in case of using both, by
+          merging it, use the command <i class="note mark">--mix-config</i> when starting your app.
+        </p>
+
+        <pre><code lang="shell">
+    bouer run --mix-config webpack.config.js
+        </code></pre>
+
+        <div class="block-note warn">
+          <p>
+            When using <i class="note mark">--mix-config</i> it does not overwrite the existing defined properties, it
+            just adds the containing fields.
+          </p>
+        </div>
+
+      </section>
+
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/cli/create-component.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Create Comp.</span>
+          </a>
+        </div>
+
+        <div class="middle">
+          <small>
+            Help us improve this documentation on github!
+            <a href="https://github.com/bouerjs/bouerjs.github.io/blob/main/components/en/cli/development.html"
+              title="Take me to Github">Edit this on Github</a>
+          </small>
+        </div>
+
+        <div class="right">
+          <a class="next" :href="/cli/deployment.html">
+            <span>Deployment</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>

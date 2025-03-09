@@ -1,0 +1,66 @@
+<div class="page documentation">
+  <menu-cli-docs data></menu-cli-docs>
+  <aside class="view nice-scroll">
+    <div class="content">
+      <section class="section">
+        <h1> <a id="deployment"> Deployment </a> </h1>
+
+        <p>
+          The CLI allows you to build the bouer project to distribution, it it as two options/modes one for <i
+            class="note">development</i> and the other for <i class="note">production</i>. Follow the instructions
+          bellow
+          to build a bouer project:
+        </p>
+
+        <p>
+
+        </p>
+
+        <h3> <a id="deployment-dev"> Building: Development </a> </h3>
+        <div e-skip>
+          <pre><code lang="shell">
+    bouer build
+      </code></pre>
+        </div>
+
+        <h3> <a id="deployment-prod"> Building: Production </a> </h3>
+        <div e-skip>
+          <pre><code lang="shell">
+    bouer create -m prod
+      </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            All the built content, can be found in the <i class="note">dist</i> folder of your project.
+          </p>
+        </div>
+
+        <p>
+          Having the built content we just need to upload it to the server we want, configure the fallback page to be
+          index.html (to allow <a href="https://developer.mozilla.org/en-US/docs/Glossary/SPA" target="_blank"
+            class="mark">SPA</a> ) as we explained in <a :href="docs/routing.html#routing-pretty-url"
+            class="mark">Routing</a> you're good to go 🚀.
+        </p>
+
+      </section>
+
+      <section class="navigator">
+        <div class="left">
+          <a class="next" :href="/cli/development.html">
+            <i class="fa fa-angle-left"></i>
+            <span>Development</span>
+          </a>
+        </div>
+
+        <div class="middle">
+          <small>
+            Help us improve this documentation on github!
+            <a href="https://github.com/bouerjs/bouerjs.github.io/blob/main/components/en/cli/deployment.html"
+              title="Take me to Github">Edit this on Github</a>
+          </small>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>
