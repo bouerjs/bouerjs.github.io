@@ -23,6 +23,76 @@
         </p>
 
         <h3> <a id="working-webpack"> Working with Webpack </a> </h3>
+
+        <p>
+          The CLI uses webpack to build the project, it combines all the <i class="note">.js|.ts</i> files into one and
+          keep the structure of other files, like <i class="note">.html</i> <i class="note">.css</i> or <i
+            class="note">.scss</i>, and the assets. The files are requested only when they need to be used (if
+          <i class="note">prefetch == <span class="mark">false</span></i>, we can find it in <a
+            :href="/docs/instance.html#properties" class="mark">Bouer Instance Properties</a> - for global or <a
+            :href="/docs/components.html#component-registering" class="mark">Component Properties</a> - for specific).
+        </p>
+
+        <p>
+          In this scenario:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="txt">
+    |_ 📁 src
+      |_ 📁 assets
+      |   |_ 🖼️ logo.svg
+      |   |_ 🖼️ main.png
+
+      |_ 📁 routes
+      |   |_ 📁 home
+      |     |_ 📄 home.html
+      |     |_ 📊 home.scss
+      |     |_ 📜 home.ts
+
+      |   |_ 📁 about
+      |     |_ 📄 about.html
+      |     |_ 📊 about.scss
+      |     |_ 📜 about.ts
+
+      |_ 📄 index.html
+      |_ 📊 main.scss
+      |_ 📜 index.ts
+              </code></pre>
+        </div>
+
+        <p>
+          The build result will like this:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="txt">
+    |_ 📁 dist
+      |_ 📁 assets
+      |   |_ 🖼️ logo.svg
+      |   |_ 🖼️ main.png
+
+      |_ 📁 routes
+      |   |_ 📁 home
+      |     |_ 📄 home.html
+      |     |_ 📊 home.css
+
+      |   |_ 📁 about
+      |     |_ 📄 about.html
+      |     |_ 📊 about.css
+
+      |_ 📄 index.html
+      |_ 📊 main.css
+      |_ 📜 main.js <!-- combined .js -->
+              </code></pre>
+        </div>
+
+        <p>
+          Note that the structure maintained and all the <i class="note">.ts</i> was combined to <i
+            class="note">main.<span class="mark">js</span></i> and all the <i class="note">.scss</i> was transformed to
+          <i class="note">.css</i>.
+        </p>
+
         <p>
           By default the CLI has it own <i class="mark">webpack.config.js</i> that is used to build and run the project,
           but it can be overwritten by creating a new <i class="mark">webpack.config.js</i>, in case of using both, by
@@ -36,7 +106,31 @@
         <div class="block-note warn">
           <p>
             When using <i class="note mark">--mix-config</i> it does not overwrite the existing defined properties, it
-            just adds the containing fields.
+            just adds the containing fields. In case of array, like: <i class="note">plugins</i> or <i
+              class="note">rules</i> the arrays will be concatenated.
+          <div class="block-note warn">
+            <p>Avoid repeating configuration, you may use <i class="note">bouer create config <span
+                  class="note info-border">--preview</span></i> to preview to cli configuration</p>
+          </div>
+          </p>
+        </div>
+
+        <pre><code lang="shell">
+    bouer create config --preview
+        </code></pre>
+
+        <p>
+          If you want to create this configuration in you project, remove the <i class="note">--preview</i> option.
+        </p>
+
+        <pre><code lang="shell">
+    bouer create config
+        </code></pre>
+
+        <div class="block-note warn">
+          <p>
+            Make sure to remove all the already defined config, in arrays, to avoid the same configuration to be added
+            many times.
           </p>
         </div>
 
