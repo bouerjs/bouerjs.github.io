@@ -8,8 +8,7 @@
         <p>
           The CLI allows you to build the bouer project to distribution, it has two options/modes one for <i
             class="note">development</i> and the other for <i class="note">production</i>. Follow the instructions
-          bellow
-          to build a bouer project:
+          bellow to build a bouer project:
         </p>
 
         <p>
@@ -26,12 +25,13 @@
         <h3> <a id="deployment-prod"> Building: Production </a> </h3>
         <div e-skip>
           <pre><code lang="shell">
-    bouer create -m prod
+    bouer build -m prod
       </code></pre>
         </div>
 
         <div class="block-note info">
           <p>
+            You can also use <i class="note mark">--mix-config</i> to combine configuration on build.
             All the built content, can be found in the <i class="note">dist</i> folder of your project.
           </p>
         </div>
@@ -42,6 +42,16 @@
             class="mark">SPA</a> ) as we explained in <a :href="docs/routing.html#routing-pretty-url"
             class="mark">Routing</a> you're good to go 🚀.
         </p>
+
+        <div e-skip>
+          <pre><code lang="shell">
+    bouer build --mix-config webpack.config.js
+
+    # or
+
+    bouer build -m prod --mix-config webpack.config.js
+      </code></pre>
+        </div>
 
       </section>
 
