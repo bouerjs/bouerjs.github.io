@@ -39,6 +39,16 @@
   }
 
   var searchableComponents = [];
+
+  function source(path) {
+
+    if (path.includes('docs/')) return "Documentation";
+    if (path.includes('tutorial/')) return "Tutorial";
+    if (path.includes('cli/')) return "CLI";
+
+    return "#";
+  }
+
   function onSearch(search) {
     var data = this.data;
 
@@ -85,10 +95,10 @@
         if (!match) continue;
 
         // If it's a code, ignore
-        if (item.querySelector("pre")) continue;
+        // if (item.querySelector("pre")) continue;
 
         // Preparing the data to set
-        var title = ref ? ref.textContent : component.title;
+        var title = ref ? ref.textContent + " • " + source(component.path) : component.title;
         var url = ref ? component.route + '#' + ref.id : component.route;
 
         var preDots = match.index > 3 ? '...' : '';
