@@ -1,6 +1,7 @@
 (function () {
   // The default language that needs to loaded
   var lang = 'en';
+  var version = '3.1.2'
 
   // Website available languages
   var languages = [
@@ -209,17 +210,17 @@
       this.data.showSearchContainer = false;
       this.data.search = '';
     },
-    version: 'v3.1.1',
+    version: 'v' + version,
     urls: {
       min: {
-        umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.min.js',
-        cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.common.min.js',
-        esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.esm.min.js'
+        umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.min.js',
+        cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.common.min.js',
+        esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.esm.min.js'
       },
       cdn: {
-        umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.js',
-        cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.common.js',
-        esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@3.1.1/dist/bouer.esm.js'
+        umd: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.js',
+        cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.common.js',
+        esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.esm.js'
       }
     }
     // Methods
