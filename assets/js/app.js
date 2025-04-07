@@ -1,7 +1,7 @@
 (function () {
   // The default language that needs to loaded
   var lang = 'en';
-  var version = '3.1.2'
+  var version = '3.2.0'
 
   // Website available languages
   var languages = [
@@ -92,7 +92,10 @@
         if (a) ref = a;
 
         // Checking if we found a match in the content
-        var match = RegExp(search, 'igm').exec(item.textContent);
+        var match = RegExp(search, 'igm').exec(
+          item.textContent
+            .replaceAll('\n', ' ')
+            .replaceAll('  ', ' '));
         if (!match) continue;
 
         // If it's a code, ignore
@@ -105,8 +108,9 @@
         var preDots = match.index > 3 ? '...' : '';
         var posDots = match.index + 50 < item.textContent.length ? '...' : '';
 
+        var cal = (match.index - 10);
         var description = preDots +
-          item.textContent.substr(match.index, 80)
+          item.textContent.substr(cal < 0 ? 0 : cal, 90)
             .replaceAll('\n', ' ')
             .replaceAll('  ', ' ')
             .trim() + posDots;
@@ -115,7 +119,8 @@
           icon: component.path.includes('docs/') ? 'fa-file-text-o' : 'fa-code',
           title: title,
           description: description,
-          url: url
+          url: url,
+          match: match
         });
       }
     }
@@ -222,8 +227,20 @@
         cjs: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.common.js',
         esm: 'https://cdn.jsdelivr.net/gh/bouerjs/bouer@' + version + '/dist/bouer.esm.js'
       }
-    }
+    },
     // Methods
+
+    onCompiled: function (evt) {
+      var el = evt.target;
+      var match = evt.detail.result.match;
+
+      var description = el.querySelector('.description');
+      var content = description.textContent;
+      var text = match[0];
+
+      description.innerHTML = content
+        .replaceAll(text, '<b class="mark-search">' + text + '</b>');
+    }
   };
 
   Prism.languages["shell"] = Prism.languages["txt"];

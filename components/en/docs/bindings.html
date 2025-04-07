@@ -55,7 +55,7 @@
           </code></pre>
         </div>
 
-        <h4> Shorthand Attributes </h4>
+        <h4> <a id="shorthand-attributes">Shorthand Attributes</a> </h4>
         <p e-skip>
           If the property has the same name with the attribute like <i class="note mark">title="{{ <i>title</i> }}"</i>,
           we are able to use shorthand attribute definition.
@@ -65,6 +65,38 @@
           <pre><code lang="html">
     <h1 {title}> Title </h1>
           </code></pre>
+        </div>
+
+        <h4> <a id="pipes">Pipes (<i class="mark">3.2.0+</i>)</a> </h4>
+        <p>
+          A Bouer.js <i class="note mark">pipe</i> is a function that takes a value, processes it, and then returns the
+          transformed value. In the HTML it is denoted by a single pipe <i class="note">(<span
+              class="mark">|</span>)</i> and can be followed by one or more arguments according the function:
+        </p>
+
+        <div e-skip>
+          <pre><code lang="html">
+    <div id="app1">
+      <h4> {{ expression | lowercase:[...params] }} </h4>
+    </div>
+          </code></pre>
+
+          <pre><code lang="js">
+    new Bouer('#app', {
+      pipes: {
+        lowercase(value) {
+          return value.toLowerCase();
+        }
+      }
+    });
+          </code></pre>
+        </div>
+
+        <div class="block-note info">
+          <p>
+            The first argument of the <i class="note">pipe <span class="mark">function</span></i> is always the
+            delimiter expression, and then all the parameters defined.
+          </p>
         </div>
 
         <h3> <a id="binding-two-way"> Two Way </a> </h3>

@@ -56,11 +56,13 @@
           <input type="text" placeholder="Search..." e-bind="search">
           <span on:click="showSearchContainer = false" class="search-container-close" title="Close Modal • ESC">x</span>
         </div>
-        <br>
-        <p> Searching for: <span class="mark">{{ search }}</span> </p>
         <div class="search-results">
 
-          <a :href="{{ result.url }}" on:click="onSearchItemClick" class="search-item" e-for="result of searchResults">
+          <a :href="{{ result.url }}"
+            on:click="onSearchItemClick"
+            class="search-item"
+            e-for="result of searchResults"
+            on:compile="onCompiled">
             <div class="icon">
               <i class="fa {{ result.icon }}"></i>
             </div>

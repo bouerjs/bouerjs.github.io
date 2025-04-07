@@ -1180,6 +1180,12 @@ pre code::after,
   color: var(--color-blue);
 }
 
+.mark-search {
+  background-color: var(--color-blue);
+  color: whitesmoke;
+  padding-left: 2px;
+}
+
 .block-note::after {
   content: "( i )";
   font-weight: 500;
@@ -1755,7 +1761,9 @@ ul.top-menu-opened {
 .search-container .search-card .search-results .search-item {
   margin-top: 16px;
   padding: 8px 0;
+  border-radius: 4px;
   background-color: var(--color-bg-lighter);
+  border: 1px solid var(--color-light-grey);
   cursor: pointer;
   display: flex;
 }
